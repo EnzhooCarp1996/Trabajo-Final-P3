@@ -1,6 +1,5 @@
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
-import { Layout, Typography, Button } from "antd";
-
+import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Layout, Typography, Button, Space } from "antd";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -8,9 +7,12 @@ const { Title } = Typography;
 interface AppHeaderProps {
     collapsed: boolean;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+    //   nombreUsuario: string;
+    //   role: string;
+    //   logout: () => void;
 }
 
-export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed }) => {
+export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed,/* nombreUsuario, role, logout */ }) => {
     return (
         <Header
             style={{
@@ -39,6 +41,24 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed })
             <Title level={4} style={{ color: "white", margin: 0 }}>
                 Panel
             </Title>
+
+            <Space size="middle">
+                <Button
+                    type="primary"
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
+                >
+                    Admin{/* {nombreUsuario} ({role}) */}
+                </Button>
+
+                <Button
+                    type="primary"
+                    icon={<LogoutOutlined />}
+                    danger
+                    //   onClick={logout}
+                    style={{ backgroundColor: "#f5222d", borderColor: "#f5222d" }}
+                />
+            </Space>
         </Header>
-    )
-}
+    );
+};
