@@ -6,19 +6,26 @@ const { Option } = Select;
 interface ChallengeFormProps {
     challenges: Challenge[],
     entrepreneurs: Entrepreneur[],
+    selectedChallenge: Challenge | null;
 }
 
-export const ProposalForm: React.FC<ChallengeFormProps> = ({ challenges, entrepreneurs }) => {
+export const ProposalForm: React.FC<ChallengeFormProps> = ({ challenges, entrepreneurs, selectedChallenge }) => {
     return (
         <>
             <Form.Item name="desafioId" label="Desafío" rules={[{ required: true, message: "Seleccione un desafío" }]}>
-                <Select placeholder="Seleccionar desafío">
-                    {challenges.map((c) => (
-                        <Option key={c.id} value={c.id}>
-                            {c.titulo}
-                        </Option>
-                    ))}
-                </Select>
+                {selectedChallenge ? (
+                    // ✅ Mostrar desafío fijo
+                    <Input value={selectedChallenge.titulo} disabled />
+                ) : (
+                    // ✅ Lista normal solo si no hay desafío seleccionado
+                    <Select placeholder="Seleccionar desafío">
+                        {challenges.map((c) => (
+                            <Option key={c.id} value={c.id}>
+                                {c.titulo}
+                            </Option>
+                        ))}
+                    </Select>
+                )}
             </Form.Item>
 
             <Form.Item name="emprendedorId" label="Emprendedor" rules={[{ required: true, message: "Seleccione un emprendedor" }]}>

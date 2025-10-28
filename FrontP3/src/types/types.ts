@@ -9,24 +9,24 @@ export interface User {
   email: string;
   password: string;
   tipoUsuario: UserType;
-  nombre: string;
   fechaRegistro: string;
   activo: boolean;
 }
 
 export interface Company {
   id: string;
-  usuarioId: string;
   nombreEmpresa: string;
   descripcion: string;
   sitioWeb: string;
   telefono: string;
+  usuarioId: string;
 }
 
 export interface Entrepreneur {
   id: string;
-  usuarioId: string;
   nombreCompleto: string;
+  edad: number
+  usuarioId: string;
 }
 
 export interface Challenge {

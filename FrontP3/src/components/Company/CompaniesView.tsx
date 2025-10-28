@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { GlobalOutlined, PhoneOutlined, BankOutlined } from "@ant-design/icons";
-import { Col, Form } from "antd";
 import type { Company } from "../../types/types";
-import { storage } from "../../storage";
-import { FormGeneral } from "../FormGeneral";
-import { HeaderEntidad } from "../HeaderEntidad";
+import { HeaderEntity } from "../HeaderEntity";
 import { ModalGeneral } from "../ModalGeneral";
+import { FormGeneral } from "../FormGeneral";
+import { CardEntity } from "../CardEntity";
 import { CompanyForm } from './CompanyForm';
-import { EntidadCard } from "../CardEntidad";
+import { storage } from "../../storage";
 import { GridRow } from "../GridRow";
+import { Col, Form } from "antd";
+import { useState } from "react";
 
 
 export const CompaniesView = () => {
@@ -63,13 +63,13 @@ export const CompaniesView = () => {
   return (
     <>
       {/* Encabezado */}
-      <HeaderEntidad titulo="Empresas" texto="Nueva Empresa" onClick={() => openModal()} />
+      <HeaderEntity titulo="Empresas" onClick={() => openModal()} />
 
       {/* lista de empresas */}
       <GridRow>
         {companies.map((company) => (
           <Col xs={24} sm={12} lg={8} key={company.id}>
-            <EntidadCard
+            <CardEntity
               title={company.nombreEmpresa}
               icon={<BankOutlined />}
               onEdit={() => openModal(company)}
@@ -87,7 +87,7 @@ export const CompaniesView = () => {
                   <PhoneOutlined /> {company.telefono}
                 </div>
               </div>
-            </EntidadCard>
+            </CardEntity>
           </Col>
         ))}
       </GridRow>

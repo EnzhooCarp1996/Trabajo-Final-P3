@@ -1,24 +1,44 @@
-import { useState } from "react";
-import { TrophyOutlined, CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import { Button, Col, Form } from "antd";
+import { useProposalView } from "../../hooks/Proposal/useProposalView";
 import type { Challenge, Company } from "../../types/types";
-import { storage } from "../../storage";
-import { FormGeneral } from "../FormGeneral";
-import { HeaderEntidad } from "../HeaderEntidad";
-import { ModalGeneral } from "../ModalGeneral";
+import { ProposalForm } from "../Proposal/ProposalForm";
+import { ChallengeList } from "./ChallengeList";
 import { ChallengeForm } from "./ChallengeForm";
-import { GridRow } from "../GridRow";
-import { EntidadCard } from "../CardEntidad";
+import { HeaderEntity } from "../HeaderEntity";
+import { ModalGeneral } from "../ModalGeneral";
+import { FormGeneral } from "../FormGeneral";
+import { useParams } from "react-router-dom";
+import { storage } from "../../storage";
+import { useState } from "react";
+import { Form } from "antd";
 
+interface ChallengesViewProps {
+    readOnly?: boolean;
+    showButtonNew?: boolean;
+}
 
-
-export const ChallengesView = () => {
+export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showButtonNew }) => {
     const [challenges, setChallenges] = useState<Challenge[]>(storage.getChallenges());
     const [companies] = useState<Company[]>(storage.getCompanies());
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(null);
-
     const [form] = Form.useForm();
+    const params = useParams<{ empresaId: string }>();
+    const currentEmpresaId = params.empresaId;
+    const formProposal = Form.useForm()[0];
+    const {
+        entrepreneurs,
+        isModalProposalOpen,
+        editingProposal,
+        selectedChallenge,
+        closeModalProposal,
+        openModalProposal,
+        handleSubmitProposal,
+    } = useProposalView();
+
+    const allChallenges = challenges; // Todos los desafíos
+    const companyChallenges = currentEmpresaId
+        ? challenges.filter(c => c.empresaId === currentEmpresaId)
+        : [];
 
     const openModal = (challenge?: Challenge) => {
         if (challenge) {
@@ -81,47 +101,42 @@ export const ChallengesView = () => {
     return (
         <>
             {/* Encabezado */}
-            <HeaderEntidad titulo="Desafíos" texto="Nuevo Desafío" onClick={() => openModal()} />
+            <HeaderEntity titulo="Desafíos" onClick={() => openModal()} readOnly={readOnly} />
 
             {/* lista de desafíos */}
-            <GridRow>
-                {challenges.map((challenge) => (
-                    <Col xs={24} sm={12} lg={8} key={challenge.id}>
-                        <EntidadCard
-                            title={challenge.titulo}
-                            icon={<TrophyOutlined style={{ color: challenge.estado === "activo" ? "#1677ff" : "#aaa" }} />}
-                            borderColor={challenge.estado === "activo" ? "#52c41a" : "#ccc"}
-                            extraActions={[
-                                <Button
-                                    key="toggle"
-                                    type="text"
-                                    icon={challenge.estado === "activo" ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
-                                    onClick={() => toggleStatus(challenge)}
-                                />,
-                            ]}
-                            onEdit={() => openModal(challenge)}
-                            onDelete={() => handleDelete(challenge.id)}
-                        >
-                            {challenge.descripcion}
-                            <div style={{ marginTop: 12, display: "flex", justifyContent: "space-between", fontSize: 12, color: "#91caff" }}>
-                                <div><CalendarOutlined /> {new Date(challenge.fechaPublicacion).toLocaleDateString()}</div>
-                                <div>{getCompanyName(challenge.empresaId)}</div>
-                            </div>
-                        </EntidadCard>
-
-                    </Col>
-                ))}
-            </GridRow>
+            <ChallengeList
+                challenges={currentEmpresaId ? companyChallenges : allChallenges}
+                getCompanyName={getCompanyName}
+                toggleStatus={!readOnly ? toggleStatus : undefined}
+                openModal={!readOnly ? openModal : undefined}
+                handleDelete={!readOnly ? handleDelete : undefined}
+                readOnly={readOnly}
+                showButtonNew={showButtonNew}
+                openModalProposal={(challenge) => openModalProposal(undefined, challenge, formProposal)}
+            />
 
             {/* Modal de creación/edición */}
+            {!readOnly && (
+                <ModalGeneral
+                    isOpen={isModalOpen}
+                    onClose={closeModal}
+                    onOk={() => form.submit()}
+                    editing={!!editingChallenge}
+                >
+                    <FormGeneral form={form} handleSubmit={handleSubmit}>
+                        <ChallengeForm companies={companies} />
+                    </FormGeneral>
+                </ModalGeneral>
+            )}
+            {/* Modal de creación de propuestas */}
             <ModalGeneral
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                onOk={() => form.submit()}
-                editing={!!editingChallenge}
+                isOpen={isModalProposalOpen}
+                onClose={closeModalProposal}
+                onOk={() => formProposal.submit()}
+                editing={!!editingProposal}
             >
-                <FormGeneral form={form} handleSubmit={handleSubmit}>
-                    <ChallengeForm companies={companies} />
+                <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
+                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs} selectedChallenge={selectedChallenge} />
                 </FormGeneral>
             </ModalGeneral>
         </>

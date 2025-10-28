@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
-import { Col, Form } from "antd";
 import type { Entrepreneur } from "../../types/types";
-import { storage } from "../../storage";
-import { FormGeneral } from "../FormGeneral";
-import { HeaderEntidad } from "../HeaderEntidad";
-import { ModalGeneral } from "../ModalGeneral";
 import { EntrepreneurForm } from "./EntrepreneurForm";
-import { EntidadCard } from "../CardEntidad";
+import { UserOutlined } from "@ant-design/icons";
+import { HeaderEntity } from "../HeaderEntity";
+import { ModalGeneral } from "../ModalGeneral";
+import { FormGeneral } from "../FormGeneral";
+import { CardEntity } from "../CardEntity";
+import { storage } from "../../storage";
 import { GridRow } from "../GridRow";
+import { Col, Form } from "antd";
+import { useState } from "react";
 
 
 export const EntrepreneursView = () => {
@@ -68,20 +68,20 @@ export const EntrepreneursView = () => {
     return (
         <>
             {/* Encabezado */}
-            <HeaderEntidad titulo="Propuestas" texto="Nueva Propuesta" onClick={() => openModal()} />
+            <HeaderEntity titulo="Emprendedores" onClick={() => openModal()} />
 
             {/* lista de emprendedores */}
             <GridRow>
                 {entrepreneurs.map((entrepreneur) => (
                     <Col xs={24} sm={12} lg={8} key={entrepreneur.id}>
-                        <EntidadCard
+                        <CardEntity
                             title={entrepreneur.nombreCompleto}
                             icon={<UserOutlined />}
                             onEdit={() => openModal(entrepreneur)}
                             onDelete={() => handleDelete(entrepreneur.id)}
                         >
                             {getProposalCount(entrepreneur.id)} propuestas
-                        </EntidadCard>
+                        </CardEntity>
 
                     </Col>
                 ))}

@@ -1,11 +1,6 @@
+import { BankOutlined, UserOutlined, FlagOutlined, FileTextOutlined, UsergroupDeleteOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Layout, Menu, Typography } from "antd";
-import {
-    BankOutlined,
-    UserOutlined,
-    FlagOutlined,
-    FileTextOutlined,
-} from "@ant-design/icons";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -18,6 +13,8 @@ interface AppSidebarProps {
 export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const currentCompanyId = "1";
+    const currentEntrepreneurId = "1";
 
     return (
         <Sider
@@ -59,10 +56,28 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                 selectedKeys={[location.pathname]}
                 items={[
                     {
+                        key: "/UserProfile",
+                        icon: <UserOutlined />,
+                        label: "Perfil",
+                        onClick: () => navigate("/UserProfile"),
+                    },
+                    {
                         key: "/Company",
                         icon: <BankOutlined />,
                         label: "Empresas",
                         onClick: () => navigate("/Company"),
+                    },
+                    {
+                        key: "/Entrepreneur",
+                        icon: <UsergroupDeleteOutlined />,
+                        label: "Emprendedores",
+                        onClick: () => navigate("/Entrepreneur"),
+                    },
+                    {
+                        key: `/Challenge/${currentCompanyId}`,
+                        icon: <FlagOutlined />,
+                        label: "Mis Desafíos",
+                        onClick: () => navigate(`/Challenge/${currentCompanyId}`),
                     },
                     {
                         key: "/Challenge",
@@ -71,16 +86,16 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                         onClick: () => navigate("/Challenge"),
                     },
                     {
-                        key: "/Entrepreneur",
-                        icon: <UserOutlined />,
-                        label: "Emprendedores",
-                        onClick: () => navigate("/Entrepreneur"),
-                    },
-                    {
                         key: "/Proposal",
                         icon: <FileTextOutlined />,
                         label: "Propuestas",
                         onClick: () => navigate("/Proposal"),
+                    },
+                    {
+                        key: `/Proposal/${currentEntrepreneurId}`,
+                        icon: <FileTextOutlined />,
+                        label: "Mis Propuestas",
+                        onClick: () => navigate(`/Proposal/${currentEntrepreneurId}`),
                     },
                 ]}
             />
