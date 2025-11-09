@@ -1,32 +1,22 @@
-export type UserType = 'empresa' | 'emprendedor';
+export type ChallengeStatus = "activo" | "inactivo";
 
-export type ChallengeStatus = 'activo' | 'inactivo';
+export type ProposalStatus = "en revision" | "seleccionada" | "descartada";
 
-export type ProposalStatus = 'en revisión' | 'seleccionada' | 'descartada';
+export type UserType = "empresa" | "emprendedor";
 
 export interface User {
   id: string;
   email: string;
   password: string;
-  tipoUsuario: UserType;
+  role: UserType;
   fechaRegistro: string;
   activo: boolean;
-}
-
-export interface Company {
-  id: string;
-  nombreEmpresa: string;
-  descripcion: string;
-  sitioWeb: string;
-  telefono: string;
-  usuarioId: string;
-}
-
-export interface Entrepreneur {
-  id: string;
-  nombreCompleto: string;
-  edad: number
-  usuarioId: string;
+  nombreEmpresa?: string;
+  descripcion?: string;
+  sitioWeb?: string;
+  telefono?: string;
+  nombreCompleto?: string;
+  edad?: number;
 }
 
 export interface Challenge {

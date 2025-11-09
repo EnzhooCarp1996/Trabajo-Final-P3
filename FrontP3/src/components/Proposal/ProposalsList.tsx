@@ -1,37 +1,64 @@
-import React from "react";
-import { Col } from "antd";
-import { FileTextOutlined, TrophyOutlined, UserOutlined, StarOutlined } from "@ant-design/icons";
-import { GridRow } from "../GridRow"; // ajustá la ruta según tu estructura
-import { CardEntity } from "../CardEntity"; // ajustá la ruta según tu estructura
-import type { Proposal } from "../../types/types";
+import { Col, Select } from "antd";
+import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
+import { GridRow } from "../GridRow";
+import { CardEntity } from "../CardEntity";
+import type { Proposal, ProposalStatus } from "../../types/types";
 
 interface ProposalsListProps {
+    votedProposals: string[],
     proposals: Proposal[];
     getStatusColor: (estado: string) => string;
     getChallengeName: (id: string) => string;
-    getEntrepreneurName: (id: string) => string;
-    openModalProposal: (proposal: Proposal) => void;
-    handleDelete: (id: string) => void;
+    getEntrepreneurName: (id: string) => string | undefined;
+    openModalProposal?: (proposal: Proposal) => void;
+    handleDelete?: (id: string) => void;
+    onChangeEstado?: (id: string, value: ProposalStatus) => void;
+    toggleVoto: (id: string) => void;
+    readOnly?: boolean;
+    showButtonNew?: boolean;
 }
 
 export const ProposalsList: React.FC<ProposalsListProps> = ({
+    votedProposals,
     proposals,
     getStatusColor,
     getChallengeName,
     getEntrepreneurName,
     openModalProposal,
     handleDelete,
+    onChangeEstado,
+    toggleVoto,
+    readOnly = false,
+    showButtonNew,
 }) => {
+
+
+
     return (
         <GridRow>
             {proposals.map((proposal) => (
                 <Col xs={24} sm={12} lg={8} key={proposal.id}>
                     <CardEntity
+                        iconoBoton={<span
+                            onClick={() => toggleVoto(proposal.id)}
+                            style={{
+                                cursor: "pointer",
+                                fontSize: "25px",
+                                transition: "0.2s",
+                                color: votedProposals.includes(proposal.id) ? "#fadb14" : "rgba(255,255,255,0.3)",
+                                transform: votedProposals.includes(proposal.id) ? "scale(1.2)" : "scale(1)",
+                            }}
+                        >
+                            ★
+                        </span>}
+                        tituloBoton={votedProposals.includes(proposal.id) ? "Sacar Voto" : "Votar"}
                         title={proposal.tituloPropuesta}
                         icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
                         borderColor={getStatusColor(proposal.estado)}
-                        onEdit={() => openModalProposal(proposal)}
-                        onDelete={() => handleDelete(proposal.id)}
+                        onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
+                        onDelete={!readOnly ? () => handleDelete && handleDelete(proposal.id) : undefined}
+                        showButtonNew={!showButtonNew} // siempre true, para que aparezca el botón
+                        onNuevoClick={() => toggleVoto(proposal.id)} // tu lógica de votar
                     >
                         {proposal.descripcion}
 
@@ -44,23 +71,59 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                                 <UserOutlined /> {getEntrepreneurName(proposal.emprendedorId)}
                             </div>
 
-                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <StarOutlined /> {proposal.puntos} puntos
-                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
 
-                            <div style={{ marginTop: 4 }}>
                                 <span
+                                    onClick={() => toggleVoto(proposal.id)}
                                     style={{
-                                        padding: "2px 6px",
-                                        borderRadius: 4,
-                                        fontSize: 12,
-                                        fontWeight: 600,
-                                        backgroundColor: getStatusColor(proposal.estado),
-                                        color: "#fff",
+                                        cursor: "pointer",
+                                        fontSize: "25px",
+                                        transition: "0.2s",
+                                        color: votedProposals.includes(proposal.id) ? "#fadb14" : "rgba(255,255,255,0.3)",
+                                        transform: votedProposals.includes(proposal.id) ? "scale(1.2)" : "scale(1)",
+
                                     }}
                                 >
-                                    {proposal.estado}
+                                    ★
                                 </span>
+
+                            </div>
+
+                            <span>{proposal.puntos} puntos</span>
+                            <div style={{ marginTop: 4 }}>
+                                {(showButtonNew) ?
+                                    (<span
+                                        style={{
+                                            padding: "2px 6px",
+                                            borderRadius: 4,
+                                            fontSize: 12,
+                                            fontWeight: 600,
+                                            backgroundColor: getStatusColor(proposal.estado),
+                                            color: "#fff",
+                                        }}
+                                    >
+                                        {proposal.estado}
+                                    </span>
+                                    ) : (
+                                        <Select
+                                            size="small"
+                                            value={proposal.estado || ""}
+                                            style={{
+                                                width: "120px",
+                                                backgroundColor: getStatusColor(proposal.estado),
+                                                color: "#fff",
+                                                borderRadius: 4,
+                                            }}
+                                            onChange={(value) => onChangeEstado?.(proposal.id, value)}
+                                            options={[
+                                                { value: "", label: "Seleccione" },
+                                                { value: "en revision", label: "En revisión" },
+                                                { value: "seleccionada", label: "Seleccionada" },
+                                                { value: "descartada", label: "Descartada" },
+                                            ]}
+                                        />
+                                    )}
+
                             </div>
                         </div>
                     </CardEntity>

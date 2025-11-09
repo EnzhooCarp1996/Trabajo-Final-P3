@@ -1,5 +1,5 @@
 import { useProposalView } from "../../hooks/Proposal/useProposalView";
-import type { Challenge, Company } from "../../types/types";
+import type { Challenge, User } from "../../types/types";
 import { ProposalForm } from "../Proposal/ProposalForm";
 import { ChallengeList } from "./ChallengeList";
 import { ChallengeForm } from "./ChallengeForm";
@@ -17,16 +17,17 @@ interface ChallengesViewProps {
 }
 
 export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showButtonNew }) => {
+    const [users] = useState<User[]>(storage.getUsers());
+    const companies = users.filter(u => u.role === "empresa");
+    const entrepreneurs = users.filter(u => u.role === "emprendedor");
     const [challenges, setChallenges] = useState<Challenge[]>(storage.getChallenges());
-    const [companies] = useState<Company[]>(storage.getCompanies());
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(null);
     const [form] = Form.useForm();
     const params = useParams<{ empresaId: string }>();
-    const currentEmpresaId = params.empresaId;
+    const currentCompanyId = params.empresaId;
     const formProposal = Form.useForm()[0];
     const {
-        entrepreneurs,
         isModalProposalOpen,
         editingProposal,
         selectedChallenge,
@@ -36,8 +37,8 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     } = useProposalView();
 
     const allChallenges = challenges; // Todos los desafíos
-    const companyChallenges = currentEmpresaId
-        ? challenges.filter(c => c.empresaId === currentEmpresaId)
+    const companyChallenges = currentCompanyId
+        ? challenges.filter(c => c.empresaId === currentCompanyId)
         : [];
 
     const openModal = (challenge?: Challenge) => {
@@ -105,7 +106,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
 
             {/* lista de desafíos */}
             <ChallengeList
-                challenges={currentEmpresaId ? companyChallenges : allChallenges}
+                challenges={currentCompanyId ? companyChallenges : allChallenges}
                 getCompanyName={getCompanyName}
                 toggleStatus={!readOnly ? toggleStatus : undefined}
                 openModal={!readOnly ? openModal : undefined}
@@ -136,7 +137,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
                 editing={!!editingProposal}
             >
                 <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
-                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs} selectedChallenge={selectedChallenge} />
+                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs as User[]} selectedChallenge={selectedChallenge} />
                 </FormGeneral>
             </ModalGeneral>
         </>

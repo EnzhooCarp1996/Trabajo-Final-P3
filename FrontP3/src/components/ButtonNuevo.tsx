@@ -1,21 +1,23 @@
-import { PlusOutlined } from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Button } from "antd";
 
 interface ButtonNuevoProps {
-  title: string;
+  title?: string;
   onClick?: () => void;
   style?: React.CSSProperties;
+  icon?: ReactNode;
 }
 
 export const ButtonNuevo: React.FC<ButtonNuevoProps> = ({
   title = "Nuevo",
   onClick,
   style,
+  icon,
 }) => {
   return (
     <Button
       type="primary"
-      icon={<PlusOutlined />}
+      icon={icon}
       onClick={onClick}
       style={{
         backgroundColor: "#1677ff",

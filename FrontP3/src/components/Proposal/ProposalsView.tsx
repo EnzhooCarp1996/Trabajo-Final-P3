@@ -6,13 +6,21 @@ import { ProposalForm } from "./ProposalForm";
 import { FormGeneral } from "../FormGeneral";
 import { Form } from "antd";
 
+interface ProposalsViewProps {
+  titulo: string;
+  readOnly?: boolean;
+  showButtonNew?: boolean;
+}
 
-export const ProposalsView = () => {
+export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, showButtonNew }) => {
   const formProposal = Form.useForm()[0];
   const {
-    proposals,
+    votedProposals,
     challenges,
     entrepreneurs,
+    currentEntrepreneurId,
+    allProposals,
+    entrepreneurProposals,
     isModalProposalOpen,
     editingProposal,
     selectedChallenge,
@@ -23,21 +31,28 @@ export const ProposalsView = () => {
     getChallengeName,
     getEntrepreneurName,
     getStatusColor,
+    onChangeEstado,
+    toggleVoto
   } = useProposalView();
 
   return (
     <>
       {/* Encabezado */}
-      <HeaderEntity titulo="Propuestas" onClick={() => openModalProposal()} />
+      <HeaderEntity titulo={titulo} onClick={() => openModalProposal()} readOnly={readOnly} />
 
       {/* lista de propuestas */}
       <ProposalsList
-        proposals={proposals}
+        votedProposals={votedProposals}
+        proposals={currentEntrepreneurId ? entrepreneurProposals : allProposals}
         getStatusColor={getStatusColor}
         getChallengeName={getChallengeName}
         getEntrepreneurName={getEntrepreneurName}
-        openModalProposal={openModalProposal}
-        handleDelete={handleDelete}
+        openModalProposal={!readOnly ? openModalProposal : undefined}
+        handleDelete={!readOnly ? handleDelete : undefined}
+        onChangeEstado={readOnly ? onChangeEstado : undefined}
+        toggleVoto={toggleVoto}
+        readOnly={readOnly}
+        showButtonNew={showButtonNew}
       />
 
 

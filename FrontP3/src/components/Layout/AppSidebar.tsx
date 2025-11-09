@@ -14,7 +14,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
     const navigate = useNavigate();
     const location = useLocation();
     const currentCompanyId = "1";
-    const currentEntrepreneurId = "1";
+    const currentEntrepreneurId = "3";
 
     return (
         <Sider

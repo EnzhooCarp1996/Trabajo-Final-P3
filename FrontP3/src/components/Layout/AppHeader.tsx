@@ -1,5 +1,6 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Typography, Button, Space } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -7,12 +8,17 @@ const { Title } = Typography;
 interface AppHeaderProps {
     collapsed: boolean;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-    //   nombreUsuario: string;
+    nombreUsuario?: string;
     //   role: string;
     //   logout: () => void;
 }
 
-export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed,/* nombreUsuario, role, logout */ }) => {
+export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, nombreUsuario, /* role, logout */ }) => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/UserProfile");
+    };
     return (
         <Header
             style={{
@@ -47,8 +53,10 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed,/*
                     type="primary"
                     icon={<UserOutlined />}
                     style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
+                    onClick={handleClick}
                 >
-                    Admin{/* {nombreUsuario} ({role}) */}
+                    {nombreUsuario} 
+                    {/* ({role}) */}
                 </Button>
 
                 <Button

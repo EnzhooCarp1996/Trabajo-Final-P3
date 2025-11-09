@@ -1,10 +1,10 @@
 import { Form, Input, Select } from "antd";
-import type { Company } from "../../types/types";
+import type { User } from "../../types/types";
 
 const { Option } = Select;
 
 interface ChallengeFormProps {
-    companies: Company[]
+    companies: User[]
 }
 
 export const ChallengeForm: React.FC<ChallengeFormProps> = ({ companies }) => {
@@ -16,11 +16,12 @@ export const ChallengeForm: React.FC<ChallengeFormProps> = ({ companies }) => {
                 rules={[{ required: true, message: "Seleccione una empresa" }]}
             >
                 <Select placeholder="Seleccionar empresa">
-                    {companies.map((company) => (
-                        <Option key={company.id} value={company.id}>
-                            {company.nombreEmpresa}
-                        </Option>
-                    ))}
+                    {companies.filter(u => u.role === "empresa")
+                        .map((company) => (
+                            <Option key={company.id} value={company.id}>
+                                {company.nombreEmpresa}
+                            </Option>
+                        ))}
                 </Select>
             </Form.Item>
 

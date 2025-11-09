@@ -1,32 +1,24 @@
-import type { Company, Entrepreneur, Challenge, Proposal } from "./types/types";
+import type { User, Challenge, Proposal } from "./types/types";
 
 const STORAGE_KEYS = {
-  COMPANIES: "companies",
-  ENTREPRENEURS: "entrepreneurs",
+  USERS: "users",
   CHALLENGES: "challenges",
   PROPOSALS: "proposals",
 };
 
 export const storage = {
-  getCompanies: (): Company[] => {
-    const data = localStorage.getItem(STORAGE_KEYS.COMPANIES);
+  getUsers: (): User[] => {
+    const data = localStorage.getItem(STORAGE_KEYS.USERS);
     return data ? JSON.parse(data) : [];
   },
-
-  setCompanies: (companies: Company[]): void => {
-    localStorage.setItem(STORAGE_KEYS.COMPANIES, JSON.stringify(companies));
+  setUsers: (users: User[]): void => {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
   },
-
-  getEntrepreneurs: (): Entrepreneur[] => {
-    const data = localStorage.getItem(STORAGE_KEYS.ENTREPRENEURS);
-    return data ? JSON.parse(data) : [];
-  },
-
-  setEntrepreneurs: (entrepreneurs: Entrepreneur[]): void => {
-    localStorage.setItem(
-      STORAGE_KEYS.ENTREPRENEURS,
-      JSON.stringify(entrepreneurs)
-    );
+  updateUser: (updated: User) => {
+    const list = storage
+      .getUsers()
+      .map((u) => (u.id === updated.id ? updated : u));
+    storage.setUsers(list);
   },
 
   getChallenges: (): Challenge[] => {
@@ -52,50 +44,57 @@ export const storage = {
   },
 
   initializeSampleData: (): void => {
-    if (storage.getCompanies().length === 0) {
-      const sampleCompanies: Company[] = [
-        {
-          id: "1",
-          usuarioId: "1",
-          nombreEmpresa: "TechCorp Solutions",
-          descripcion: "Empresa líder en soluciones tecnológicas",
-          sitioWeb: "https://techcorp.example.com",
-          telefono: "+1234567890",
-        },
-        {
-          id: "2",
-          usuarioId: "2",
-          nombreEmpresa: "Innovation Labs",
-          descripcion: "Laboratorio de innovación y desarrollo",
-          sitioWeb: "https://innovationlabs.example.com",
-          telefono: "+0987654321",
-        },
-        {
-          id: "3",
-          usuarioId: "3",
-          nombreEmpresa: "Innovation Labs",
-          descripcion: "Laboratorio de innovación y desarrollo",
-          sitioWeb: "https://innovationlabs.example.com",
-          telefono: "+0987654321",
-        },
-      ];
-      storage.setCompanies(sampleCompanies);
-    }
+    const sampleUsers: User[] = [
+      // Empresas
+      {
+        id: "1",
+        email: "empresa1@example.com",
+        password: "********",
+        role: "empresa",
+        fechaRegistro: "2023-01-01",
+        activo: true,
+        nombreEmpresa: "TechCorp Solutions",
+        descripcion: "Empresa líder en soluciones tecnológicas",
+        sitioWeb: "https://techcorp.example.com",
+        telefono: "+1234567890",
+      },
+      {
+        id: "2",
+        email: "empresa2@example.com",
+        password: "********",
+        role: "empresa",
+        fechaRegistro: "2023-01-02",
+        activo: true,
+        nombreEmpresa: "Innovation Labs",
+        descripcion: "Laboratorio de innovación y desarrollo",
+        sitioWeb: "https://innovationlabs.example.com",
+        telefono: "+0987654321",
+      },
+      // Emprendedores
+      {
+        id: "3",
+        email: "maria.gonzalez@example.com",
+        password: "********",
+        role: "emprendedor",
+        fechaRegistro: "2023-01-03",
+        activo: true,
+        nombreCompleto: "María González",
+        edad: 18,
+      },
+      {
+        id: "4",
+        email: "carlos.rodriguez@example.com",
+        password: "********",
+        role: "emprendedor",
+        fechaRegistro: "2023-01-04",
+        activo: true,
+        nombreCompleto: "Carlos Rodríguez",
+        edad: 25,
+      },
+    ];
 
-    if (storage.getEntrepreneurs().length === 0) {
-      const sampleEntrepreneurs: Entrepreneur[] = [
-        {
-          id: "1",
-          usuarioId: "3",
-          nombreCompleto: "María González",
-        },
-        {
-          id: "2",
-          usuarioId: "4",
-          nombreCompleto: "Carlos Rodríguez",
-        },
-      ];
-      storage.setEntrepreneurs(sampleEntrepreneurs);
+    if (storage.getUsers().length === 0) {
+      storage.setUsers(sampleUsers);
     }
 
     if (storage.getChallenges().length === 0) {
@@ -136,18 +135,18 @@ export const storage = {
         {
           id: "1",
           desafioId: "1",
-          emprendedorId: "1",
+          emprendedorId: "3",
           tituloPropuesta: "App Móvil con React Native",
           descripcion:
             "Propongo desarrollar la aplicación usando React Native para máxima compatibilidad",
           fechaCreacion: new Date().toISOString(),
-          estado: "en revisión",
+          estado: "en revision",
           puntos: 85,
         },
         {
           id: "2",
           desafioId: "2",
-          emprendedorId: "2",
+          emprendedorId: "3",
           tituloPropuesta: "Sistema de ML con Python",
           descripcion:
             "Implementación de machine learning usando Python y TensorFlow",

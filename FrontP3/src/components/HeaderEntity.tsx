@@ -1,3 +1,4 @@
+import { PlusOutlined } from "@ant-design/icons";
 import { ButtonNuevo } from "./ButtonNuevo";
 import { Typography } from "antd";
 
@@ -31,6 +32,7 @@ export const HeaderEntity: React.FC<HeaderEntityProps> = ({
         <ButtonNuevo
           title="Nuevo"
           onClick={onClick}
+          icon={<PlusOutlined />}
         />
       )}
 

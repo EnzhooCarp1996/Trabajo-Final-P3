@@ -1,11 +1,13 @@
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Card, Typography } from "antd";
 import { ButtonNuevo } from "./ButtonNuevo";
+import type { ReactNode } from "react";
 
 const { Text } = Typography;
 
 interface CardEntityProps {
-  title: string;
+  tituloBoton?: string;
+  title?: string;
   icon?: React.ReactNode;
   children?: React.ReactNode;
   borderColor?: string;
@@ -16,9 +18,11 @@ interface CardEntityProps {
   readOnly?: boolean
   showButtonNew?: boolean;
   onNuevoClick?: () => void;
+  iconoBoton?: ReactNode
 }
 
 export const CardEntity: React.FC<CardEntityProps> = ({
+  tituloBoton,
   title,
   icon,
   children,
@@ -30,16 +34,18 @@ export const CardEntity: React.FC<CardEntityProps> = ({
   readOnly = false,
   showButtonNew = false,
   onNuevoClick,
+  iconoBoton,
 }) => {
   const actions = readOnly
     ? []
     : [
       ...(extraActions || []),
       ...(onEdit ? [<EditOutlined key="edit" onClick={onEdit} />] : []),
-      ...(onDelete ? [<DeleteOutlined key="delete" onClick={onDelete} />] : []),
+      ...(onDelete ? [<DeleteOutlined key="delete" onClick={onDelete} style={{ color: "#d10b0bff", }} />] : []),
     ];
 
   return (
+    
     <Card
       title={
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -48,19 +54,11 @@ export const CardEntity: React.FC<CardEntityProps> = ({
             {title}
           </span>
           {showButtonNew && (
-            <ButtonNuevo
-              title="Propuesta"
-              onClick={onNuevoClick}
-            />
+            <ButtonNuevo title={tituloBoton} onClick={onNuevoClick} icon={iconoBoton} />
           )}
         </div>
       }
-      style={{
-        background: backgroundColor,
-        color: "white",
-        border: `1px solid ${borderColor}`,
-        borderRadius: 12,
-      }}
+      style={{ background: backgroundColor, color: "white", border: `1px solid ${borderColor}`, borderRadius: 12, }}
       actions={actions}
     >
       <Text style={{ color: "#ccc" }}>{children}</Text>

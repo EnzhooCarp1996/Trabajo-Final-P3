@@ -1,4 +1,4 @@
-import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, TrophyOutlined } from "@ant-design/icons";
+import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
 import type { Challenge } from "../../types/types";
 import { CardEntity } from "../CardEntity";
 import { GridRow } from "../GridRow";
@@ -7,7 +7,7 @@ import { Button, Col } from "antd";
 
 interface ChallengeListProps {
     challenges: Challenge[];
-    getCompanyName: (empresaId: string) => string;
+    getCompanyName: (empresaId: string) => string | undefined;
     toggleStatus?: (challenge: Challenge) => void;
     openModal?: (challenge: Challenge) => void;
     handleDelete?: (id: string) => void;
@@ -31,6 +31,8 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
             {challenges.map((challenge) => (
                 <Col xs={24} sm={12} lg={8} key={challenge.id}>
                     <CardEntity
+                        tituloBoton={"Propuesta"}
+                        iconoBoton={<PlusOutlined />}
                         title={challenge.titulo}
                         icon={<TrophyOutlined style={{ color: challenge.estado === "activo" ? "#1677ff" : "#aaa" }} />}
                         borderColor={challenge.estado === "activo" ? "#52c41a" : "#db0101ff"}
@@ -54,12 +56,9 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
                         }
                         onEdit={!readOnly ? () => openModal && openModal(challenge) : undefined}
                         onDelete={!readOnly ? () => handleDelete && handleDelete(challenge.id) : undefined}
-                        {...(challenge.estado === "activo"
-                            ? {
-                                showButtonNew,
-                                onNuevoClick: () => openModalProposal?.(challenge),
-                            }
-                            : {})}
+                        showButtonNew={challenge.estado === "activo" && showButtonNew}
+                        onNuevoClick={challenge.estado === "activo" ? () => openModalProposal?.(challenge) : undefined}
+
 
                     >
                         {challenge.descripcion}

@@ -10,6 +10,13 @@ export const EntrepreneurForm = () => {
             >
                 <Input />
             </Form.Item>
+            <Form.Item
+                name="edad"
+                label="Edad"
+                rules={[{ required: true, message: "Ingrese edad valida" }]}
+            >
+                <Input />
+            </Form.Item>
 
         </>
     )
