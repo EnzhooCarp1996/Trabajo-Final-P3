@@ -14,7 +14,7 @@ export interface User {
   nombreEmpresa?: string;
   descripcion?: string;
   sitioWeb?: string;
-  telefono?: string;
+  telefono: string;
   nombreCompleto?: string;
   edad?: number;
 }

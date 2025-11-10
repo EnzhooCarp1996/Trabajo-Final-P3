@@ -79,6 +79,7 @@ export const storage = {
         fechaRegistro: "2023-01-03",
         activo: true,
         nombreCompleto: "María González",
+        telefono: "+0987654323",
         edad: 18,
       },
       {
@@ -88,6 +89,7 @@ export const storage = {
         role: "emprendedor",
         fechaRegistro: "2023-01-04",
         activo: true,
+        telefono: "+0987654322",
         nombreCompleto: "Carlos Rodríguez",
         edad: 25,
       },
