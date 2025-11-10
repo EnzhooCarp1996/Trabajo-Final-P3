@@ -10,14 +10,14 @@ export interface IUser extends Document {
   _id: Types.ObjectId;
   email: string;
   password: string;
-  role: Types.ObjectId;
-  fechaRegistro?: Date;
+  role: Types.ObjectId | IRole;
   nombreEmpresa?: string;
   descripcion?: string;
   sitioWeb?: string;
   telefono: string;
   nombreCompleto?: string;
   edad?: number;
+  createdAt: Date;
   checkPassword(
     potentialPassword: string
   ): Promise<{ isOk: boolean; isLocked: boolean }>;
@@ -34,17 +34,16 @@ export interface IChallenge extends Document {
   empresaId: Types.ObjectId;
   titulo: string;
   descripcion: string;
-  fechaPublicacion: Date;
   estado: ChallengeStatus;
+  createdAt: Date;
 }
 
 export interface IProposal extends Document {
-  _id: string;
+  _id: Types.ObjectId;
   desafioId: Types.ObjectId;
   emprendedorId: Types.ObjectId;
   tituloPropuesta: string;
   descripcion: string;
-  fechaCreacion: Date;
   estado: ProposalStatus;
   puntos: number;
 }
@@ -53,8 +52,8 @@ export interface IMessage extends Document {
   _id: Types.ObjectId;
   empresaId: Types.ObjectId;
   emprendedorId: Types.ObjectId;
+  desafioId: Types.ObjectId;
   contenido: string;
-  fechaEnvio: Date;
 }
 
 // JWT Payload
@@ -102,6 +101,30 @@ export interface CreateUserRequest {
   nombreCompleto?: string;
   edad?: number;
 }
+
+export interface CreateChallengeRequest {
+  empresaId: Types.ObjectId;
+  titulo: string;
+  descripcion: string;
+  estado?: ChallengeStatus;
+}
+
+export interface CreateProposalRequest {
+  desafioId: Types.ObjectId;
+  emprendedorId: Types.ObjectId;
+  tituloPropuesta: string;
+  descripcion: string;
+  estado: ProposalStatus;
+  puntos: number;
+}
+
+export interface CreateMessageRequest {
+  empresaId: Types.ObjectId;
+  emprendedorId: Types.ObjectId;
+  desafioId: Types.ObjectId;
+  contenido: string;
+}
+
 
 // Environment Variables
 export interface EnvironmentVariables {

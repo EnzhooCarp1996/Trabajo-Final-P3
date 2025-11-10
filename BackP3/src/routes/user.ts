@@ -1,5 +1,4 @@
 import express, { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
 
 import User from "@/schemas/user";
 import Role from "@/schemas/role";
@@ -102,7 +101,7 @@ async function updateUser(
 
   // Solo el admin o el propio usuario puede modificar sus datos
   if (!req.isAdmin?.() && req.params.id !== req.user?._id) {
-    res.status(403).send("Unauthorized");
+    res.status(503).send("Unauthorized");
     return;
   }
 
@@ -113,14 +112,13 @@ async function updateUser(
     const userToUpdate = await User.findById(req.params.id);
 
     if (!userToUpdate) {
-      console.error("User not found");
-      res.status(404).send("User not found");
+      console.error("Usuario not found");
+      res.status(404).send("Usuario not found");
       return;
     }
 
-    // Asignamos los nuevos valores (solo los que vengan)
+    // Asigna los nuevos valores (solo los que vengan)
     Object.assign(userToUpdate, req.body);
-
     // Dispara el pre('save') y hashea si cambió la contraseña
     await userToUpdate.save();
 

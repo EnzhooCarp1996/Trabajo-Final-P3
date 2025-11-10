@@ -26,7 +26,6 @@ const userSchema = new Schema<IUser>(
     },
     password: { type: String, required: true, select: false },
     role: { type: ObjectId, ref: "Role", required: true },
-    fechaRegistro: { type: Date, default: Date.now },
     telefono: { type: String, trim: true },
     nombreEmpresa: { type: String, lowercase: true, trim: true },
     descripcion: { type: String, trim: true },

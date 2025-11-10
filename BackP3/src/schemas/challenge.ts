@@ -13,7 +13,6 @@ const challengeSchema = new Schema<IChallenge>(
     empresaId: { type: ObjectId, ref: "User", required: true, },
     titulo: { type: String, required: true, trim: true, maxlength: 100, },
     descripcion: { type: String, required: true, trim: true, maxlength: 1000, },
-    fechaPublicacion: { type: Date, default: Date.now, },
     estado: { type: String, enum: challengeStatuses, default: "activo", required: true, },
   },
   { timestamps: true }
