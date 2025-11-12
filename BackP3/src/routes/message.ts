@@ -1,13 +1,14 @@
 import express, { Request, Response, NextFunction } from "express";
-import Message from "@/schemas/message";
-import User from "@/schemas/user";
-import Challenge from "@/schemas/challenge";
-import { CreateMessageRequest, IMessage } from "@/types/index";
+import Message from "../schemas/message";
+import User from "../schemas/user";
+import Challenge from "../schemas/challenge";
+import { CreateMessageRequest, IMessage } from "../types/index";
 
 const router = express.Router();
 
 router.get("/:id", getMessages);
 router.post("/", createMessage);
+router.put("/:id", updateMessage);
 
 async function getMessages(
   req: Request<
@@ -74,3 +75,32 @@ async function createMessage(
     next(err);
   }
 }
+
+// Actualizar un desafio
+async function updateMessage(
+  req: Request<{ id: string }, unknown, Partial<CreateMessageRequest>>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  console.log("Actualizar mensaje con id: ", req.params.id);
+
+  try {
+    const messageToUpdate = await Message.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    if (!messageToUpdate) {
+      console.error("Mensaje not found");
+      res.status(404).send("Mensaje not found");
+      return;
+    }
+
+    res.send(messageToUpdate);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export default router;

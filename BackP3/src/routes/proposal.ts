@@ -1,50 +1,43 @@
-import express, { Request, Response, NextFunction } from "express";
-import Proposal from "@/schemas/proposal";
-import User from "@/schemas/user";
-import Challenge from "@/schemas/challenge";
-import { CreateProposalRequest, IProposal, ProposalStatus } from "@/types";
+import express, { Request, Response, NextFunction } from 'express'
+import Proposal from '../schemas/proposal'
+import User from '../schemas/user'
+import Challenge from '../schemas/challenge'
+import { CreateProposalRequest, IProposal, ProposalStatus } from '../types'
 
-const router = express.Router();
+const router = express.Router()
 
 // Rutas
-router.get("/", getAllProposals);
-router.get("/:id", getProposalById);
-router.post("/", createProposal);
-router.delete("/:id", deleteProposal);
+router.get('/', getAllProposals)
+router.get('/:id', getProposalById)
+router.post('/', createProposal)
+router.put('/:id', updateProposal)
+router.delete('/:id', deleteProposal)
 
 // Obtener todas las propuestas, o por emprendedor
 async function getAllProposals(
   req: Request<{}, {}, {}, { estado?: ProposalStatus; desafioId?: string; emprendedorId?: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  const { estado, desafioId, emprendedorId } = req.query;
+  const { estado, desafioId, emprendedorId } = req.query
 
   try {
-    const filter: any = {};
+    const filter: any = {}
 
-    if (
-      estado &&
-      ["en revision", "seleccionada", "descartada"].includes(estado)
-    ) {
-      filter.estado = estado;
-    }
+    if (estado && ['en revision', 'seleccionada', 'descartada'].includes(estado))
+      filter.estado = estado
 
-    if (desafioId) {
-      filter.desafioId = desafioId;
-    }
+    if (desafioId) filter.desafioId = desafioId
 
-    if (emprendedorId) {
-      filter.emprendedorId = emprendedorId;
-    }
+    if (emprendedorId) filter.emprendedorId = emprendedorId
 
     const proposals = await Proposal.find(filter)
-      .populate({ path: "emprendedorId", select: "nombreCompleto" })
-      .populate({ path: "desafioId", select: "titulo" });
+      .populate({ path: 'emprendedorId', select: 'nombreCompleto' })
+      .populate({ path: 'desafioId', select: 'titulo' })
 
-    res.send(proposals);
+    res.send(proposals)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -52,53 +45,53 @@ async function getAllProposals(
 async function getProposalById(
   req: Request<{ id: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Obtener propuesta con id: ", req.params.id);
+  console.log('Obtener propuesta con id: ', req.params.id)
 
   try {
     const proposal = await Proposal.findById(req.params.id)
-      .populate({ path: "emprendedorId", select: "nombreCompleto" })
-      .populate({ path: "desafioId", select: "titulo" });
+      .populate({ path: 'emprendedorId', select: 'nombreCompleto' })
+      .populate({ path: 'desafioId', select: 'titulo' })
 
     if (!proposal) {
-      res.status(404).send("Proposal not found");
-      return;
+      res.status(404).send('Proposal not found')
+      return
     }
 
-    res.send(proposal);
+    res.send(proposal)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
 async function createProposal(
   req: Request<Record<string, never>, unknown, CreateProposalRequest>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Propuesta creada: ", req.body);
+  console.log('Propuesta creada: ', req.body)
 
-  const { desafioId, emprendedorId } = req.body;
+  const { desafioId, emprendedorId } = req.body
 
   try {
-    const desafio = await Challenge.findById(desafioId);
+    const desafio = await Challenge.findById(desafioId)
     if (!desafio) {
-      res.status(404).send("Desafio not found");
-      return;
+      res.status(404).send('Desafio not found')
+      return
     }
 
-    const emprendedor = await User.findById(emprendedorId);
+    const emprendedor = await User.findById(emprendedorId)
     if (!emprendedor) {
-      res.status(404).send("Emprendedor not found");
-      return;
+      res.status(404).send('Emprendedor not found')
+      return
     }
 
-    const proposalCreated = await Proposal.create(req.body);
+    const proposalCreated = await Proposal.create(req.body)
 
-    res.send(proposalCreated);
+    res.send(proposalCreated)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -106,17 +99,17 @@ async function createProposal(
 async function updateProposal(
   req: Request<{ id: string }, unknown, Partial<CreateProposalRequest>>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Actualizar propuesta con id: ", req.params.id);
+  console.log('Actualizar propuesta con id: ', req.params.id)
 
   try {
-    const proposalToUpdate = await Proposal.findById(req.params.id);
+    const proposalToUpdate = await Proposal.findById(req.params.id)
 
     if (!proposalToUpdate) {
-      console.error("Propuesta not found");
-      res.status(404).send("Propuesta not found");
-      return;
+      console.error('Propuesta not found')
+      res.status(404).send('Propuesta not found')
+      return
     }
 
     // Opcional: validar permisos
@@ -126,12 +119,12 @@ async function updateProposal(
     //   return;
     // }
 
-    Object.assign(proposalToUpdate, req.body);
-    await proposalToUpdate.save();
+    Object.assign(proposalToUpdate, req.body)
+    await proposalToUpdate.save()
 
-    res.send(proposalToUpdate);
+    res.send(proposalToUpdate)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -139,24 +132,24 @@ async function updateProposal(
 async function deleteProposal(
   req: Request<{ id: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Propuesta eliminada con id: ", req.params.id);
+  console.log('Propuesta eliminada con id: ', req.params.id)
 
   try {
-    const proposal = await Proposal.findById(req.params.id);
+    const proposal = await Proposal.findById(req.params.id)
 
     if (!proposal) {
-      res.status(404).send("Propuesta not found");
-      return;
+      res.status(404).send('Propuesta not found')
+      return
     }
 
-    await Proposal.deleteOne({ _id: proposal._id });
+    await Proposal.deleteOne({ _id: proposal._id })
 
-    res.send(`Propuesta eliminada: ${req.params.id}`);
+    res.send(`Propuesta eliminada: ${req.params.id}`)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
-export default router;
+export default router

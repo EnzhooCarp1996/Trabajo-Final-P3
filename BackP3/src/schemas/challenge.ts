@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { IChallenge, ChallengeStatus } from "@/types/index";
-import { validarTipoUsuario } from "@/utils/validarTipoUsuario";
+import { IChallenge, ChallengeStatus } from "../types/index";
+import { validarTipoUsuario } from "../utils/validarTipoUsuario";
 
 const { ObjectId } = Schema.Types;
 

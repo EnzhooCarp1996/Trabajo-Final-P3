@@ -1,6 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
-import { IProposal, ProposalStatus } from "@/types/index";
-import { validarTipoUsuario } from "@/utils/validarTipoUsuario";
+import { IProposal, ProposalStatus } from "../types/index";
+import { validarTipoUsuario } from "../utils/validarTipoUsuario";
 
 const { ObjectId } = Schema.Types;
 

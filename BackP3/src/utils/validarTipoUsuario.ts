@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IUser, IRole, UserType } from "@/types";
+import { IUser, IRole, UserType } from "../types";
 
 export async function validarTipoUsuario(
   userId: mongoose.Types.ObjectId,

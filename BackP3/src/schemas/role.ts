@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import { IRole, UserType } from '@/types/index'
+import { IRole, UserType } from '../types/index'
 
 const userTypes: UserType[] = ["empresa", "emprendedor"];
 

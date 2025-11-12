@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { IRole, IUser, UserType } from "@/types/index";
-import { hashPassword } from "@/utils/hashPassword";
+import { IRole, IUser, UserType } from "../types/index";
+import { hashPassword } from "../utils/hashPassword";
 
 const { ObjectId } = Schema.Types;
 
@@ -54,6 +54,7 @@ userSchema.method(
 
 userSchema.pre<IUser>("save", async function (next) {
   if (!this.isModified("password")) return next();
+  console.log("Hasheando password para:", this.email);
   this.password = await hashPassword(this.password);
   next();
 });

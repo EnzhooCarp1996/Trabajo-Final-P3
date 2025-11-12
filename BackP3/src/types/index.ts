@@ -54,6 +54,7 @@ export interface IMessage extends Document {
   emprendedorId: Types.ObjectId;
   desafioId: Types.ObjectId;
   contenido: string;
+  visto?: boolean;
 }
 
 // JWT Payload
@@ -123,6 +124,7 @@ export interface CreateMessageRequest {
   emprendedorId: Types.ObjectId;
   desafioId: Types.ObjectId;
   contenido: string;
+  visto?: boolean;
 }
 
 

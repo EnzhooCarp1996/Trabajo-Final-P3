@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import Challenge from "@/schemas/challenge";
-import User from "@/schemas/user";
-import { ChallengeStatus, CreateChallengeRequest } from "@/types";
-import { validateIdParam } from "@/middlewares/validateId";
+import Challenge from "../schemas/challenge";
+import User from "../schemas/user";
+import { ChallengeStatus, CreateChallengeRequest } from "../types";
+import { validateIdParam } from "../middlewares/validateId";
 
 const router = express.Router();
 

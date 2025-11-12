@@ -9,8 +9,7 @@ interface UserResponse {
   _id: string
   role: string
   email: string
-  firstName: string
-  lastName: string
+  nombre: string
 }
 
 interface TokenResponse {
@@ -25,22 +24,23 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
     throw new Error('Role not found')
   }
 
-  const payload: JWTPayload = { _id: user._id.toString(), email: user.email, role: role.name }
+  const payload: JWTPayload = { _id: user._id.toString(), email: user.email, role: role.nombre }
 
   const userResponse: UserResponse = {
     _id: user._id.toString(),
-    role: role.name,
+    role: role.nombre,
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    nombre: (user.nombreCompleto || user.nombreEmpresa)!,
   }
 
   // const privateKey = fs.readFileSync(path.join(__dirname, `../keys/base-api-express-generator.pem`))
 
   // Unsecure alternative
-  const token = jwt.sign(payload, 'base-api-express-generator', {
+  const token = jwt.sign(payload, process.env.JWT_SECRET!, {
     subject: user._id.toString(),
-    issuer: 'base-api-express-generator',
+    issuer: process.env.JWT_ISSUER || 'base-api-express-generator',
+    algorithm: 'RS256',
+    expiresIn: '7d' // duración del token
   })
 
   // const token = jwt.sign(payload, privateKey, {

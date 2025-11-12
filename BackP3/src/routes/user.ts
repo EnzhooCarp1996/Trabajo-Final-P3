@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 
-import User from "@/schemas/user";
-import Role from "@/schemas/role";
-import { CreateUserRequest } from "@/types";
-import { validateIdParam } from "@/middlewares/validateId";
+import User from "../schemas/user";
+import Role from "../schemas/role";
+import { CreateUserRequest } from "../types";
+import { validateIdParam } from "../middlewares/validateId";
 
 const router = express.Router();
 

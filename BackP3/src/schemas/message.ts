@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
-import { IMessage } from "@/types/index";
-import { validarTipoUsuario } from "@/utils/validarTipoUsuario";
+import { IMessage } from "../types/index";
+import { validarTipoUsuario } from "../utils/validarTipoUsuario";
 
 const { ObjectId } = Schema.Types;
 
@@ -10,6 +10,7 @@ const messageSchema = new Schema<IMessage>(
     emprendedorId: { type: ObjectId, ref: "User", required: true, },
     desafioId: { type: ObjectId, ref: "Challenge", required: true, },
     contenido: { type: String, required: true, trim: true, maxlength: 1000, },
+    visto: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
