@@ -3,7 +3,7 @@ import { ChallengesView } from './components/Challenge/ChallengesView';
 import { ProposalsView } from './components/Proposal/ProposalsView';
 import { CompanyView } from './components/Company/CompanyView';
 import { UserProfile } from './components/UserProfile/UserProfile';
-import type { User } from './types/types';
+import type { IUser } from './types/types';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppContent } from './components/Layout/AppContent';
 import { storage } from './storage';
@@ -16,12 +16,12 @@ import './App.css'
 function App() {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const user: User = {
-    id: "3",
+  const user: IUser = {
+    _id: "3",
     email: "maria.gonzalez@example.com",
     password: "********",
     role: "emprendedor",
-    fechaRegistro: "2023-01-01",
+    createdAt: "2023-01-01",
     activo: true,
     nombreCompleto: "Maria Gonzalez",
     edad: 18,

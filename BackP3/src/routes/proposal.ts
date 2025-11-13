@@ -70,7 +70,6 @@ async function createProposal(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  console.log('Propuesta creada: ', req.body)
 
   const { desafioId, emprendedorId } = req.body
 
@@ -90,6 +89,7 @@ async function createProposal(
     const proposalCreated = await Proposal.create(req.body)
 
     res.send(proposalCreated)
+    console.log('Propuesta creada: ', req.body)
   } catch (err) {
     next(err)
   }
@@ -112,17 +112,19 @@ async function updateProposal(
       return
     }
 
-    // Opcional: validar permisos
     // solo el emprendedor dueño o un admin pueda actualizar
-    // if (!req.isAdmin?.() && req.user?._id !== proposal.emprendedorId.toString()) {
-    //   res.status(403).send("Unauthorized");
+    // if (!req.isAdmin?.() && req.user?._id.toString() !== proposalToUpdate.emprendedorId.toString()) {
+    //   res.status(403).send('No autorizado para eliminar esta propuesta');
     //   return;
     // }
+    delete req.body.desafioId;
+    delete req.body.emprendedorId;
 
     Object.assign(proposalToUpdate, req.body)
     await proposalToUpdate.save()
 
     res.send(proposalToUpdate)
+    console.log('Propuesta actualizada: ', req.body)
   } catch (err) {
     next(err)
   }
@@ -143,6 +145,12 @@ async function deleteProposal(
       res.status(404).send('Propuesta not found')
       return
     }
+
+    // solo el emprendedor dueño o un admin pueda actualizar
+    // if (!req.isAdmin?.() && req.user?._id.toString() !== proposal.emprendedorId.toString()) {
+    //   res.status(403).send('No autorizado para eliminar esta propuesta');
+    //   return;
+    // }
 
     await Proposal.deleteOne({ _id: proposal._id })
 

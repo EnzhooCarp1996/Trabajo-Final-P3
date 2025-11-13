@@ -2,18 +2,18 @@ import { Col } from "antd"
 import { CardEntity } from "../CardEntity"
 import { GridRow } from "../GridRow"
 import { BankOutlined, GlobalOutlined, PhoneOutlined } from "@ant-design/icons"
-import type { User } from "../../types/types"
+import type { IUser } from "../../types/types"
 
 
 interface CompaniesListProps {
-    companies: User[]
+    companies: IUser[]
 }
 export const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
 
     return (
         <GridRow>
             {companies.filter(u => u.role === "empresa").map((company) => (
-                <Col xs={24} sm={12} lg={8} key={company.id}>
+                <Col xs={24} sm={12} lg={8} key={company._id}>
                     <CardEntity
                         title={company.nombreEmpresa}
                         icon={<BankOutlined />}

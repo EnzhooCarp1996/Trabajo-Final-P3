@@ -3,7 +3,7 @@ import type {
   Proposal,
   Challenge,
   ProposalStatus,
-  User,
+  IUser,
 } from "../../types/types";
 import { storage } from "../../storage";
 import { type FormInstance } from "antd";
@@ -14,7 +14,7 @@ export const useProposalView = () => {
     storage.getProposals()
   );
   const [challenges] = useState<Challenge[]>(storage.getChallenges());
-  const [users] = useState<User[]>(storage.getUsers());
+  const [users] = useState<IUser[]>(storage.getUsers());
   const entrepreneurs = users.filter((u) => u.role === "emprendedor");
 
   const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
@@ -75,7 +75,7 @@ export const useProposalView = () => {
       form?.resetFields();
       form?.setFieldsValue({
         desafioId: challenge ? challenge.titulo : "",
-        emprendedorId: entrepreneurs.length > 0 ? entrepreneurs[0].id : "",
+        emprendedorId: entrepreneurs.length > 0 ? entrepreneurs[0]._id : "",
         estado: "en revisión",
         puntos: 0,
       });
@@ -120,7 +120,7 @@ export const useProposalView = () => {
   };
 
   const getEntrepreneurName = (emprendedorId: string) => {
-    const entrepreneur = entrepreneurs.find((e) => e.id === emprendedorId);
+    const entrepreneur = entrepreneurs.find((e) => e._id === emprendedorId);
     return entrepreneur
       ? entrepreneur.nombreCompleto
       : "Emprendedor desconocido";

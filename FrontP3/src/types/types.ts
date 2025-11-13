@@ -2,19 +2,18 @@ export type ChallengeStatus = "activo" | "inactivo";
 
 export type ProposalStatus = "en revision" | "seleccionada" | "descartada";
 
-export type UserType = "empresa" | "emprendedor";
+export type Role = "empresa" | "emprendedor";
 
-export interface User {
-  id: string;
+export interface IUser {
+  _id: string;
   email: string;
   password: string;
-  role: UserType;
-  fechaRegistro: string;
-  activo: boolean;
+  role: Role;
+  telefono: string;
+  createdAt?: string;
   nombreEmpresa?: string;
   descripcion?: string;
   sitioWeb?: string;
-  telefono: string;
   nombreCompleto?: string;
   edad?: number;
 }
@@ -37,4 +36,21 @@ export interface Proposal {
   fechaCreacion: string;
   estado: ProposalStatus;
   puntos: number;
+}
+
+export interface LoginResponse {
+  token: string;
+  nombreUsuario: string;
+  email: string;
+  role: string;
+  refreshToken?: string;
+  mensaje?: string;
+}
+
+export interface JwtPayload {
+  exp: number;
+  sub: string;
+  nombreUsuario?: string;
+  email?: string;
+  role?: string;
 }

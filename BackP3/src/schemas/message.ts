@@ -8,7 +8,7 @@ const messageSchema = new Schema<IMessage>(
   {
     empresaId: { type: ObjectId, ref: "User", required: true, },
     emprendedorId: { type: ObjectId, ref: "User", required: true, },
-    desafioId: { type: ObjectId, ref: "Challenge", required: true, },
+    propuestaId: { type: ObjectId, ref: "Proposal", required: true, },
     contenido: { type: String, required: true, trim: true, maxlength: 1000, },
     visto: { type: Boolean, default: false },
   },

@@ -1,4 +1,4 @@
-import type { User, Challenge, Proposal } from "./types/types";
+import type { IUser, Challenge, Proposal } from "./types/types";
 
 const STORAGE_KEYS = {
   USERS: "users",
@@ -7,17 +7,17 @@ const STORAGE_KEYS = {
 };
 
 export const storage = {
-  getUsers: (): User[] => {
+  getUsers: (): IUser[] => {
     const data = localStorage.getItem(STORAGE_KEYS.USERS);
     return data ? JSON.parse(data) : [];
   },
-  setUsers: (users: User[]): void => {
+  setUsers: (users: IUser[]): void => {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
   },
-  updateUser: (updated: User) => {
+  updateUser: (updated: IUser) => {
     const list = storage
       .getUsers()
-      .map((u) => (u.id === updated.id ? updated : u));
+      .map((u) => (u._id === updated._id ? updated : u));
     storage.setUsers(list);
   },
 
@@ -44,27 +44,25 @@ export const storage = {
   },
 
   initializeSampleData: (): void => {
-    const sampleUsers: User[] = [
+    const sampleUsers: IUser[] = [
       // Empresas
       {
-        id: "1",
+        _id: "1",
         email: "empresa1@example.com",
         password: "********",
         role: "empresa",
-        fechaRegistro: "2023-01-01",
-        activo: true,
+        createdAt: "2023-01-01",
         nombreEmpresa: "TechCorp Solutions",
         descripcion: "Empresa líder en soluciones tecnológicas",
         sitioWeb: "https://techcorp.example.com",
         telefono: "+1234567890",
       },
       {
-        id: "2",
+        _id: "2",
         email: "empresa2@example.com",
         password: "********",
         role: "empresa",
-        fechaRegistro: "2023-01-02",
-        activo: true,
+        createdAt: "2023-01-02",
         nombreEmpresa: "Innovation Labs",
         descripcion: "Laboratorio de innovación y desarrollo",
         sitioWeb: "https://innovationlabs.example.com",
@@ -72,23 +70,21 @@ export const storage = {
       },
       // Emprendedores
       {
-        id: "3",
+        _id: "3",
         email: "maria.gonzalez@example.com",
         password: "********",
         role: "emprendedor",
-        fechaRegistro: "2023-01-03",
-        activo: true,
+        createdAt: "2023-01-03",
         nombreCompleto: "María González",
         telefono: "+0987654323",
         edad: 18,
       },
       {
-        id: "4",
+        _id: "4",
         email: "carlos.rodriguez@example.com",
         password: "********",
         role: "emprendedor",
-        fechaRegistro: "2023-01-04",
-        activo: true,
+        createdAt: "2023-01-04",
         telefono: "+0987654322",
         nombreCompleto: "Carlos Rodríguez",
         edad: 25,

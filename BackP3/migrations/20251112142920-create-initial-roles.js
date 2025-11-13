@@ -1,0 +1,26 @@
+import mongodb from 'mongodb'
+
+const { ObjectId } = mongodb
+
+const initialRoles = [
+  {
+    _id: new ObjectId('000000000000000000000001'),
+    nombre: 'empresa',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    _id: new ObjectId('000000000000000000000002'),
+    nombre: 'emprendedor',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+]
+
+export const up = async (db) => {
+  await db.collection('roles').insertMany(initialRoles)
+}
+
+export const down = async (db) => {
+  await db.collection('roles').deleteMany({ _id: { $in: initialRoles.map((role) => role._id) } })
+}

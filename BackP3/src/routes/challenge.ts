@@ -1,41 +1,41 @@
-import express, { Request, Response, NextFunction } from "express";
-import Challenge from "../schemas/challenge";
-import User from "../schemas/user";
-import { ChallengeStatus, CreateChallengeRequest } from "../types";
-import { validateIdParam } from "../middlewares/validateId";
+import express, { Request, Response, NextFunction } from 'express'
+import Challenge from '../schemas/challenge'
+import User from '../schemas/user'
+import { ChallengeStatus, CreateChallengeRequest } from '../types'
+import { validateIdParam } from '../middlewares/validateId'
 
-const router = express.Router();
+const router = express.Router()
 
 // Rutas
-router.get("/", getAllChallenges);
-router.get("/:id", validateIdParam, getChallengeById);
-router.post("/", createChallenge);
-router.put("/:id", validateIdParam, updateChallenge);
-router.delete("/:id", validateIdParam, deleteChallenge);
+router.get('/', getAllChallenges)
+router.get('/:id', validateIdParam, getChallengeById)
+router.post('/', createChallenge)
+router.put('/:id', validateIdParam, updateChallenge)
+router.delete('/:id', validateIdParam, deleteChallenge)
 
 // Obtener todos los desafios activos, o por empresa
 async function getAllChallenges(
   req: Request<{}, {}, {}, { estado?: ChallengeStatus; empresaId?: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  const { estado, empresaId } = req.query;
+  const { estado, empresaId } = req.query
 
   try {
-    const filter: any = {};
+    const filter: any = {}
 
-    if (estado && ["activo", "inactivo"].includes(estado)) filter.estado = estado;
-    
-    if (empresaId) filter.empresaId = empresaId;
-    
+    if (estado && ['activo', 'inactivo'].includes(estado)) filter.estado = estado
+
+    if (empresaId) filter.empresaId = empresaId
+
     const challenges = await Challenge.find(filter).populate({
-      path: "empresaId",
-      select: "nombreEmpresa",
-    });
+      path: 'empresaId',
+      select: 'nombreEmpresa',
+    })
 
-    res.send(challenges);
+    res.send(challenges)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -43,24 +43,24 @@ async function getAllChallenges(
 async function getChallengeById(
   req: Request<{ id: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Obtener desafio con id: ", req.params.id);
+  console.log('Obtener desafio con id: ', req.params.id)
 
   try {
     const challenge = await Challenge.findById(req.params.id).populate({
-      path: "empresaId",
-      select: "nombreEmpresa",
-    });
+      path: 'empresaId',
+      select: 'nombreEmpresa',
+    })
 
     if (!challenge) {
-      res.status(404).send("Challenge not found");
-      return;
+      res.status(404).send('Challenge not found')
+      return
     }
 
-    res.send(challenge);
+    res.send(challenge)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -68,25 +68,25 @@ async function getChallengeById(
 async function createChallenge(
   req: Request<Record<string, never>, unknown, CreateChallengeRequest>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Desafio creado: ", req.body);
+  console.log('Desafio creado: ', req.body)
 
-  const { empresaId } = req.body;
+  const { empresaId } = req.body
 
   try {
-    const empresa = await User.findById(empresaId);
+    const empresa = await User.findById(empresaId)
     // Validar si existe la empresa
     if (!empresa) {
-      res.status(404).send("Empresa not found");
-      return;
+      res.status(404).send('Empresa not found')
+      return
     }
     // Crear el desafio
-    const challengeCreated = await Challenge.create(req.body);
+    const challengeCreated = await Challenge.create(req.body)
 
-    res.send(challengeCreated);
+    res.send(challengeCreated)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -94,25 +94,33 @@ async function createChallenge(
 async function updateChallenge(
   req: Request<{ id: string }, unknown, Partial<CreateChallengeRequest>>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Actualizar desafio con id: ", req.params.id);
+  console.log('Actualizar desafio con id: ', req.params.id)
 
   try {
-    const challengeToUpdate = await Challenge.findById(req.params.id);
+    const challengeToUpdate = await Challenge.findById(req.params.id)
 
     if (!challengeToUpdate) {
-      console.error("Desafio not found");
-      res.status(404).send("Desafio not found");
-      return;
+      console.error('Desafio not found')
+      res.status(404).send('Desafio not found')
+      return
     }
 
-    Object.assign(challengeToUpdate, req.body);
-    await challengeToUpdate.save();
+    // 🔒 Solo el admin o el usuario empresa dueño puede modificarlo
+    // if (!req.isAdmin?.() && challengeToUpdate.empresaId.toString() !== req.user?._id.toString()) {
+    //   res.status(403).send('No autorizado para modificar este desafío')
+    //   return
+    // }
 
-    res.send(challengeToUpdate);
+    delete req.body.empresaId
+    Object.assign(challengeToUpdate, req.body)
+    await challengeToUpdate.save()
+
+    res.send(challengeToUpdate)
+    console.log('Desafio actualizado: ', req.body)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
@@ -120,24 +128,31 @@ async function updateChallenge(
 async function deleteChallenge(
   req: Request<{ id: string }>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
-  console.log("Desafio eliminado con id: ", req.params.id);
+  console.log('Desafio eliminado con id: ', req.params.id)
 
   try {
-    const challenge = await Challenge.findById(req.params.id);
+    const challenge = await Challenge.findById(req.params.id)
 
     if (!challenge) {
-      res.status(404).send("Desafio not found");
-      return;
+      console.error('Desafio not found')
+      res.status(404).send('Desafio not found')
+      return
     }
 
-    await Challenge.deleteOne({ _id: challenge._id });
+    // 🔒 Solo el admin o el usuario empresa dueño puede modificarlo
+    // if (!req.isAdmin?.() && challenge.empresaId.toString() !== req.user?._id.toString()) {
+    //   res.status(403).send('No autorizado para eliminar este desafío')
+    //   return
+    // }
 
-    res.send(`Desafio eliminado: ${req.params.id}`);
+    await Challenge.deleteOne({ _id: challenge._id })
+
+    res.send(`Desafio eliminado: ${req.params.id}`)
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
 
-export default router;
+export default router

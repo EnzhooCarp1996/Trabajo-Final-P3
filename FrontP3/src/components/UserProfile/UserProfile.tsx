@@ -1,5 +1,5 @@
 import { BankOutlined, EditOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
-import type { User } from "../../types/types";
+import type { IUser } from "../../types/types";
 import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
 import { Card, Typography, Button, Form } from "antd";
 import { CompanyForm } from "../Company/CompanyForm";
@@ -12,18 +12,18 @@ import { useState } from "react";
 const { Title, Text } = Typography;
 
 interface UserProfileProps {
-    user: User;
+    user: IUser;
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
-    const [currentUser, setCurrentUser] = useState<User>(user);
+    const [currentUser, setCurrentUser] = useState<IUser>(user);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
 
-    const handleSubmit = (values: Partial<User>) => {
+    const handleSubmit = (values: Partial<IUser>) => {
         // actualizar estado local
         setCurrentUser(prev => {
-            const updated = { ...prev, ...values } as User;
+            const updated = { ...prev, ...values } as IUser;
             // actualizar en storage
             storage.updateUser(updated);
             return updated;
@@ -104,7 +104,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                     ]}
                 >
                     <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Fecha de Registro: {new Date(user.fechaRegistro).toLocaleDateString()}</Text>
+                        <Text style={{ color: "#ccc" }}>Fecha de Registro: {new Date(user.createdAt).toLocaleDateString()}</Text>
                     </div>
                     <div style={{ marginBottom: "12px" }}>
                         <Text style={{ color: "#ccc" }}>Estado: {user.activo ? "Activo" : "Inactivo"}</Text>

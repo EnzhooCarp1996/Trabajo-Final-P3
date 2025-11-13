@@ -9,6 +9,7 @@ import userRouter from "./routes/user";
 import challengeRouter from "./routes/challenge";
 import proposalRouter from "./routes/proposal";
 import messageRouter from "./routes/message";
+import { errorHandler } from "./middlewares/errorHandler";
 // import authentication from './middlewares/authentication'
 // import authorization from './middlewares/authorization'
 
@@ -28,13 +29,7 @@ app.use("/challenges", challengeRouter); // GET /challenges?estado=activo&empres
 app.use("/proposals", proposalRouter);   // GET /proposals?estado=en%20revision&emprendedorId=456
 app.use("/messages", messageRouter);     // GET /messages?empresaId=...&desafioId=...
 
-// Middleware de manejo de errores
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error("❌ Error:", err.message || err);
-  res.status(500).send("Internal server error");
-});
-// app.use('/', statusRouter)
 // app.use('/auth', authRouter)
 // app.use('/users', authentication, userRouter)
-
+app.use(errorHandler);
 export default app;

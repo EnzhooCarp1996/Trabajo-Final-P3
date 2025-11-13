@@ -20,17 +20,17 @@ export const EntrepreneurView = () => {
 
             <Space wrap size="large">
                 {entrepreneurs.filter(u => u.role === "emprendedor").map((entrepreneur) => (
-                    
-                        <CardEntity
-                            title={entrepreneur.nombreCompleto}
-                            icon={<UserOutlined />}
-                        >
-                            <div style={{ color: "#ccc" }}>
-                                <strong>Edad:</strong> {entrepreneur.edad} años
-                            </div>
-                            {getProposalCount(entrepreneur.id)} propuestas
-                        </CardEntity>
-                    
+
+                    <CardEntity
+                        title={entrepreneur.nombreCompleto}
+                        icon={<UserOutlined />}
+                    >
+                        <div style={{ color: "#ccc" }}>
+                            <strong>Edad:</strong> {entrepreneur.edad} años
+                        </div>
+                        {getProposalCount(entrepreneur._id)} propuestas
+                    </CardEntity>
+
                 ))}
             </Space>
 

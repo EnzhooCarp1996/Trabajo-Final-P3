@@ -1,5 +1,5 @@
 import { useProposalView } from "../../hooks/Proposal/useProposalView";
-import type { Challenge, User } from "../../types/types";
+import type { Challenge, IUser } from "../../types/types";
 import { ProposalForm } from "../Proposal/ProposalForm";
 import { ChallengeList } from "./ChallengeList";
 import { ChallengeForm } from "./ChallengeForm";
@@ -17,7 +17,7 @@ interface ChallengesViewProps {
 }
 
 export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showButtonNew }) => {
-    const [users] = useState<User[]>(storage.getUsers());
+    const [users] = useState<IUser[]>(storage.getUsers());
     const companies = users.filter(u => u.role === "empresa");
     const entrepreneurs = users.filter(u => u.role === "emprendedor");
     const [challenges, setChallenges] = useState<Challenge[]>(storage.getChallenges());
@@ -48,7 +48,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
         } else {
             setEditingChallenge(null);
             form.resetFields();
-            if (companies.length > 0) form.setFieldsValue({ empresaId: companies[0].id, estado: "activo" });
+            if (companies.length > 0) form.setFieldsValue({ empresaId: companies[0]._id, estado: "activo" });
         }
         setIsModalOpen(true);
     };
@@ -95,7 +95,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     };
 
     const getCompanyName = (empresaId: string) => {
-        const company = companies.find(c => c.id === empresaId);
+        const company = companies.find(c => c._id === empresaId);
         return company ? company.nombreEmpresa : "Empresa desconocida";
     };
 
@@ -137,7 +137,7 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
                 editing={!!editingProposal}
             >
                 <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
-                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs as User[]} selectedChallenge={selectedChallenge} />
+                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs as IUser[]} selectedChallenge={selectedChallenge} />
                 </FormGeneral>
             </ModalGeneral>
         </>

@@ -4,14 +4,14 @@ import { storage } from "../../storage";
 
 import { Space } from "antd"
 import { useState } from "react";
-import type { User } from "../../types/types";
+import type { IUser } from "../../types/types";
 
 import 'swiper/css';
 import { Box, Paper } from "@mui/material";
 
 
 export const CompanyView = () => {
-  const [users] = useState<User[]>(storage.getUsers());
+  const [users] = useState<IUser[]>(storage.getUsers());
   const companies = users.filter(u => u.role === "empresa");
 
   // const handleDelete = (id: string) => {

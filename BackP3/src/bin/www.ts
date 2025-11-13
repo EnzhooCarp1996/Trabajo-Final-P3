@@ -20,9 +20,9 @@ app.set('port', port)
 // Create HTTP server.
 const server = http.createServer(app)
 
-const db_url = process.env.MONGO_URL_AUTH_ENABLED || 'mongodb://127.0.0.1:27017'
-const db_name = process.env.MONGO_DB || 'test'
-const fullUrl = `${db_url}/${db_name}`
+const db_url = process.env.MONGO_URL
+const db_name = process.env.MONGO_DB
+const fullUrl = `${db_url}${db_name}`
 
 // MongoDB database initialization
 initDatabase()

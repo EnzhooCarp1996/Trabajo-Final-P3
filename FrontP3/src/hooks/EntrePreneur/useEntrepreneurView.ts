@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { storage } from "../../storage";
-import type { User } from "../../types/types";
+import type { IUser } from "../../types/types";
 
 export const useEntrepreneurView = () => {
-  const [users] = useState<User[]>(storage.getUsers());
+  const [users] = useState<IUser[]>(storage.getUsers());
   const entrepreneurs = users.filter((u) => u.role === "emprendedor");
 
   const getProposalCount = (entrepreneurId: string) => {
