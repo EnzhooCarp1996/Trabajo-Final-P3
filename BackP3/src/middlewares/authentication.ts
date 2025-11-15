@@ -34,8 +34,9 @@ function authentication(req: Request, res: Response, next: NextFunction): void {
 
   try {
     // Unsecure alternative
-    const decoded = jwt.verify(token, 'base-api-express-generator', {
-      issuer: 'base-api-express-generator',
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!, {
+      algorithms: ['HS256'], // <-- debe coincidir
+      issuer: process.env.JWT_ISSUER || 'base-api-express-generator',
     }) as JWTPayload
 
     // Correct alternative

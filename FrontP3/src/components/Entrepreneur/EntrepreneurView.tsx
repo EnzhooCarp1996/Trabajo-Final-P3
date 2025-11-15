@@ -8,7 +8,7 @@ import { UserOutlined } from "@ant-design/icons";
 
 
 export const EntrepreneurView = () => {
-    const { entrepreneurs, getProposalCount } = useEntrepreneurView();
+    const { entrepreneurs, loading, getProposalCount } = useEntrepreneurView();
 
     return (
         <>
@@ -17,9 +17,11 @@ export const EntrepreneurView = () => {
 
             {/* lista de emprendedores */}
             {/* <EntrepreneursList entrepreneurs={entrepreneurs} getProposalCount={getProposalCount} /> */}
-
+{loading ? (
+        <p>Cargando...</p>
+      ) : (
             <Space wrap size="large">
-                {entrepreneurs.filter(u => u.role === "emprendedor").map((entrepreneur) => (
+                {entrepreneurs.map((entrepreneur) => (
 
                     <CardEntity
                         title={entrepreneur.nombreCompleto}
@@ -33,7 +35,7 @@ export const EntrepreneurView = () => {
 
                 ))}
             </Space>
-
+)}
         </>
     );
 }

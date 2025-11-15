@@ -1,7 +1,4 @@
-import api from "./AxiosService"; // tu axiosInstance con interceptores
-import type { AxiosResponse } from "axios";
-
-// Tipos de usuario (podés ajustarlos según tu schema)
+import axiosInstance from "./AxiosService";
 
 export type Role = "empresa" | "emprendedor";
 
@@ -10,6 +7,7 @@ export interface IUser {
   email: string;
   password: string;
   role: Role;
+  activo: boolean;
   telefono: string;
   createdAt?: string;
   nombreEmpresa?: string;
@@ -22,7 +20,7 @@ export interface IUser {
 export interface CreateUserRequest {
   email: string;
   password: string;
-  role: string; // en el frontend, generalmente se manda como string, no ObjectId
+  role: string;
   activo: boolean;
   telefono: string;
   nombreEmpresa?: string;
@@ -32,34 +30,29 @@ export interface CreateUserRequest {
   edad?: number;
 }
 
-// Obtener todos los usuarios filtrados por rol
-export async function getAllUsersByRole(role: "empresa" | "emprendedor"): Promise<IUser[]> {
-  const response: AxiosResponse<IUser[]> = await api.get(`/users`, {
-    params: { role },
-  });
-  return response.data;
+// Interfaz que define el contrato del servicio
+export interface UserService {
+  getAllByRole: (role: "empresa" | "emprendedor") => Promise<IUser[]>;
+  getById: (id: string) => Promise<IUser>;
+  create: (data: CreateUserRequest) => Promise<IUser>;
+  update: (id: string, data: Partial<CreateUserRequest>) => Promise<IUser>;
+  delete: (id: string) => Promise<{ message: string }>;
 }
 
-// Obtener usuario por ID
-export async function getUserById(id: string): Promise<IUser> {
-  const response: AxiosResponse<IUser> = await api.get(`/users/${id}`);
-  return response.data;
-}
+// Implementación del servicio
+export const userService: UserService = {
+  getAllByRole: (role) =>
+    axiosInstance.get<IUser[]>(`/users`, { params: { role } }).then(res => res.data),
 
-// Crear usuario
-export async function createUser(data: CreateUserRequest): Promise<IUser> {
-  const response: AxiosResponse<IUser> = await api.post(`/users`, data);
-  return response.data;
-}
+  getById: (id) =>
+    axiosInstance.get<IUser>(`/users/${id}`).then(res => res.data),
 
-// Actualizar usuario
-export async function updateUser(id: string, data: Partial<CreateUserRequest>): Promise<IUser> {
-  const response: AxiosResponse<IUser> = await api.put(`/users/${id}`, data);
-  return response.data;
-}
+  create: (data) =>
+    axiosInstance.post<IUser>(`/users`, data).then(res => res.data),
 
-// Eliminar usuario
-export async function deleteUser(id: string): Promise<string> {
-  const response: AxiosResponse<string> = await api.delete(`/users/${id}`);
-  return response.data;
-}
+  update: (id, data) =>
+    axiosInstance.put<IUser>(`/users/${id}`, data).then(res => res.data),
+
+  delete: (id) =>
+    axiosInstance.delete<{ message: string }>(`/users/${id}`).then(res => res.data),
+};

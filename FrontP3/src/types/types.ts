@@ -8,7 +8,8 @@ export interface IUser {
   _id: string;
   email: string;
   password: string;
-  role: Role;
+  role: string;
+  activo: boolean;
   telefono: string;
   createdAt?: string;
   nombreEmpresa?: string;
@@ -53,4 +54,12 @@ export interface JwtPayload {
   nombreUsuario?: string;
   email?: string;
   role?: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  nombreUsuario: string;
+  role: string;
+  refreshToken?: string;
+  mensaje?: string;
 }

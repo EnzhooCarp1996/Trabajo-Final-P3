@@ -1,6 +1,7 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { Layout, Typography, Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/Auth/useAuth";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -15,6 +16,7 @@ interface AppHeaderProps {
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, nombreUsuario, /* role, logout */ }) => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const handleClick = () => {
         navigate("/UserProfile");
@@ -63,7 +65,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, n
                     type="primary"
                     icon={<LogoutOutlined />}
                     danger
-                    //   onClick={logout}
+                    onClick={logout}
                     style={{ backgroundColor: "#f5222d", borderColor: "#f5222d" }}
                 />
             </Space>

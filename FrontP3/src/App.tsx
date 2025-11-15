@@ -1,28 +1,35 @@
-import { EntrepreneurView } from './components/Entrepreneur/EntrepreneurView';
-import { ChallengesView } from './components/Challenge/ChallengesView';
-import { ProposalsView } from './components/Proposal/ProposalsView';
-import { CompanyView } from './components/Company/CompanyView';
-import { UserProfile } from './components/UserProfile/UserProfile';
 import type { IUser } from './types/types';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppContent } from './components/Layout/AppContent';
 import { storage } from './storage';
 import { useEffect } from 'react';
 
 
 import './App.css'
+import { useAuth } from './context/Auth/useAuth';
+import { LoginForm } from './components/Login/LoginForm';
+import { PrivateRoutes } from './routes/PrivateRoutes';
 // import { LoginForm } from './components/Login/LoginForm';
 
 function App() {
   // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { token, role, email, _id } = useAuth();
+  console.log("TOKEN EN APP:", token);
+
+  useEffect(() => {
+    storage.initializeSampleData();
+  }, []);
+
+
 
   const user: IUser = {
-    _id: "3",
-    email: "maria.gonzalez@example.com",
+    _id: _id,
+    email: email,
     password: "********",
-    role: "emprendedor",
-    createdAt: "2023-01-01",
+    role: role,
     activo: true,
+    telefono: "1168779720",
+    createdAt: "2023-01-01",
     nombreCompleto: "Maria Gonzalez",
     edad: 18,
   };
@@ -40,44 +47,37 @@ function App() {
   //   telefono: "+54 11 1234-5678",
   // };
 
-
-
-  useEffect(() => {
-    storage.initializeSampleData();
-  }, []);
-
   // const handleLogin = () => {
   //   setIsAuthenticated(true);
   // };
 
   return (
+
     <BrowserRouter>
       <Routes>
-        {/* Ruta pública: Login */}
-        {/* <Route path="/login" element={<LoginForm onLogin={handleLogin} />} /> */}
 
-        {/* Rutas privadas: requieren estar autenticado */}
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/UserProfile" /> : <LoginForm />}
+        />
+
+        {/* RUTAS PRIVADAS */}
         <Route
           path="/*"
           element={
-            <AppContent nombreUsuario={user.role === "emprendedor" ? user.nombreCompleto : user.nombreEmpresa}>
-              <Routes>
-                <Route path="/UserProfile" element={<UserProfile user={user} />} />
-                <Route path="/Company" element={<CompanyView />} />
-                <Route path="/Challenge" element={<ChallengesView readOnly showButtonNew={user.role === "emprendedor"} />} />
-                <Route path="/Challenge/:empresaId" element={<ChallengesView />} />
-                <Route path="/Entrepreneur" element={<EntrepreneurView />} />
-                <Route path="/Proposal" element={<ProposalsView titulo={"Propuestas"} readOnly showButtonNew={user.role === "emprendedor"} />} />
-                <Route path="/Proposal/:entrepreneurId" element={<ProposalsView titulo={"Mis Propuestas"} showButtonNew={user.role === "emprendedor"} />} />
-                <Route path="*" element={<h2>Página no encontrada</h2>} />
-              </Routes>
-            </AppContent>
-
-            // <Navigate to="/login" replace />
+            token ? (
+              <AppContent nombreUsuario={user.nombreCompleto}>
+                <PrivateRoutes user={user} />
+              </AppContent>
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
       </Routes>
     </BrowserRouter>
+
   );
 }
 

@@ -1,31 +1,16 @@
-import { useState } from "react";
 import { Eye, EyeOff, PaintBucket } from "lucide-react";
+import { useLoginForm } from "../../hooks/Login/useLoginForm";
 
-export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
-  const [formData, setFormData] = useState({
-    nombreUsuario: "",
-    contrasenia: "",
-    recordar: false,
-  });
-
-  const [showContrasenia, setShowContrasenia] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  // Maneja inputs comunes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      console.log("Login exitoso");
-      setLoading(false);
-      onLogin?.(); // llama al callback del App
-    }, 1000);
-  };
+export const LoginForm = () => {
+  const {
+    formData,
+    showPassword,
+    loading,
+    error,
+    setShowPassword,
+    handleChange,
+    handleSubmit,
+  } = useLoginForm();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-900 via-emerald-900 to-green-800 px-4">
@@ -44,12 +29,12 @@ export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Usuario */}
             <div>
-              <label htmlFor="nombreUsuario" className="block text-gray-300 mb-2">Nombre de Usuario</label>
+              <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
               <input
-                id="nombreUsuario"
+                id="email"
                 type="text"
-                name="nombreUsuario"
-                value={formData.nombreUsuario}
+                name="email"
+                value={formData.email}
                 autoComplete="username"
                 onChange={handleChange}
                 className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-green-500"
@@ -59,13 +44,13 @@ export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
 
             {/* Contraseña */}
             <div>
-              <label htmlFor="contrasenia" className="block text-gray-300 mb-2">Contraseña</label>
+              <label htmlFor="password" className="block text-gray-300 mb-2">Contraseña</label>
               <div className="relative">
                 <input
-                  id="contrasenia"
-                  type={showContrasenia ? "text" : "password"}
-                  name="contrasenia"
-                  value={formData.contrasenia}
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
                   onChange={handleChange}
                   autoComplete="current-password"
                   className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-green-500 pr-10"
@@ -73,10 +58,10 @@ export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowContrasenia(!showContrasenia)}
+                  onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
                 >
-                  {showContrasenia ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
             </div>
@@ -93,7 +78,7 @@ export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
               <span className="text-gray-300">Recordarme</span>
             </div>
 
-
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <button
               type="submit"
@@ -109,11 +94,11 @@ export const LoginForm = ({ onLogin }: { onLogin?: () => void }) => {
         <div className="w-full md:w-1/2 bg-gradient-to-br from-green-600 via-emerald-600 to-green-800 flex flex-col items-center justify-center p-6">
           <PaintBucket className="w-20 md:w-32 h-20 md:h-32 text-white mb-4" />
           <div className="text-white text-xl md:text-3xl font-bold opacity-80 text-center space-y-1">
-            <p>Bienvenido al SGTA</p>
-            <p>Sistema de Gestión de Taller Automotriz</p>
+            <p>Bienvenido</p>
+            <p>Plataforma de Desafios</p>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -39,7 +39,7 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
   const token = jwt.sign(payload, process.env.JWT_SECRET!, {
     subject: user._id.toString(),
     issuer: process.env.JWT_ISSUER || 'base-api-express-generator',
-    algorithm: 'RS256',
+    algorithm: 'HS256',
     expiresIn: '7d' // duración del token
   })
 

@@ -1,11 +1,11 @@
-import axios from "axios"
-import type { AxiosError, AxiosInstance, AxiosResponse } from "axios"
-import { getToken, isTokenExpired, logout } from "./SessionService"
-import toast from "react-hot-toast"
+import axios from "axios";
+import type { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import { getToken, isTokenExpired, logout } from "./SessionService";
+import toast from "react-hot-toast";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const axiosInstance: AxiosInstance  = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: { "Content-Type": "application/json" },
   timeout: 1000 * 15, // 15 sec
@@ -14,6 +14,14 @@ const axiosInstance: AxiosInstance  = axios.create({
 // Interceptor de request
 axiosInstance.interceptors.request.use(
   (config) => {
+    // Ignorar requests a login o register
+    if (
+      config.url?.includes("/auth") ||
+      config.url?.includes("/auth")
+    ) {
+      return config;
+    }
+
     const token = getToken();
     if (!token || isTokenExpired(token)) {
       logout();
