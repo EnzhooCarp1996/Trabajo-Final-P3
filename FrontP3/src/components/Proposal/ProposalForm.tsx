@@ -1,42 +1,19 @@
-import type { Challenge, Entrepreneur } from "../../types/types";
-import { Form, Input, Select } from "antd";
 
-const { Option } = Select;
+import type { IChallenge } from "../../types/types";
+import { Form, Input, Typography } from "antd";
+
+const { Title } = Typography;
 
 interface ChallengeFormProps {
-    challenges: Challenge[],
-    entrepreneurs: Entrepreneur[],
-    selectedChallenge: Challenge | null;
+    selectedChallenge: IChallenge | null;
 }
 
-export const ProposalForm: React.FC<ChallengeFormProps> = ({ challenges, entrepreneurs, selectedChallenge }) => {
+export const ProposalForm: React.FC<ChallengeFormProps> = ({ selectedChallenge }) => {
+
+
     return (
         <>
-            <Form.Item name="desafioId" label="Desafío" rules={[{ required: true, message: "Seleccione un desafío" }]}>
-                {selectedChallenge ? (
-                    // ✅ Mostrar desafío fijo
-                    <Input value={selectedChallenge.titulo} disabled />
-                ) : (
-                    // ✅ Lista normal solo si no hay desafío seleccionado
-                    <Select placeholder="Seleccionar desafío">
-                        {challenges.map((c) => (
-                            <Option key={c.id} value={c.id}>
-                                {c.titulo}
-                            </Option>
-                        ))}
-                    </Select>
-                )}
-            </Form.Item>
-
-            <Form.Item name="emprendedorId" label="Emprendedor" rules={[{ required: true, message: "Seleccione un emprendedor" }]}>
-                <Select placeholder="Seleccionar emprendedor">
-                    {entrepreneurs.map((e) => (
-                        <Option key={e.id} value={e.id}>
-                            {e.nombreCompleto}
-                        </Option>
-                    ))}
-                </Select>
-            </Form.Item>
+            <Title level={3}>{selectedChallenge?.titulo}</Title>
 
             <Form.Item name="tituloPropuesta" label="Título de la Propuesta" rules={[{ required: true }]}>
                 <Input />
@@ -45,19 +22,6 @@ export const ProposalForm: React.FC<ChallengeFormProps> = ({ challenges, entrepr
             <Form.Item name="descripcion" label="Descripción" rules={[{ required: true }]}>
                 <Input.TextArea rows={3} />
             </Form.Item>
-
-            <Form.Item name="estado" label="Estado" rules={[{ required: true }]}>
-                <Select>
-                    <Option value="en revisión">En Revisión</Option>
-                    <Option value="seleccionada">Seleccionada</Option>
-                    <Option value="descartada">Descartada</Option>
-                </Select>
-            </Form.Item>
-
-            <Form.Item name="puntos" label="Puntos" rules={[{ required: true }]}>
-                <Input type="number" min={0} max={100} />
-            </Form.Item>
-
         </>
     )
 }

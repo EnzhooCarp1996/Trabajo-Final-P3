@@ -1,19 +1,19 @@
 import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
-import type { Challenge } from "../../types/types";
+import type { IChallenge } from "../../types/types";
 import { CardEntity } from "../CardEntity";
 import { GridRow } from "../GridRow";
 import { Button, Col } from "antd";
 
 
 interface ChallengeListProps {
-    challenges: Challenge[];
+    challenges: IChallenge[];
     getCompanyName: (empresaId: string) => string | undefined;
-    toggleStatus?: (challenge: Challenge) => void;
-    openModal?: (challenge: Challenge) => void;
+    toggleStatus?: (challenge: IChallenge) => void;
+    openModal?: (challenge: IChallenge) => void;
     handleDelete?: (id: string) => void;
     readOnly?: boolean;
     showButtonNew?: boolean;
-    openModalProposal?: (challenge?: Challenge) => void;
+    openModalProposal?: (challenge?: IChallenge) => void;
 }
 
 export const ChallengeList: React.FC<ChallengeListProps> = ({
@@ -29,7 +29,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
     return (
         <GridRow>
             {challenges.map((challenge) => (
-                <Col xs={24} sm={12} lg={8} key={challenge.id}>
+                <Col xs={24} sm={12} lg={8} key={challenge._id}>
                     <CardEntity
                         tituloBoton={"Propuesta"}
                         iconoBoton={<PlusOutlined />}
@@ -55,7 +55,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
                                 : []
                         }
                         onEdit={!readOnly ? () => openModal && openModal(challenge) : undefined}
-                        onDelete={!readOnly ? () => handleDelete && handleDelete(challenge.id) : undefined}
+                        onDelete={!readOnly ? () => handleDelete && handleDelete(challenge._id) : undefined}
                         showButtonNew={challenge.estado === "activo" && showButtonNew}
                         onNuevoClick={challenge.estado === "activo" ? () => openModalProposal?.(challenge) : undefined}
 
@@ -72,7 +72,7 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
                             }}
                         >
                             <div>
-                                <CalendarOutlined /> {new Date(challenge.fechaPublicacion).toLocaleDateString()}
+                                <CalendarOutlined /> {new Date(challenge.createdAt).toLocaleDateString()}
                             </div>
                             <div>{getCompanyName(challenge.empresaId)}</div>
                         </div>

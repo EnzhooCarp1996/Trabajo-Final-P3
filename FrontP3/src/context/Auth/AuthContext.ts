@@ -4,6 +4,7 @@ interface AuthContextType {
   token: string | null;
   _id: string;
   email: string;
+  nombre: string;
   role: string;
   login: (token: string, recordar?: boolean) => void;
   logout: () => void;

@@ -7,7 +7,9 @@ import { HeaderEntity } from "../HeaderEntity";
 import { ModalGeneral } from "../ModalGeneral";
 import { FormGeneral } from "../FormGeneral";
 import { storage } from "../../storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../context/Auth/useAuth";
+import { userService } from "../../services/UserService";
 
 const { Title, Text } = Typography;
 
@@ -16,9 +18,19 @@ interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
-    const [currentUser, setCurrentUser] = useState<IUser>(user);
+    const { _id, role } = useAuth();
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+
+    useEffect(() => {
+        if (!_id) return;
+
+        userService.getById(_id)
+            .then((user) => setCurrentUser(user))
+            .catch((err) => console.error("Error cargando usuario:", err));
+
+    }, [_id]);
 
     const handleSubmit = (values: Partial<IUser>) => {
         // actualizar estado local
@@ -39,20 +51,20 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
 
     const renderUserInfo = () => {
-        if (currentUser.role === "empresa") {
+        if (role === "empresa") {
             return (
                 <Card
                     title="Información de la Empresa"
                     style={{ borderColor: "#01650bff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
 
                 >
-                    <Text style={{ color: "#fff" }}>Nombre de la Empresa: {currentUser.nombreEmpresa}</Text>
+                    <Text style={{ color: "#fff" }}>Nombre de la Empresa: {currentUser?.nombreEmpresa}</Text>
                     <br />
-                    <Text style={{ color: "#fff" }}>Descripción: {currentUser.descripcion}</Text>
+                    <Text style={{ color: "#fff" }}>Descripción: {currentUser?.descripcion}</Text>
                     <br />
-                    <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser.sitioWeb}</a></Text>
+                    <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser?.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser?.sitioWeb}</a></Text>
                     <br />
-                    <Text style={{ color: "#fff" }}>Teléfono: {currentUser.telefono}</Text>
+                    <Text style={{ color: "#fff" }}>Teléfono: {currentUser?.telefono}</Text>
                 </Card>
             );
         } else {
@@ -61,7 +73,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                     title="Información del Emprendedor"
                     style={{ borderColor: "#01650bff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
                 >
-                    <Text style={{ color: "#fff" }}>Nombre Completo: {currentUser.nombreCompleto}</Text>
+                    <Text style={{ color: "#fff" }}>Nombre Completo: {currentUser?.nombreCompleto}</Text>
                 </Card>
             );
         }
@@ -92,7 +104,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                                 <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
                             )}
                             <div>
-                                <Title level={3} style={{ color: "#fff" }}>{currentUser.role === "emprendedor" ? currentUser?.nombreCompleto : currentUser.nombreEmpresa}</Title>
+                                <Title level={3} style={{ color: "#fff" }}>{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
                                 <Text style={{ color: "#ccc" }}>@{user.email.split('@')[0]}</Text>
                             </div>
                         </div>
@@ -104,10 +116,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                     ]}
                 >
                     <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Fecha de Registro: {new Date(user.createdAt).toLocaleDateString()}</Text>
+                        <Text style={{ color: "#ccc" }}>Fecha de Registro: {currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : ""}</Text>
                     </div>
                     <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Estado: {user.activo ? "Activo" : "Inactivo"}</Text>
+                        <Text style={{ color: "#ccc" }}>Estado: {currentUser?.activo ? "Activo" : "Inactivo"}</Text>
+                    </div>
+                    <div style={{ marginBottom: "12px" }}>
+                        <Text style={{ color: "#ccc" }}>Telefono: {currentUser?.telefono}</Text>
                     </div>
                     <div style={{ display: "flex", gap: "12px" }}>
                         <Button icon={<MailOutlined />} type="link" href={`mailto:${user.email}`} target="_blank">
@@ -121,12 +136,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
             </div>
 
             <ModalGeneral
+                titulo={"Usuario"}
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 onOk={() => form.submit()}
             >
                 <FormGeneral form={form} handleSubmit={handleSubmit}>
-                    {currentUser.role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
+                    {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
                 </FormGeneral>
             </ModalGeneral>
         </>

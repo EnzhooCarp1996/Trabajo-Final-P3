@@ -6,6 +6,7 @@ import axiosInstance from "./AxiosService";
 export interface JWTPayload {
   _id: string;
   email: string;
+  nombre: string;
   role: "empresa" | "emprendedor";
   iat?: number;
   exp?: number;
@@ -17,7 +18,7 @@ export interface JWTPayload {
 // -------------------------
 export interface AuthService {
   logIn: (email: string, password: string) => Promise<LoginResponse>;
-  getUserInfo: () => { _id: string, email: string; role: string };
+  getUserInfo: () => { _id: string, email: string, nombre: string, role: string };
 }
 
 export const authService: AuthService = {
@@ -37,12 +38,12 @@ export const authService: AuthService = {
 
   getUserInfo: () => {
     const token = getToken();
-    if (!token || isTokenExpired(token)) return {  _id: "", email: "", role: "" };
+    if (!token || isTokenExpired(token)) return {  _id: "", email: "", nombre: "", role: "" };
     try {
       const decoded = jwtDecode<JWTPayload>(token);
-      return { _id: decoded._id, email: decoded.email, role: decoded.role };
+      return { _id: decoded._id, email: decoded.email, nombre: decoded.nombre, role: decoded.role };
     } catch {
-      return {  _id: "", email: "", role: "" };
+      return {  _id: "", email: "", nombre: "", role: "" };
     }
   },
 };

@@ -14,9 +14,9 @@ interface AppHeaderProps {
     //   logout: () => void;
 }
 
-export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, nombreUsuario, /* role, logout */ }) => {
+export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed }) => {
     const navigate = useNavigate();
-    const { logout } = useAuth();
+    const { nombre, role, logout } = useAuth();
 
     const handleClick = () => {
         navigate("/UserProfile");
@@ -47,7 +47,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, n
             />
 
             <Title level={4} style={{ color: "white", margin: 0 }}>
-                Panel
+                Panel {role}
             </Title>
 
             <Space size="middle">
@@ -57,7 +57,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed, n
                     style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
                     onClick={handleClick}
                 >
-                    {nombreUsuario} 
+                    {nombre} 
                     {/* ({role}) */}
                 </Button>
 

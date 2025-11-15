@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     sessionLogout();
     setToken(null);
-    setUserInfo({ _id: "", email: "", role: "" });
+    setUserInfo({ _id: "", email: "", nombre: "", role: "" });
   };
 
   useEffect(() => {
@@ -46,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         _id: userInfo._id,
         email: userInfo.email,
+        nombre: userInfo.nombre,
         role: userInfo.role,
         login,
         logout,

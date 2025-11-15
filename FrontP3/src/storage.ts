@@ -1,4 +1,4 @@
-import type { IUser, Challenge, Proposal } from "./types/types";
+import type { IUser, IChallenge, IProposal } from "./types/types";
 
 const STORAGE_KEYS = {
   USERS: "users",
@@ -21,21 +21,21 @@ export const storage = {
     storage.setUsers(list);
   },
 
-  getChallenges: (): Challenge[] => {
+  getChallenges: (): IChallenge[] => {
     const data = localStorage.getItem(STORAGE_KEYS.CHALLENGES);
     return data ? JSON.parse(data) : [];
   },
 
-  setChallenges: (challenges: Challenge[]): void => {
+  setChallenges: (challenges: IChallenge[]): void => {
     localStorage.setItem(STORAGE_KEYS.CHALLENGES, JSON.stringify(challenges));
   },
 
-  getProposals: (): Proposal[] => {
+  getProposals: (): IProposal[] => {
     const data = localStorage.getItem(STORAGE_KEYS.PROPOSALS);
     return data ? JSON.parse(data) : [];
   },
 
-  setProposals: (proposals: Proposal[]): void => {
+  setProposals: (proposals: IProposal[]): void => {
     localStorage.setItem(STORAGE_KEYS.PROPOSALS, JSON.stringify(proposals));
   },
 
@@ -96,32 +96,32 @@ export const storage = {
     }
 
     if (storage.getChallenges().length === 0) {
-      const sampleChallenges: Challenge[] = [
+      const sampleChallenges: IChallenge[] = [
         {
-          id: "1",
+          _id: "1",
           empresaId: "1",
           titulo: "Desarrollo de App Móvil",
           descripcion:
             "Buscamos una solución innovadora para nuestra app móvil de gestión empresarial",
-          fechaPublicacion: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
           estado: "activo",
         },
         {
-          id: "2",
+          _id: "2",
           empresaId: "2",
           titulo: "Sistema de IA para Análisis",
           descripcion:
             "Necesitamos implementar un sistema de inteligencia artificial para análisis de datos",
-          fechaPublicacion: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
           estado: "activo",
         },
         {
-          id: "3",
+          _id: "3",
           empresaId: "1",
           titulo: "Sistema de IA para Análisis",
           descripcion:
             "Necesitamos implementar un sistema de inteligencia artificial para análisis de datos",
-          fechaPublicacion: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
           estado: "activo",
         },
       ];
@@ -129,26 +129,26 @@ export const storage = {
     }
 
     if (storage.getProposals().length === 0) {
-      const sampleProposals: Proposal[] = [
+      const sampleProposals: IProposal[] = [
         {
-          id: "1",
+          _id: "1",
           desafioId: "1",
           emprendedorId: "3",
           tituloPropuesta: "App Móvil con React Native",
           descripcion:
             "Propongo desarrollar la aplicación usando React Native para máxima compatibilidad",
-          fechaCreacion: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
           estado: "en revision",
           puntos: 85,
         },
         {
-          id: "2",
+          _id: "2",
           desafioId: "2",
           emprendedorId: "3",
           tituloPropuesta: "Sistema de ML con Python",
           descripcion:
             "Implementación de machine learning usando Python y TensorFlow",
-          fechaCreacion: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
           estado: "seleccionada",
           puntos: 92,
         },

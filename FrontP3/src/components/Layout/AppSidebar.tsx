@@ -1,6 +1,7 @@
 import { BankOutlined, UserOutlined, FlagOutlined, FileTextOutlined, UsergroupDeleteOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Layout, Menu, Typography } from "antd";
+import { useAuth } from "../../context/Auth/useAuth";
 
 const { Sider } = Layout;
 const { Title } = Typography;
@@ -14,7 +15,8 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
     const navigate = useNavigate();
     const location = useLocation();
     const currentCompanyId = "1";
-    const currentEntrepreneurId = "3";
+    const { _id } = useAuth();
+    const currentEntrepreneurId = _id;
 
     return (
         <Sider

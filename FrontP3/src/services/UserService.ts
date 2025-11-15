@@ -1,21 +1,8 @@
+import type { IUser } from "../types/types";
 import axiosInstance from "./AxiosService";
 
 export type Role = "empresa" | "emprendedor";
 
-export interface IUser {
-  _id: string;
-  email: string;
-  password: string;
-  role: Role;
-  activo: boolean;
-  telefono: string;
-  createdAt?: string;
-  nombreEmpresa?: string;
-  descripcion?: string;
-  sitioWeb?: string;
-  nombreCompleto?: string;
-  edad?: number;
-}
 
 export interface CreateUserRequest {
   email: string;

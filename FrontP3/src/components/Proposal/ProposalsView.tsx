@@ -16,8 +16,6 @@ export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, 
   const formProposal = Form.useForm()[0];
   const {
     votedProposals,
-    challenges,
-    entrepreneurs,
     currentEntrepreneurId,
     allProposals,
     entrepreneurProposals,
@@ -58,13 +56,14 @@ export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, 
 
       {/* Modal de creación/edición */}
       <ModalGeneral
+        titulo={"Propuesta"}
         isOpen={isModalProposalOpen}
         onClose={closeModalProposal}
         onOk={() => formProposal.submit()}
         editing={!!editingProposal}
       >
         <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
-          <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs} selectedChallenge={selectedChallenge} />
+          <ProposalForm selectedChallenge={selectedChallenge} />
         </FormGeneral>
       </ModalGeneral>
     </>

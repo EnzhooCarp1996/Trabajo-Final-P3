@@ -1,6 +1,10 @@
 import { Modal } from "antd";
+import { Typography } from "antd";
+
+const { Title } = Typography;
 
 interface ModalGeneralProps {
+    titulo: string;
     isOpen: boolean;
     onClose: () => void;
     onOk: () => void;
@@ -9,6 +13,7 @@ interface ModalGeneralProps {
 }
 
 export const ModalGeneral: React.FC<ModalGeneralProps> = ({
+    titulo,
     isOpen,
     onClose,
     onOk,
@@ -17,7 +22,7 @@ export const ModalGeneral: React.FC<ModalGeneralProps> = ({
 }) => {
     return (
         <Modal
-            title={editing ? "Editar" : "Nuevo"}
+            
             open={isOpen}
             onCancel={onClose}
             onOk={onOk}
@@ -25,6 +30,7 @@ export const ModalGeneral: React.FC<ModalGeneralProps> = ({
             cancelText="Cancelar"
             okButtonProps={{ style: { backgroundColor: "#1677ff" } }}
         >
+            <Title level={3} style={{ marginBottom: 16, color: "#1677ff" }}>{`${editing ? "Editar " : "Nuevo " } ${titulo}`}</Title>
             {children}
         </Modal>
     );

@@ -1,26 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
-  Proposal,
-  Challenge,
+  IProposal,
+  IChallenge,
   ProposalStatus,
   IUser,
 } from "../../types/types";
 import { storage } from "../../storage";
 import { type FormInstance } from "antd";
 import { useParams } from "react-router-dom";
+import { proposalService } from "../../services/ProposalService";
+import toast from "react-hot-toast";
+import { useAuth } from "../../context/Auth/useAuth";
 
 export const useProposalView = () => {
-  const [proposals, setProposals] = useState<Proposal[]>(
-    storage.getProposals()
-  );
-  const [challenges] = useState<Challenge[]>(storage.getChallenges());
+  const { _id } = useAuth();
+  const [challenges] = useState<IChallenge[]>(storage.getChallenges());
   const [users] = useState<IUser[]>(storage.getUsers());
   const entrepreneurs = users.filter((u) => u.role === "emprendedor");
 
   const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
-  const [editingProposal, setEditingProposal] = useState<Proposal | null>(null);
+  const [editingProposal, setEditingProposal] = useState<IProposal | null>(null);
   const params = useParams<{ entrepreneurId: string }>();
   const currentEntrepreneurId = params.entrepreneurId;
+
+  const [proposals, setProposals] = useState<IProposal[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      setLoading(true);
+      try {
+        const data = await proposalService.getAll();
+        setProposals(data);
+      } catch (error) {
+        console.error(error);
+        toast.error("Error al cargar las empresas");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
 
   const [votedProposals, setVotedProposals] = useState<string[]>(
     JSON.parse(localStorage.getItem("votedProposals") || "[]")
@@ -30,7 +51,7 @@ export const useProposalView = () => {
     const yaVoto = votedProposals.includes(proposalId);
 
     const updated = allProposals.map((p) => {
-      if (p.id === proposalId) {
+      if (p._id === proposalId) {
         return { ...p, puntos: yaVoto ? p.puntos - 1 : p.puntos + 1 };
       }
       return p;
@@ -51,7 +72,7 @@ export const useProposalView = () => {
     localStorage.setItem("votedProposals", JSON.stringify(updatedVotes));
   };
 
-  const [selectedChallenge, setSelectedChallenge] = useState<Challenge | null>(
+  const [selectedChallenge, setSelectedChallenge] = useState<IChallenge | null>(
     null
   );
 
@@ -61,8 +82,8 @@ export const useProposalView = () => {
     : [];
 
   const openModalProposal = (
-    proposal?: Proposal,
-    challenge?: Challenge,
+    proposal?: IProposal,
+    challenge?: IChallenge,
     form?: FormInstance
   ) => {
     if (proposal) {
@@ -88,34 +109,39 @@ export const useProposalView = () => {
     setEditingProposal(null);
   };
 
-  const handleSubmitProposal = (values: any) => {
+  const handleSubmitProposal = async (values: any) => {
+    try {
     if (editingProposal) {
+      const updatedProposal = await proposalService.update(editingProposal._id, values);
       const updated = proposals.map((p) =>
-        p.id === editingProposal.id ? { ...p, ...values } : p
+        p._id === editingProposal._id ? updatedProposal : p
       );
       setProposals(updated);
-      storage.setProposals(updated);
+      
     } else {
-      const newProposal: Proposal = {
-        id: storage.generateId(),
-        fechaCreacion: new Date().toISOString(),
+      const newProposal = await proposalService.create({
         ...values,
-      };
+        desafioId: selectedChallenge?._id,
+        emprendedorId: _id,
+      });
       const updated = [...proposals, newProposal];
       setProposals(updated);
-      storage.setProposals(updated);
+      
     }
     closeModalProposal();
-  };
+    } catch (error) {
+      console.error("Error al crear/actualizar propuesta", error);
+    }
+};
 
   const handleDelete = (id: string) => {
-    const updated = proposals.filter((p) => p.id !== id);
+    const updated = proposals.filter((p) => p._id !== id);
     setProposals(updated);
     storage.setProposals(updated);
   };
 
   const getChallengeName = (desafioId: string) => {
-    const challenge = challenges.find((c) => c.id === desafioId);
+    const challenge = challenges.find((c) => c._id === desafioId);
     return challenge ? challenge.titulo : "Desafío desconocido";
   };
 
@@ -139,7 +165,7 @@ export const useProposalView = () => {
 
   const onChangeEstado = (id: string, nuevoEstado: ProposalStatus) => {
     const updated = proposals.map((p) =>
-      p.id === id ? { ...p, estado: nuevoEstado } : p
+      p._id === id ? { ...p, estado: nuevoEstado } : p
     );
 
     setProposals(updated);
@@ -148,6 +174,7 @@ export const useProposalView = () => {
 
   return {
     votedProposals,
+    loading,
     proposals,
     challenges,
     currentEntrepreneurId,

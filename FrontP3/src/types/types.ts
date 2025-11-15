@@ -11,7 +11,7 @@ export interface IUser {
   role: string;
   activo: boolean;
   telefono: string;
-  createdAt?: string;
+  createdAt?: Date;
   nombreEmpresa?: string;
   descripcion?: string;
   sitioWeb?: string;
@@ -19,24 +19,24 @@ export interface IUser {
   edad?: number;
 }
 
-export interface Challenge {
-  id: string;
+export interface IChallenge {
+  _id: string;
   empresaId: string;
   titulo: string;
   descripcion: string;
-  fechaPublicacion: string;
   estado: ChallengeStatus;
+  createdAt: Date;
 }
 
-export interface Proposal {
-  id: string;
+export interface IProposal {
+  _id: string;
   desafioId: string;
   emprendedorId: string;
   tituloPropuesta: string;
   descripcion: string;
-  fechaCreacion: string;
   estado: ProposalStatus;
   puntos: number;
+  createdAt: string;
 }
 
 export interface LoginResponse {

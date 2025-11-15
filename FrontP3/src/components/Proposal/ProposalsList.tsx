@@ -2,15 +2,15 @@ import { Col, Select } from "antd";
 import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
 import { GridRow } from "../GridRow";
 import { CardEntity } from "../CardEntity";
-import type { Proposal, ProposalStatus } from "../../types/types";
+import type { IProposal, ProposalStatus } from "../../types/types";
 
 interface ProposalsListProps {
     votedProposals: string[],
-    proposals: Proposal[];
+    proposals: IProposal[];
     getStatusColor: (estado: string) => string;
     getChallengeName: (id: string) => string;
     getEntrepreneurName: (id: string) => string | undefined;
-    openModalProposal?: (proposal: Proposal) => void;
+    openModalProposal?: (proposal: IProposal) => void;
     handleDelete?: (id: string) => void;
     onChangeEstado?: (id: string, value: ProposalStatus) => void;
     toggleVoto: (id: string) => void;
@@ -37,28 +37,28 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
     return (
         <GridRow>
             {proposals.map((proposal) => (
-                <Col xs={24} sm={12} lg={8} key={proposal.id}>
+                <Col xs={24} sm={12} lg={8} key={proposal._id}>
                     <CardEntity
                         iconoBoton={<span
-                            onClick={() => toggleVoto(proposal.id)}
+                            onClick={() => toggleVoto(proposal._id)}
                             style={{
                                 cursor: "pointer",
                                 fontSize: "25px",
                                 transition: "0.2s",
-                                color: votedProposals.includes(proposal.id) ? "#fadb14" : "rgba(255,255,255,0.3)",
-                                transform: votedProposals.includes(proposal.id) ? "scale(1.2)" : "scale(1)",
+                                color: votedProposals.includes(proposal._id) ? "#fadb14" : "rgba(255,255,255,0.3)",
+                                transform: votedProposals.includes(proposal._id) ? "scale(1.2)" : "scale(1)",
                             }}
                         >
                             ★
                         </span>}
-                        tituloBoton={votedProposals.includes(proposal.id) ? "Sacar Voto" : "Votar"}
+                        tituloBoton={votedProposals.includes(proposal._id) ? "Sacar Voto" : "Votar"}
                         title={proposal.tituloPropuesta}
                         icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
                         borderColor={getStatusColor(proposal.estado)}
                         onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
-                        onDelete={!readOnly ? () => handleDelete && handleDelete(proposal.id) : undefined}
+                        onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
                         showButtonNew={!showButtonNew} // siempre true, para que aparezca el botón
-                        onNuevoClick={() => toggleVoto(proposal.id)} // tu lógica de votar
+                        onNuevoClick={() => toggleVoto(proposal._id)} // tu lógica de votar
                     >
                         {proposal.descripcion}
 
@@ -74,13 +74,13 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
 
                                 <span
-                                    onClick={() => toggleVoto(proposal.id)}
+                                    onClick={() => toggleVoto(proposal._id)}
                                     style={{
                                         cursor: "pointer",
                                         fontSize: "25px",
                                         transition: "0.2s",
-                                        color: votedProposals.includes(proposal.id) ? "#fadb14" : "rgba(255,255,255,0.3)",
-                                        transform: votedProposals.includes(proposal.id) ? "scale(1.2)" : "scale(1)",
+                                        color: votedProposals.includes(proposal._id) ? "#fadb14" : "rgba(255,255,255,0.3)",
+                                        transform: votedProposals.includes(proposal._id) ? "scale(1.2)" : "scale(1)",
 
                                     }}
                                 >
@@ -114,7 +114,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                                                 color: "#fff",
                                                 borderRadius: 4,
                                             }}
-                                            onChange={(value) => onChangeEstado?.(proposal.id, value)}
+                                            onChange={(value) => onChangeEstado?.(proposal._id, value)}
                                             options={[
                                                 { value: "", label: "Seleccione" },
                                                 { value: "en revision", label: "En revisión" },

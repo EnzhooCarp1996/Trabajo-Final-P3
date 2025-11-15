@@ -45,6 +45,7 @@ export interface IProposal extends Document {
   descripcion: string
   estado: ProposalStatus
   puntos: number
+  createdAt: Date
 }
 
 export interface IMessage extends Document {
@@ -61,6 +62,7 @@ export interface JWTPayload {
   _id: string
   email: string
   role: string
+  nombre: string
   iat?: number
   exp?: number
   iss?: string

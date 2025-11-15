@@ -1,5 +1,5 @@
 import { useProposalView } from "../../hooks/Proposal/useProposalView";
-import type { Challenge, IUser } from "../../types/types";
+import type { IChallenge, IUser } from "../../types/types";
 import { ProposalForm } from "../Proposal/ProposalForm";
 import { ChallengeList } from "./ChallengeList";
 import { ChallengeForm } from "./ChallengeForm";
@@ -8,8 +8,10 @@ import { ModalGeneral } from "../ModalGeneral";
 import { FormGeneral } from "../FormGeneral";
 import { useParams } from "react-router-dom";
 import { storage } from "../../storage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Form } from "antd";
+import { challengeService } from "../../services/ChallengeService";
+import toast from "react-hot-toast";
 
 interface ChallengesViewProps {
     readOnly?: boolean;
@@ -19,10 +21,9 @@ interface ChallengesViewProps {
 export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showButtonNew }) => {
     const [users] = useState<IUser[]>(storage.getUsers());
     const companies = users.filter(u => u.role === "empresa");
-    const entrepreneurs = users.filter(u => u.role === "emprendedor");
-    const [challenges, setChallenges] = useState<Challenge[]>(storage.getChallenges());
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingChallenge, setEditingChallenge] = useState<Challenge | null>(null);
+    const [editingChallenge, setEditingChallenge] = useState<IChallenge | null>(null);
     const [form] = Form.useForm();
     const params = useParams<{ empresaId: string }>();
     const currentCompanyId = params.empresaId;
@@ -35,13 +36,32 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
         openModalProposal,
         handleSubmitProposal,
     } = useProposalView();
+    const [challenges, setChallenges] = useState<IChallenge[]>([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchCompanies = async () => {
+            setLoading(true);
+            try {
+                const data = await challengeService.getAll("activo");
+                setChallenges(data);
+            } catch (error) {
+                console.error(error);
+                toast.error("Error al cargar las empresas");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCompanies();
+    }, []);
 
     const allChallenges = challenges; // Todos los desafíos
     const companyChallenges = currentCompanyId
         ? challenges.filter(c => c.empresaId === currentCompanyId)
         : [];
 
-    const openModal = (challenge?: Challenge) => {
+    const openModal = (challenge?: IChallenge) => {
         if (challenge) {
             setEditingChallenge(challenge);
             form.setFieldsValue(challenge);
@@ -61,14 +81,14 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     const handleSubmit = (values: any) => {
         if (editingChallenge) {
             const updated = challenges.map((c) =>
-                c.id === editingChallenge.id ? { ...c, ...values } : c
+                c._id === editingChallenge._id ? { ...c, ...values } : c
             );
             setChallenges(updated);
             storage.setChallenges(updated);
         } else {
-            const newChallenge: Challenge = {
-                id: storage.generateId(),
-                fechaPublicacion: new Date().toISOString(),
+            const newChallenge: IChallenge = {
+                _id: storage.generateId(),
+                createdAt: new Date().toISOString(),
                 ...values,
             };
             const updated = [...challenges, newChallenge];
@@ -79,14 +99,14 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     };
 
     const handleDelete = (id: string) => {
-        const updated = challenges.filter((c) => c.id !== id);
+        const updated = challenges.filter((c) => c._id !== id);
         setChallenges(updated);
         storage.setChallenges(updated);
     };
 
-    const toggleStatus = (challenge: Challenge) => {
+    const toggleStatus = (challenge: IChallenge) => {
         const updated = challenges.map(c =>
-            c.id === challenge.id
+            c._id === challenge._id
                 ? { ...c, estado: c.estado === "activo" ? "inactivo" as const : 'activo' as const }
                 : c
         );
@@ -103,43 +123,50 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
         <>
             {/* Encabezado */}
             <HeaderEntity titulo="Desafíos" onClick={() => openModal()} readOnly={readOnly} />
-
             {/* lista de desafíos */}
-            <ChallengeList
-                challenges={currentCompanyId ? companyChallenges : allChallenges}
-                getCompanyName={getCompanyName}
-                toggleStatus={!readOnly ? toggleStatus : undefined}
-                openModal={!readOnly ? openModal : undefined}
-                handleDelete={!readOnly ? handleDelete : undefined}
-                readOnly={readOnly}
-                showButtonNew={showButtonNew}
-                openModalProposal={(challenge) => openModalProposal(undefined, challenge, formProposal)}
-            />
+            {loading ? (
+                <p>Cargando...</p>
+            ) : (
+                <>
+                    <ChallengeList
+                        challenges={currentCompanyId ? companyChallenges : allChallenges}
+                        getCompanyName={getCompanyName}
+                        toggleStatus={!readOnly ? toggleStatus : undefined}
+                        openModal={!readOnly ? openModal : undefined}
+                        handleDelete={!readOnly ? handleDelete : undefined}
+                        readOnly={readOnly}
+                        showButtonNew={showButtonNew}
+                        openModalProposal={(challenge) => openModalProposal(undefined, challenge, formProposal)}
+                    />
 
-            {/* Modal de creación/edición */}
-            {!readOnly && (
-                <ModalGeneral
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
-                    onOk={() => form.submit()}
-                    editing={!!editingChallenge}
-                >
-                    <FormGeneral form={form} handleSubmit={handleSubmit}>
-                        <ChallengeForm companies={companies} />
-                    </FormGeneral>
-                </ModalGeneral>
+                    {/* Modal de creación/edición */}
+                    {!readOnly && (
+                        <ModalGeneral
+                            titulo={"Desafio"}
+                            isOpen={isModalOpen}
+                            onClose={closeModal}
+                            onOk={() => form.submit()}
+                            editing={!!editingChallenge}
+                        >
+                            <FormGeneral form={form} handleSubmit={handleSubmit}>
+                                <ChallengeForm companies={companies} />
+                            </FormGeneral>
+                        </ModalGeneral>
+                    )}
+                    {/* Modal de creación de propuestas */}
+                    <ModalGeneral
+                        titulo={"Propuesta"}
+                        isOpen={isModalProposalOpen}
+                        onClose={closeModalProposal}
+                        onOk={() => formProposal.submit()}
+                        editing={!!editingProposal}
+                    >
+                        <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
+                            <ProposalForm selectedChallenge={selectedChallenge} />
+                        </FormGeneral>
+                    </ModalGeneral>
+                </>
             )}
-            {/* Modal de creación de propuestas */}
-            <ModalGeneral
-                isOpen={isModalProposalOpen}
-                onClose={closeModalProposal}
-                onOk={() => formProposal.submit()}
-                editing={!!editingProposal}
-            >
-                <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
-                    <ProposalForm challenges={challenges} entrepreneurs={entrepreneurs as IUser[]} selectedChallenge={selectedChallenge} />
-                </FormGeneral>
-            </ModalGeneral>
         </>
     );
 }

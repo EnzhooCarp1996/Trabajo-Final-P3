@@ -24,7 +24,7 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
     throw new Error('Role not found')
   }
 
-  const payload: JWTPayload = { _id: user._id.toString(), email: user.email, role: role.nombre }
+  const payload: JWTPayload = { _id: user._id.toString(), email: user.email, role: role.nombre, nombre: (user.nombreCompleto || user.nombreEmpresa)! }
 
   const userResponse: UserResponse = {
     _id: user._id.toString(),
