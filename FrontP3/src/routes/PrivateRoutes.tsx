@@ -5,6 +5,7 @@ import { EntrepreneurView } from "../components/Entrepreneur/EntrepreneurView";
 import { ChallengesView } from "../components/Challenge/ChallengesView";
 import { ProposalsView } from "../components/Proposal/ProposalsView";
 import { useAuth } from "../context/Auth/useAuth";
+import { ProposalsViewById } from "../components/Proposal/ProposalById/ProposalViewById";
 
 export const PrivateRoutes: React.FC = () => {
     const { role } = useAuth();
@@ -17,7 +18,7 @@ export const PrivateRoutes: React.FC = () => {
             <Route path="/Entrepreneur" element={<EntrepreneurView />} />
             <Route path="/Proposal" element={<ProposalsView titulo="Propuestas" readOnly />} />
             <Route path="/Challenge/:empresaId" element={<ChallengesView />} />
-            <Route path="/Proposal/:entrepreneurId" element={<ProposalsView titulo="Mis Propuestas" />} />
+            <Route path="/ProposalById" element={<ProposalsViewById/>} />
         </Routes>
     );
 };

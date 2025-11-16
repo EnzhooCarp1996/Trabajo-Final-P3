@@ -42,13 +42,6 @@ export const UserProfile: React.FC = () => {
         }
     };
 
-
-
-    //---------------------------------------------------------------------------------------------------------------------
-
-
-
-
     const openModal = () => {
         form.setFieldsValue(currentUser); // carga los datos actuales del usuario en el formulario
         setIsModalOpen(true);
@@ -114,6 +107,7 @@ export const UserProfile: React.FC = () => {
                     </div>
                 </Card>
             </div >
+            <Title style={{ textAlign: "center"}} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
 
             <ModalGeneral
                 titulo={"Usuario"}

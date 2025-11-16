@@ -30,13 +30,23 @@ export interface IChallenge {
 
 export interface IProposal {
   _id: string;
-  desafioId: string;
-  emprendedorId: string;
+  desafioId: IChallengeRef;
+  emprendedorId: IEntrepreneurRef;
   tituloPropuesta: string;
   descripcion: string;
   estado: ProposalStatus;
   puntos: number;
   createdAt: string;
+}
+
+export interface IChallengeRef {
+  _id: string;
+  titulo: string;
+}
+
+export interface IEntrepreneurRef {
+  _id: string;
+  nombreCompleto: string;
 }
 
 export interface LoginResponse {

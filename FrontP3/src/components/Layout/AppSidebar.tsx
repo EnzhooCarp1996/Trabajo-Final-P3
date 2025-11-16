@@ -15,8 +15,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
     const navigate = useNavigate();
     const location = useLocation();
     const currentCompanyId = "1";
-    const { _id, role } = useAuth();
-    const currentEntrepreneurId = _id;
+    const { role } = useAuth();
 
     return (
         <Sider
@@ -95,10 +94,10 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                             onClick: () => navigate(`/Challenge/${currentCompanyId}`),
                         } :
                         {
-                            key: `/Proposal/${currentEntrepreneurId}`,
+                            key: `/ProposalById`,
                             icon: <FileTextOutlined />,
                             label: "Mis Propuestas",
-                            onClick: () => navigate(`/Proposal/${currentEntrepreneurId}`),
+                            onClick: () => navigate(`/ProposalById`),
                         }
                 ]}
             />

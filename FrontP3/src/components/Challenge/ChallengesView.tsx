@@ -1,4 +1,4 @@
-import { useProposalView } from "../../hooks/Proposal/useProposalView";
+import { useProposal } from "../../hooks/Proposal/useProposal";
 import type { IChallenge, IUser } from "../../types/types";
 import { ProposalForm } from "../Proposal/ProposalForm";
 import { ChallengeList } from "./ChallengeList";
@@ -27,15 +27,15 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     const [form] = Form.useForm();
     const params = useParams<{ empresaId: string }>();
     const currentCompanyId = params.empresaId;
-    const formProposal = Form.useForm()[0];
     const {
+        formProposal,
         isModalProposalOpen,
         editingProposal,
         selectedChallenge,
         closeModalProposal,
         openModalProposal,
         handleSubmitProposal,
-    } = useProposalView();
+    } = useProposal();
     const [challenges, setChallenges] = useState<IChallenge[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -122,7 +122,8 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
     return (
         <>
             {/* Encabezado */}
-            <HeaderEntity titulo="Desafíos" onClick={() => openModal()} readOnly={readOnly} />
+            <HeaderEntity titulo="Desafíos" />
+            {/* onClick={() => openModal()} readOnly={readOnly} */}
             {/* lista de desafíos */}
             {loading ? (
                 <p>Cargando...</p>
@@ -136,10 +137,10 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
                         handleDelete={!readOnly ? handleDelete : undefined}
                         readOnly={readOnly}
                         showButtonNew={showButtonNew}
-                        openModalProposal={(challenge) => openModalProposal(undefined, challenge, formProposal)}
+                        openModalProposal={(challenge) => openModalProposal(challenge, formProposal)}
                     />
 
-                    {/* Modal de creación/edición */}
+                    {/* Modal de creación */}
                     {!readOnly && (
                         <ModalGeneral
                             titulo={"Desafio"}
@@ -170,3 +171,5 @@ export const ChallengesView: React.FC<ChallengesViewProps> = ({ readOnly, showBu
         </>
     );
 }
+
+

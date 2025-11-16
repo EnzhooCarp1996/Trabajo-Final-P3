@@ -1,33 +1,23 @@
 import { Col, Select } from "antd";
 import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
-import { GridRow } from "../GridRow";
 import { CardEntity } from "../CardEntity";
 import type { IProposal, ProposalStatus } from "../../types/types";
 import { useAuth } from "../../context/Auth/useAuth";
+import { getStatusColor } from "../../utils/utilsProposals";
 
 interface ProposalsListProps {
-    votedProposals: string[],
-    proposals: IProposal[];
-    getStatusColor: (estado: string) => string;
-    getChallengeName: (id: string) => string;
-    getEntrepreneurName: (id: string) => string | undefined;
+    proposal: IProposal;
     openModalProposal?: (proposal: IProposal) => void;
     handleDelete?: (id: string) => void;
     onChangeEstado?: (id: string, value: ProposalStatus) => void;
-    toggleVoto: (id: string) => void;
     readOnly?: boolean;
 }
 
 export const ProposalsList: React.FC<ProposalsListProps> = ({
-    votedProposals,
-    proposals,
-    getStatusColor,
-    getChallengeName,
-    getEntrepreneurName,
+    proposal,
     openModalProposal,
     handleDelete,
     onChangeEstado,
-    toggleVoto,
     readOnly = false,
 }) => {
 
@@ -35,100 +25,92 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
 
 
     return (
-        <GridRow>
-            {proposals.map((proposal) => (
-                <Col xs={24} sm={12} lg={8} key={proposal._id}>
-                    <CardEntity
-                        iconoBoton={<span
-                            onClick={() => toggleVoto(proposal._id)}
+        <Col xs={24} sm={12} lg={8} key={proposal._id}>
+            <CardEntity
+                iconoBoton={<span
+
+                    style={{
+                        cursor: "pointer",
+                        fontSize: "25px",
+                        transition: "0.2s",
+
+                    }}
+                >
+                    ★
+                </span>}
+
+                title={proposal.tituloPropuesta}
+                icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
+                borderColor={getStatusColor(proposal.estado)}
+                onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
+                onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
+                showButtonNew={role === "emprendedor" ? false : true}
+
+            >
+                {proposal.descripcion}
+
+                <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <TrophyOutlined /> {proposal.desafioId.titulo}
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <UserOutlined /> {proposal.emprendedorId.nombreCompleto}
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+
+                        <span
                             style={{
                                 cursor: "pointer",
                                 fontSize: "25px",
                                 transition: "0.2s",
-                                color: votedProposals.includes(proposal._id) ? "#fadb14" : "rgba(255,255,255,0.3)",
-                                transform: votedProposals.includes(proposal._id) ? "scale(1.2)" : "scale(1)",
                             }}
                         >
                             ★
-                        </span>}
-                        tituloBoton={votedProposals.includes(proposal._id) ? "Sacar Voto" : "Votar"}
-                        title={proposal.tituloPropuesta}
-                        icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
-                        borderColor={getStatusColor(proposal.estado)}
-                        onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
-                        onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
-                        showButtonNew={role === "emprendedor" ? false : true}
-                        onNuevoClick={() => toggleVoto(proposal._id)} // tu lógica de votar
-                    >
-                        {proposal.descripcion}
+                        </span>
 
-                        <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <TrophyOutlined /> {getChallengeName(proposal.desafioId)}
-                            </div>
+                    </div>
 
-                            <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                                <UserOutlined /> {getEntrepreneurName(proposal.emprendedorId)}
-                            </div>
-
-                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-
-                                <span
-                                    onClick={() => toggleVoto(proposal._id)}
+                    <span>{proposal.puntos} puntos</span>
+                    <div style={{ marginTop: 4 }}>
+                        {(role === "emprendedor") ?
+                            (<span
+                                style={{
+                                    padding: "2px 6px",
+                                    borderRadius: 4,
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    backgroundColor: getStatusColor(proposal.estado),
+                                    color: "#fff",
+                                }}
+                            >
+                                {proposal.estado}
+                            </span>
+                            ) : (
+                                <Select
+                                    size="small"
+                                    value={proposal.estado || ""}
                                     style={{
-                                        cursor: "pointer",
-                                        fontSize: "25px",
-                                        transition: "0.2s",
-                                        color: votedProposals.includes(proposal._id) ? "#fadb14" : "rgba(255,255,255,0.3)",
-                                        transform: votedProposals.includes(proposal._id) ? "scale(1.2)" : "scale(1)",
-
+                                        width: "120px",
+                                        backgroundColor: getStatusColor(proposal.estado),
+                                        color: "#fff",
+                                        borderRadius: 4,
                                     }}
-                                >
-                                    ★
-                                </span>
+                                    onChange={(value) => onChangeEstado?.(proposal._id, value)}
+                                    options={[
+                                        { value: "", label: "Seleccione" },
+                                        { value: "en revision", label: "En revisión" },
+                                        { value: "seleccionada", label: "Seleccionada" },
+                                        { value: "descartada", label: "Descartada" },
+                                    ]}
+                                />
+                            )}
 
-                            </div>
+                    </div>
+                </div>
+            </CardEntity>
+        </Col>
 
-                            <span>{proposal.puntos} puntos</span>
-                            <div style={{ marginTop: 4 }}>
-                                {(role === "emprendedor") ?
-                                    (<span
-                                        style={{
-                                            padding: "2px 6px",
-                                            borderRadius: 4,
-                                            fontSize: 12,
-                                            fontWeight: 600,
-                                            backgroundColor: getStatusColor(proposal.estado),
-                                            color: "#fff",
-                                        }}
-                                    >
-                                        {proposal.estado}
-                                    </span>
-                                    ) : (
-                                        <Select
-                                            size="small"
-                                            value={proposal.estado || ""}
-                                            style={{
-                                                width: "120px",
-                                                backgroundColor: getStatusColor(proposal.estado),
-                                                color: "#fff",
-                                                borderRadius: 4,
-                                            }}
-                                            onChange={(value) => onChangeEstado?.(proposal._id, value)}
-                                            options={[
-                                                { value: "", label: "Seleccione" },
-                                                { value: "en revision", label: "En revisión" },
-                                                { value: "seleccionada", label: "Seleccionada" },
-                                                { value: "descartada", label: "Descartada" },
-                                            ]}
-                                        />
-                                    )}
-
-                            </div>
-                        </div>
-                    </CardEntity>
-                </Col>
-            ))}
-        </GridRow>
     );
 };
