@@ -3,6 +3,7 @@ import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icon
 import { GridRow } from "../GridRow";
 import { CardEntity } from "../CardEntity";
 import type { IProposal, ProposalStatus } from "../../types/types";
+import { useAuth } from "../../context/Auth/useAuth";
 
 interface ProposalsListProps {
     votedProposals: string[],
@@ -15,7 +16,6 @@ interface ProposalsListProps {
     onChangeEstado?: (id: string, value: ProposalStatus) => void;
     toggleVoto: (id: string) => void;
     readOnly?: boolean;
-    showButtonNew?: boolean;
 }
 
 export const ProposalsList: React.FC<ProposalsListProps> = ({
@@ -29,9 +29,9 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
     onChangeEstado,
     toggleVoto,
     readOnly = false,
-    showButtonNew,
 }) => {
 
+    const { role } = useAuth()
 
 
     return (
@@ -57,7 +57,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                         borderColor={getStatusColor(proposal.estado)}
                         onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
                         onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
-                        showButtonNew={!showButtonNew} // siempre true, para que aparezca el botón
+                        showButtonNew={role === "emprendedor" ? false : true}
                         onNuevoClick={() => toggleVoto(proposal._id)} // tu lógica de votar
                     >
                         {proposal.descripcion}
@@ -91,7 +91,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
 
                             <span>{proposal.puntos} puntos</span>
                             <div style={{ marginTop: 4 }}>
-                                {(showButtonNew) ?
+                                {(role === "emprendedor") ?
                                     (<span
                                         style={{
                                             padding: "2px 6px",

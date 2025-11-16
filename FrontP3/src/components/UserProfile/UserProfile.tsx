@@ -6,18 +6,13 @@ import { CompanyForm } from "../Company/CompanyForm";
 import { HeaderEntity } from "../HeaderEntity";
 import { ModalGeneral } from "../ModalGeneral";
 import { FormGeneral } from "../FormGeneral";
-import { storage } from "../../storage";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/Auth/useAuth";
-import { userService } from "../../services/UserService";
+import { userService, type CreateUserRequest } from "../../services/UserService";
 
 const { Title, Text } = Typography;
 
-interface UserProfileProps {
-    user: IUser;
-}
-
-export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+export const UserProfile: React.FC = () => {
     const { _id, role } = useAuth();
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,17 +27,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
     }, [_id]);
 
-    const handleSubmit = (values: Partial<IUser>) => {
-        // actualizar estado local
-        setCurrentUser(prev => {
-            const updated = { ...prev, ...values } as IUser;
-            // actualizar en storage
-            storage.updateUser(updated);
-            return updated;
-        });
+    const handleSubmit = async (values: CreateUserRequest) => {
+        if (!currentUser?._id) {
+            console.error("No se encontró el ID del usuario");
+            return;
+        }
 
-        // cerrar modal
-        setIsModalOpen(false);
+        try {
+            const updatedUser = await userService.update(currentUser._id, values);
+            setCurrentUser(updatedUser);
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error("Error actualizando usuario", error);
+        }
     };
 
 
@@ -50,34 +47,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
     //---------------------------------------------------------------------------------------------------------------------
 
 
-    const renderUserInfo = () => {
-        if (role === "empresa") {
-            return (
-                <Card
-                    title="Información de la Empresa"
-                    style={{ borderColor: "#01650bff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
 
-                >
-                    <Text style={{ color: "#fff" }}>Nombre de la Empresa: {currentUser?.nombreEmpresa}</Text>
-                    <br />
-                    <Text style={{ color: "#fff" }}>Descripción: {currentUser?.descripcion}</Text>
-                    <br />
-                    <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser?.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser?.sitioWeb}</a></Text>
-                    <br />
-                    <Text style={{ color: "#fff" }}>Teléfono: {currentUser?.telefono}</Text>
-                </Card>
-            );
-        } else {
-            return (
-                <Card
-                    title="Información del Emprendedor"
-                    style={{ borderColor: "#01650bff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
-                >
-                    <Text style={{ color: "#fff" }}>Nombre Completo: {currentUser?.nombreCompleto}</Text>
-                </Card>
-            );
-        }
-    };
 
     const openModal = () => {
         form.setFieldsValue(currentUser); // carga los datos actuales del usuario en el formulario
@@ -91,21 +61,21 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
     return (
         <>
-            <HeaderEntity titulo="Perfil" readOnly />
+            <HeaderEntity titulo="Perfil" />
             <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "800px", margin: "0 auto", boxSizing: "border-box", }}>
 
                 {/*Información Básica del Usuario */}
                 <Card
                     style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
                     title={
-                        <div style={{ display: "flex", alignItems: "center" }}>
-                            {user.role === "emprendedor" ? (<UserOutlined style={{ color: "#089717ff", marginRight: "28px", fontSize: "3em" }} />
+                        <div style={{ color: "#089717ff", display: "flex", alignItems: "center" }}>
+                            {role === "emprendedor" ? (<UserOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
                             ) : (
                                 <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
                             )}
                             <div>
-                                <Title level={3} style={{ color: "#fff" }}>{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
-                                <Text style={{ color: "#ccc" }}>@{user.email.split('@')[0]}</Text>
+                                <Title level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
+
                             </div>
                         </div>
                     }
@@ -119,25 +89,36 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
                         <Text style={{ color: "#ccc" }}>Fecha de Registro: {currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : ""}</Text>
                     </div>
                     <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Estado: {currentUser?.activo ? "Activo" : "Inactivo"}</Text>
-                    </div>
-                    <div style={{ marginBottom: "12px" }}>
                         <Text style={{ color: "#ccc" }}>Telefono: {currentUser?.telefono}</Text>
                     </div>
-                    <div style={{ display: "flex", gap: "12px" }}>
-                        <Button icon={<MailOutlined />} type="link" href={`mailto:${user.email}`} target="_blank">
-                            {user.email}
-                        </Button>
+                    <div style={{ marginBottom: "12px" }}>
+                        <Text style={{ color: "#ccc" }}>Email <MailOutlined />: {currentUser?.email}</Text>
+                    </div>
+
+                    {role === "emprendedor" ? (
+                        <div style={{ marginBottom: "12px" }}>
+                            <Text style={{ color: "#ccc" }}>Edad: {currentUser?.edad}</Text>
+                        </div>
+                    ) : (
+                        <>
+                            <div style={{ marginBottom: "12px" }}>
+                                <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser?.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser?.sitioWeb}</a></Text>
+                            </div>
+                            <div style={{ marginBottom: "12px" }}>
+                                <Text style={{ color: "#fff" }}>Descripción: {currentUser?.descripcion}</Text>
+                            </div>
+                        </>
+                    )}
+                    <div style={{ marginBottom: "12px" }}>
+                        <Text style={{ color: "#ccc" }}>Estado: {currentUser?.activo ? "Activo" : "Inactivo"}</Text>
                     </div>
                 </Card>
-
-                {/* Información de la Empresa o Emprendedor */}
-                {renderUserInfo()}
-            </div>
+            </div >
 
             <ModalGeneral
                 titulo={"Usuario"}
                 isOpen={isModalOpen}
+                editing={true}
                 onClose={closeModal}
                 onOk={() => form.submit()}
             >

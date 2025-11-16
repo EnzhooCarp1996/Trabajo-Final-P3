@@ -1,104 +1,205 @@
-import { Eye, EyeOff, PaintBucket } from "lucide-react";
 import { useLoginForm } from "../../hooks/Login/useLoginForm";
+import { Layout, Card, Form, Input, Button, Typography, Checkbox } from "antd";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import { PaintBucket } from "lucide-react";
+
+const { Title, Text } = Typography;
 
 export const LoginForm = () => {
   const {
     formData,
-    showPassword,
     loading,
     error,
-    setShowPassword,
     handleChange,
     handleSubmit,
+    handleCheckbox
   } = useLoginForm();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-green-900 via-emerald-900 to-green-800 px-4">
-      <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 md:mb-12 text-center">
-        Clinica del Automovil
-      </h1>
+    <Layout
+      style={{
+        background: "#12395B",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Card
+        styles={{
+          body: {
+            padding: 0,
+            display: "flex",
+          },
+        }}
+        style={{
+          width: "100%",
+          maxWidth: "900px",
+          margin: "0 auto",
+          background: "#12395B",
+          borderRadius: "14px",
+          overflow: "hidden",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+          flexDirection: "row",
+          flexWrap: "wrap",
+        }}
+      >
 
-      <div className="flex flex-col-reverse md:flex-row w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl">
-        {/* Columna izquierda - Formulario */}
-        <div className="w-full md:w-1/2 bg-[#0d1a0f] p-6 md:p-10 flex flex-col justify-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Iniciar sesión</h2>
-          <p className="text-gray-400 mb-6 text-sm md:text-base">
+        {/* IZQUIERDA 60% */}
+        <div
+          style={{
+            width: window.innerWidth < 768 ? "100%" : "50%",
+            minWidth: "320px",
+            padding: "40px 32px",
+            background: "black",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+
+          }}
+        >
+          <Title level={2} style={{ color: "#fff", marginBottom: 0 }}>
+            Iniciar sesión
+          </Title>
+
+          <Text style={{ color: "#ccc" }}>
             Por favor ingrese sus datos de acceso
-          </p>
+          </Text>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Usuario */}
-            <div>
-              <label htmlFor="email" className="block text-gray-300 mb-2">Email</label>
-              <input
+          <Form
+            layout="vertical"
+            style={{ marginTop: "24px" }}
+            onFinish={handleSubmit}
+          >
+            {/* EMAIL */}
+            <Form.Item
+              label={<label htmlFor="email" style={{ color: "#ccc" }}>Email</label>}
+              name="email"
+              rules={[
+                { required: true, message: "El email es obligatorio" },
+                { type: "email", message: "Ingrese un email válido" }
+              ]}
+            >
+              <Input
                 id="email"
-                type="text"
                 name="email"
                 value={formData.email}
-                autoComplete="username"
                 onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-green-500"
-                required
+                autoComplete="username"
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  height: "40px",
+                }}
               />
-            </div>
+            </Form.Item>
 
-            {/* Contraseña */}
-            <div>
-              <label htmlFor="password" className="block text-gray-300 mb-2">Contraseña</label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  autoComplete="current-password"
-                  className="w-full px-4 py-2 rounded-md bg-transparent border border-gray-600 text-white focus:outline-none focus:border-green-500 pr-10"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-white"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
+            {/* PASSWORD */}
+            <Form.Item
+              label={<label htmlFor="password" style={{ color: "#ccc" }}>Contraseña</label>}
+              name="password"
+              rules={[
+                { required: true, message: "La contraseña es obligatoria" },
+                { min: 4, message: "La contraseña debe tener al menos 4 caracteres" }
+              ]}
+            >
+              <Input.Password
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                autoComplete="current-password"
+                iconRender={(visible) =>
+                  visible ? (
+                    <EyeTwoTone twoToneColor="#ffffff" />
+                  ) : (
+                    <EyeInvisibleOutlined style={{ color: "white" }} />
+                  )
+                }
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  height: "40px",
+                }}
+              />
+            </Form.Item>
 
-            {/* Recordarme */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
+            {/* RECORDAR */}
+            <Form.Item>
+              <Checkbox
+                id="recordar"
                 name="recordar"
                 checked={formData.recordar}
-                onChange={handleChange}
-                className="mr-2 accent-green-600"
-              />
-              <span className="text-gray-300">Recordarme</span>
-            </div>
+                onChange={handleCheckbox}
+                style={{ color: "white" }}
+              >
+                Recordar
+              </Checkbox>
+            </Form.Item>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {/* ERROR */}
+            {error && (
+              <Text type="danger" style={{ marginBottom: "10px", display: "block" }}>
+                {error}
+              </Text>
+            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 rounded-md bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold hover:opacity-90 transition disabled:opacity-50"
+            {/* BOTÓN */}
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              block
+              style={{
+                background: "linear-gradient(90deg, #1f8f4b, #2fb36a)",
+                border: "none",
+                height: "45px",
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
             >
               {loading ? "Ingresando..." : "Ingresar"}
-            </button>
-          </form>
+            </Button>
+            {error && (
+              <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded mt-3">
+                {error}
+              </div>
+            )}
+          </Form>
         </div>
 
-        {/* Columna derecha */}
-        <div className="w-full md:w-1/2 bg-gradient-to-br from-green-600 via-emerald-600 to-green-800 flex flex-col items-center justify-center p-6">
-          <PaintBucket className="w-20 md:w-32 h-20 md:h-32 text-white mb-4" />
-          <div className="text-white text-xl md:text-3xl font-bold opacity-80 text-center space-y-1">
-            <p>Bienvenido</p>
-            <p>Plataforma de Desafios</p>
-          </div>
+        {/* DERECHA 40% */}
+        <div
+          style={{
+            width: window.innerWidth < 768 ? "100%" : "50%",
+            minWidth: "320px",
+            background: "linear-gradient(135deg, #0a2342, #1a4d7a, #0e3b5b)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "30px",
+          }}
+        >
+          <PaintBucket size={80} color="white" style={{ marginBottom: "20px", opacity: 0.85 }} />
+
+          <Title
+            level={3}
+            style={{ color: "white", textAlign: "center", marginBottom: "10px" }}
+          >
+            Bienvenido
+          </Title>
+
+          <Text
+            style={{
+              color: "white",
+              fontSize: "16px",
+              opacity: 0.9,
+              textAlign: "center",
+            }}
+          >
+            Plataforma de Desafíos
+          </Text>
         </div>
-      </div>
-    </div>
-  )
-}
+      </Card>
+    </Layout>
+  );
+};

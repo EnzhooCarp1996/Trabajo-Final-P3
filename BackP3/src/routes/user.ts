@@ -104,7 +104,7 @@ async function updateUser(
   //   return
   // }
 
-  // No se puede actualizar el correo electrónico.
+  // No se puede actualizar el role
   delete req.body.role;
 
   try {

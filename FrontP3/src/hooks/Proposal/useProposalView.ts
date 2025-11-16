@@ -7,7 +7,6 @@ import type {
 } from "../../types/types";
 import { storage } from "../../storage";
 import { type FormInstance } from "antd";
-import { useParams } from "react-router-dom";
 import { proposalService } from "../../services/ProposalService";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/Auth/useAuth";
@@ -20,8 +19,7 @@ export const useProposalView = () => {
 
   const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
   const [editingProposal, setEditingProposal] = useState<IProposal | null>(null);
-  const params = useParams<{ entrepreneurId: string }>();
-  const currentEntrepreneurId = params.entrepreneurId;
+  const currentEntrepreneurId = _id;
 
   const [proposals, setProposals] = useState<IProposal[]>([]);
   const [loading, setLoading] = useState(false);

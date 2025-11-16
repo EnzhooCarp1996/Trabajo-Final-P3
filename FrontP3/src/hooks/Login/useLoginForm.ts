@@ -1,3 +1,4 @@
+import type { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useAuth } from "../../context/Auth/useAuth";
 import { authService } from "../../services/AuthService";
 import { useState } from "react";
@@ -22,20 +23,26 @@ export function useLoginForm() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+const handleSubmit = async () => {
+  setLoading(true);
+  setError(null);
 
-    try {
-      const data = await authService.logIn(formData.email, formData.password);
-      login(data.token, formData.recordar);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Error inesperado");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const data = await authService.logIn(formData.email, formData.password);
+    login(data.token, formData.recordar);
+  } catch (err: unknown) {
+    setError(err instanceof Error ? err.message : "Error inesperado");
+  } finally {
+    setLoading(false);
+  }
+};
+  const handleCheckbox = (e: CheckboxChangeEvent) => {
+  setFormData(prev => ({
+    ...prev,
+    recordar: e.target.checked
+  }));
+};
+
 
   return {
     formData,
@@ -45,5 +52,6 @@ export function useLoginForm() {
     setShowPassword,
     handleChange,
     handleSubmit,
+    handleCheckbox
   };
 }

@@ -1,4 +1,4 @@
-import { setToken, getToken, isTokenExpired } from "./SessionService";
+import { getToken, isTokenExpired } from "./SessionService";
 import type { LoginResponse } from "../types/types";
 import { jwtDecode } from "jwt-decode";
 import axiosInstance from "./AxiosService";
@@ -26,11 +26,13 @@ export const authService: AuthService = {
     axiosInstance.post<LoginResponse>("/auth", { email, password })
       .then((res) => {
         if (!res.data.token) throw new Error("Token no recibido");
-        // Guardar token en sesión
-        setToken(res.data.token);
-        if (res.data.refreshToken) localStorage.setItem("refreshToken", res.data.refreshToken);
         return res.data;
-      }),
+      })
+      .catch((err) => {
+      // Captura mensaje legible desde backend
+      const msg = err.response?.data?.message || "Credenciales inválidas";
+      throw new Error(msg);
+    }),
 
   // -------------------------
   // USUARIO ACTUAL

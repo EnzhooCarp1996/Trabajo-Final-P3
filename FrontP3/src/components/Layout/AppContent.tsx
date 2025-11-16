@@ -7,11 +7,10 @@ import { Layout } from "antd";
 const { Content } = Layout;
 
 interface AppContent {
-  nombreUsuario?: string;
   children?: React.ReactNode;
 }
 
-export const AppContent: React.FC<AppContent> = ({ nombreUsuario, children }) => {
+export const AppContent: React.FC<AppContent> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -20,7 +19,7 @@ export const AppContent: React.FC<AppContent> = ({ nombreUsuario, children }) =>
       <AppSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       <Layout>
-        <AppHeader nombreUsuario={nombreUsuario} collapsed={collapsed} setCollapsed={setCollapsed} />
+        <AppHeader collapsed={collapsed} setCollapsed={setCollapsed} />
 
         <Content
           style={{

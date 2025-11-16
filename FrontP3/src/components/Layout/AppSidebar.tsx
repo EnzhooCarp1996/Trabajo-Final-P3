@@ -15,7 +15,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
     const navigate = useNavigate();
     const location = useLocation();
     const currentCompanyId = "1";
-    const { _id } = useAuth();
+    const { _id, role } = useAuth();
     const currentEntrepreneurId = _id;
 
     return (
@@ -76,12 +76,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                         onClick: () => navigate("/Entrepreneur"),
                     },
                     {
-                        key: `/Challenge/${currentCompanyId}`,
-                        icon: <FlagOutlined />,
-                        label: "Mis Desafíos",
-                        onClick: () => navigate(`/Challenge/${currentCompanyId}`),
-                    },
-                    {
                         key: "/Challenge",
                         icon: <FlagOutlined />,
                         label: "Desafíos",
@@ -93,12 +87,19 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                         label: "Propuestas",
                         onClick: () => navigate("/Proposal"),
                     },
-                    {
-                        key: `/Proposal/${currentEntrepreneurId}`,
-                        icon: <FileTextOutlined />,
-                        label: "Mis Propuestas",
-                        onClick: () => navigate(`/Proposal/${currentEntrepreneurId}`),
-                    },
+                    role === "empresa" ?
+                        {
+                            key: `/Challenge/${currentCompanyId}`,
+                            icon: <FlagOutlined />,
+                            label: "Mis Desafíos",
+                            onClick: () => navigate(`/Challenge/${currentCompanyId}`),
+                        } :
+                        {
+                            key: `/Proposal/${currentEntrepreneurId}`,
+                            icon: <FileTextOutlined />,
+                            label: "Mis Propuestas",
+                            onClick: () => navigate(`/Proposal/${currentEntrepreneurId}`),
+                        }
                 ]}
             />
         </Sider>

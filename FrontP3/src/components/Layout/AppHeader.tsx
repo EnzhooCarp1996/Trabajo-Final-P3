@@ -9,7 +9,6 @@ const { Title } = Typography;
 interface AppHeaderProps {
     collapsed: boolean;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-    nombreUsuario?: string;
     //   role: string;
     //   logout: () => void;
 }

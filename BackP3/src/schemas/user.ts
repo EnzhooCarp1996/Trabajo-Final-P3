@@ -27,10 +27,10 @@ const userSchema = new Schema<IUser>(
     password: { type: String, required: true, select: false },
     role: { type: ObjectId, ref: "Role", required: true },
     telefono: { type: String, trim: true },
-    nombreEmpresa: { type: String, lowercase: true, trim: true },
+    nombreEmpresa: { type: String, trim: true },
     descripcion: { type: String, trim: true },
     sitioWeb: { type: String, trim: true },
-    nombreCompleto: { type: String, lowercase: true, trim: true },
+    nombreCompleto: { type: String, trim: true },
     edad: { type: Number, min: 0 },
   },
   { timestamps: true }

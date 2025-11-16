@@ -9,10 +9,9 @@ import { Form } from "antd";
 interface ProposalsViewProps {
   titulo: string;
   readOnly?: boolean;
-  showButtonNew?: boolean;
 }
 
-export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, showButtonNew }) => {
+export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly}) => {
   const formProposal = Form.useForm()[0];
   const {
     votedProposals,
@@ -36,7 +35,7 @@ export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, 
   return (
     <>
       {/* Encabezado */}
-      <HeaderEntity titulo={titulo} onClick={() => openModalProposal()} readOnly={readOnly} />
+      <HeaderEntity titulo={titulo}/>
 
       {/* lista de propuestas */}
       <ProposalsList
@@ -50,7 +49,6 @@ export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly, 
         onChangeEstado={readOnly ? onChangeEstado : undefined}
         toggleVoto={toggleVoto}
         readOnly={readOnly}
-        showButtonNew={showButtonNew}
       />
 
 

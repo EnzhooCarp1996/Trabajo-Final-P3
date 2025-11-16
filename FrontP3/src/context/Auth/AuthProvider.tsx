@@ -8,10 +8,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(getToken());
   const [userInfo, setUserInfo] = useState(authService.getUserInfo());
 
-  const login = (
-    newToken: string,
-    recordar: boolean = true,
-  ) => {
+  const login = ( newToken: string, recordar: boolean = true ) => {
     if (recordar) {
       localStorage.setItem("token", newToken);
     } else {

@@ -40,7 +40,7 @@ async function generateUserToken(req: unknown, user: IUser): Promise<TokenRespon
     subject: user._id.toString(),
     issuer: process.env.JWT_ISSUER || 'base-api-express-generator',
     algorithm: 'HS256',
-    expiresIn: '7d' // duración del token
+    expiresIn: '2h' // duración del token
   })
 
   // const token = jwt.sign(payload, privateKey, {

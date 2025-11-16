@@ -11,11 +11,21 @@ export const EntrepreneurForm = () => {
                 <Input />
             </Form.Item>
             <Form.Item
-                name="edad"
-                label="Edad"
-                rules={[{ required: true, message: "Ingrese edad valida" }]}
+                name="telefono"
+                label="telefono"
+                rules={[{ message: "Ingrese telefono" }]}
             >
                 <Input />
+            </Form.Item>
+            <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                    { required: true, message: "Ingrese el email" },
+                    { type: "email", message: "Ingrese un email válido" }
+                ]}
+            >
+                <Input type="email" />
             </Form.Item>
 
         </>

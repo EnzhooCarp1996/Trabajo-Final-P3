@@ -1,7 +1,10 @@
 import { jwtDecode } from "jwt-decode";
 
 export function getToken(): string | null {
-  return localStorage.getItem("token");
+  return (
+    localStorage.getItem("token") ||
+    sessionStorage.getItem("token")
+  );
 }
 
 export function setToken(token: string) {
@@ -11,12 +14,12 @@ export function setToken(token: string) {
 export function clearSession() {
   localStorage.removeItem("token");
   localStorage.removeItem("refreshToken");
+  sessionStorage.removeItem("token");
 }
 
 export function logout(setToken?: (token: string | null) => void) {
   clearSession();
   if (setToken) setToken(null);
-  window.location.href = "/login";
 }
 
 export function isTokenExpired(token: string): boolean {
