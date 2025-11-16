@@ -6,32 +6,34 @@ import type {
   IChallengeRef,
 } from "../../types/types";
 import { storage } from "../../storage";
-import { Form, Modal, type FormInstance } from "antd";
+import { Form, Modal } from "antd";
 import { proposalService } from "../../services/ProposalService";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/Auth/useAuth";
 
 export const useProposal = () => {
   const { _id } = useAuth();
-
-
   const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
   const [editingProposal, setEditingProposal] = useState<IProposal | null>(null);
   const [proposals, setProposals] = useState<IProposal[]>([]);
+  const [loading, setLoading] = useState(false);
   const formProposal = Form.useForm()[0];
 
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchProposals = async () => {
+      setLoading(true);
       try {
         const data = await proposalService.getAll();
         setProposals(data);
       } catch (error) {
         console.error(error);
-        toast.error("Error al cargar las empresas");
-      } 
+        toast.error("Error al cargar las propuestas");
+      } finally {
+          setLoading(false);
+      }
     };
 
-    fetchCompanies();
+    fetchProposals();
   }, []);
 
   const [votedProposals, setVotedProposals] = useState<string[]>(
@@ -69,13 +71,12 @@ export const useProposal = () => {
 
 
   const openModalProposal = (
-    challenge?: IChallenge,
-    form?: FormInstance
+    challenge?: IChallenge
   ) => {
       setEditingProposal(null);
       setSelectedChallenge(challenge ?? null);
-      form?.resetFields();
-      form?.setFieldsValue({
+      formProposal?.resetFields();
+      formProposal?.setFieldsValue({
         desafioId: challenge ? challenge.titulo : "",
         emprendedorId: _id,
         puntos: 0,
@@ -107,8 +108,8 @@ export const useProposal = () => {
         
       closeModalProposal();
       } catch (error) {
-        console.error("Error al crear/actualizar propuesta", error);
-        toast.error("No se pudo actualizar la propuesta");
+        console.error("Error al crear la propuesta", error);
+        toast.error("No se pudo crear la propuesta");
       }
           },
     });
@@ -124,6 +125,7 @@ export const useProposal = () => {
   };
 
   return {
+    loading,
     formProposal,
     votedProposals,
     proposals,

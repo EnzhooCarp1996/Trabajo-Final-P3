@@ -3,6 +3,11 @@ import axiosInstance from "./AxiosService";
 
 export type ChallengeStatus = "activo" | "inactivo";
 
+export interface ChallengeFilters {
+  estado?: ChallengeStatus;
+  empresaId?: string;
+}
+
 export interface CreateChallengeRequest {
   empresaId: string;
   titulo: string;
@@ -12,7 +17,7 @@ export interface CreateChallengeRequest {
 
 // Interfaz que define el contrato del servicio
 export interface ChalengeService {
-  getAll: (estado: ChallengeStatus) => Promise<IChallenge[]>;
+  getAll: (filters: ChallengeFilters) => Promise<IChallenge[]>;
   getById: (id: string) => Promise<IChallenge>;
   create: (data: CreateChallengeRequest) => Promise<IChallenge>;
   update: (id: string, data: Partial<CreateChallengeRequest>) => Promise<IChallenge>;
@@ -21,8 +26,8 @@ export interface ChalengeService {
 
 // Implementación del servicio
 export const challengeService: ChalengeService = {
-  getAll: (estado) =>
-    axiosInstance.get<IChallenge[]>(`/challenges`, { params: { estado } }).then(res => res.data),
+  getAll: (filters) =>
+    axiosInstance.get<IChallenge[]>(`/challenges`, { params: filters }).then(res => res.data),
 
   getById: (id) =>
     axiosInstance.get<IChallenge>(`/challenges/${id}`).then(res => res.data),

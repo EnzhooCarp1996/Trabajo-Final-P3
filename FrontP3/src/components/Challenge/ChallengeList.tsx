@@ -1,13 +1,11 @@
 import { CalendarOutlined, CheckCircleOutlined, CloseCircleOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
 import type { IChallenge } from "../../types/types";
 import { CardEntity } from "../CardEntity";
-import { GridRow } from "../GridRow";
 import { Button, Col } from "antd";
 
 
 interface ChallengeListProps {
-    challenges: IChallenge[];
-    getCompanyName: (empresaId: string) => string | undefined;
+    challenge: IChallenge;
     toggleStatus?: (challenge: IChallenge) => void;
     openModal?: (challenge: IChallenge) => void;
     handleDelete?: (id: string) => void;
@@ -17,18 +15,16 @@ interface ChallengeListProps {
 }
 
 export const ChallengeList: React.FC<ChallengeListProps> = ({
-    challenges,
-    getCompanyName,
+    challenge,
     toggleStatus,
     openModal,
     handleDelete,
-    readOnly = false,
+    readOnly,
     showButtonNew,
     openModalProposal,
 }) => {
     return (
-        <GridRow>
-            {challenges.map((challenge) => (
+
                 <Col xs={24} sm={12} lg={8} key={challenge._id}>
                     <CardEntity
                         tituloBoton={"Propuesta"}
@@ -74,11 +70,10 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
                             <div>
                                 <CalendarOutlined /> {new Date(challenge.createdAt).toLocaleDateString()}
                             </div>
-                            <div>{getCompanyName(challenge.empresaId)}</div>
+                            <div>{challenge.empresaId.nombreEmpresa}</div>
                         </div>
                     </CardEntity>
                 </Col>
-            ))}
-        </GridRow>
+
     );
 };

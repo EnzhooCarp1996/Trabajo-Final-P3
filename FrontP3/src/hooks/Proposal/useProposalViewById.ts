@@ -8,27 +8,24 @@ import { Modal } from "antd";
 
 export const useProposalViewById = () => {
   const { _id } = useAuth();
-
-const formProposal = Form.useForm()[0];
-
-
-  const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
-  const [editingProposal, setEditingProposal] = useState<IProposal | null>(null);
+  const formProposal = Form.useForm()[0];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editing, setEditing] = useState<IProposal | null>(null);
   const [proposals, setProposals] = useState<IProposal[]>([]);
 
 
   useEffect(() => {
-    const fetchCompanies = async () => {
+    const fetchProposals = async () => {
       try {
         const data = await proposalService.getAll({ emprendedorId: _id });
         setProposals(data);
       } catch (error) {
         console.error(error);
-        toast.error("Error al cargar las empresas");
+        toast.error("Error al cargar tus propuestas");
       } 
     };
 
-    fetchCompanies();
+    fetchProposals();
   }, []);
 
   const [selectedChallenge, setSelectedChallenge] = useState<IChallengeRef | null>(
@@ -36,23 +33,23 @@ const formProposal = Form.useForm()[0];
   );
 
 
-const openModalProposal = (proposal: IProposal, form?: FormInstance) => {
-  setEditingProposal(proposal);
+const openModal = (proposal: IProposal, form?: FormInstance) => {
+  setEditing(proposal);
   setSelectedChallenge(proposal.desafioId);
   form?.setFieldsValue({
     tituloPropuesta: proposal.tituloPropuesta,
     descripcion: proposal.descripcion,
   });
-  setIsModalProposalOpen(true);
+  setIsModalOpen(true);
 };
 
-  const closeModalProposal = () => {
-    setIsModalProposalOpen(false);
-    setEditingProposal(null);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditing(null);
   };
 
 const handleSubmitProposalById = async (values: any) => {
-  if (!editingProposal) return;
+  if (!editing) return;
 
   Modal.confirm({
     title: "Actualizar propuesta",
@@ -61,13 +58,13 @@ const handleSubmitProposalById = async (values: any) => {
     cancelText: "No",
     onOk: async () => {
       try {
-        const updatedProposal = await proposalService.update(editingProposal._id, values);
+        const updatedProposal = await proposalService.update(editing._id, values);
         const updated = proposals.map((p) =>
-          p._id === editingProposal._id ? updatedProposal : p
+          p._id === editing._id ? updatedProposal : p
         );
         setProposals(updated);
         toast.success("Propuesta actualizada correctamente");
-        closeModalProposal();
+        closeModal();
       } catch (error) {
         console.error("Error al actualizar propuesta", error);
         toast.error("No se pudo actualizar la propuesta");
@@ -100,11 +97,11 @@ const handleDelete = (id: string) => {
   return {
     formProposal,
     proposals,
-    isModalProposalOpen,
-    editingProposal,
+    isModalProposalOpen: isModalOpen,
+    editingProposal: editing,
     selectedChallenge,
-    openModalProposal,
-    closeModalProposal,
+    openModalProposal: openModal,
+    closeModalProposal: closeModal,
     handleSubmitProposalById,
     handleDelete,
   };

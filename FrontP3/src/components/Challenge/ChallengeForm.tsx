@@ -1,55 +1,31 @@
-import { Form, Input, Select } from "antd";
-import type { IUser } from "../../types/types";
+import { Form, Input } from "antd";
 
-const { Option } = Select;
 
-interface ChallengeFormProps {
-    companies: IUser[]
-}
-
-export const ChallengeForm: React.FC<ChallengeFormProps> = ({ companies }) => {
+export const ChallengeForm: React.FC = () => {
     return (
         <>
             <Form.Item
-                name="empresaId"
-                label="Empresa"
-                rules={[{ required: true, message: "Seleccione una empresa" }]}
-            >
-                <Select placeholder="Seleccionar empresa">
-                    {companies.filter(u => u.role === "empresa")
-                        .map((company) => (
-                            <Option key={company._id} value={company._id}>
-                                {company.nombreEmpresa}
-                            </Option>
-                        ))}
-                </Select>
-            </Form.Item>
-
-            <Form.Item
                 name="titulo"
-                label="Título"
-                rules={[{ required: true, message: "Ingrese un título" }]}
+                label="Título del Desafio"
+                rules={[
+                    { required: true, message: "El título es obligatorio" },
+                    { min: 5, message: "El título debe tener al menos 5 caracteres" },
+                    { max: 100, message: "El título no puede superar los 100 caracteres" },
+                ]}
             >
-                <Input />
+                <Input placeholder="Ingrese el titulo del desafio aqui"/>
             </Form.Item>
 
             <Form.Item
                 name="descripcion"
                 label="Descripción"
-                rules={[{ required: true, message: "Ingrese una descripción" }]}
+                rules={[
+                    { required: true, message: "La descripción es obligatoria" },
+                    { min: 10, message: "La descripción debe tener al menos 10 caracteres" },
+                    { max: 500, message: "La descripción no puede superar los 500 caracteres" },
+                ]}
             >
-                <Input.TextArea rows={3} />
-            </Form.Item>
-
-            <Form.Item
-                name="estado"
-                label="Estado"
-                rules={[{ required: true, message: "Seleccione un estado" }]}
-            >
-                <Select>
-                    <Option value="activo">Activo</Option>
-                    <Option value="inactivo">Inactivo</Option>
-                </Select>
+                <Input.TextArea rows={3} placeholder="Ingrese la descripción de la propuesta aqui" />
             </Form.Item>
 
         </>

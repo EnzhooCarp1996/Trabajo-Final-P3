@@ -9,6 +9,7 @@ import { FormGeneral } from "../FormGeneral";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/Auth/useAuth";
 import { userService, type CreateUserRequest } from "../../services/UserService";
+import { ChallengeTable } from './../Challenge/ChallengeTable';
 
 const { Title, Text } = Typography;
 
@@ -55,11 +56,12 @@ export const UserProfile: React.FC = () => {
     return (
         <>
             <HeaderEntity titulo="Perfil" />
+            <div style={{ minHeight: "200px", overflowY: "auto" }}>
             <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "800px", margin: "0 auto", boxSizing: "border-box", }}>
 
                 {/*Información Básica del Usuario */}
                 <Card
-                    style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "rgba(255, 255, 255, 0.1)", color: "#fff" }}
+                    style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "#002140", color: "#fff" }}
                     title={
                         <div style={{ color: "#089717ff", display: "flex", alignItems: "center" }}>
                             {role === "emprendedor" ? (<UserOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
@@ -67,7 +69,7 @@ export const UserProfile: React.FC = () => {
                                 <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
                             )}
                             <div>
-                                <Title level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
+                                <Title style={{ color: "#ccc" }} level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
 
                             </div>
                         </div>
@@ -107,7 +109,13 @@ export const UserProfile: React.FC = () => {
                     </div>
                 </Card>
             </div >
-            <Title style={{ textAlign: "center"}} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
+            <Title style={{ textAlign: "center" }} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
+
+            {role === "emprendedor" ? (
+                <ChallengeTable />
+            ) : (
+                <ChallengeTable />
+            )}
 
             <ModalGeneral
                 titulo={"Usuario"}
@@ -120,6 +128,7 @@ export const UserProfile: React.FC = () => {
                     {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
                 </FormGeneral>
             </ModalGeneral>
+            </div>
         </>
     );
 };

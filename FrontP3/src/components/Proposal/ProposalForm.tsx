@@ -24,7 +24,7 @@ export const ProposalForm: React.FC<ChallengeFormProps> = ({ selectedChallenge }
                     { max: 100, message: "El título no puede superar los 100 caracteres" },
                 ]}
             >
-                <Input placeholder="Ingrese el título de la propuesta" />
+                <Input placeholder="Ingrese el título de la propuesta aqui" />
             </Form.Item>
 
             <Form.Item
@@ -36,7 +36,7 @@ export const ProposalForm: React.FC<ChallengeFormProps> = ({ selectedChallenge }
                     { max: 500, message: "La descripción no puede superar los 500 caracteres" },
                 ]}
             >
-                <Input.TextArea rows={3} placeholder="Ingrese la descripción de la propuesta" />
+                <Input.TextArea rows={3} placeholder="Ingrese la descripción de la propuesta aqui" />
             </Form.Item>
 
         </>

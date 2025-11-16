@@ -23,7 +23,7 @@ export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly }
       <GridRow>
         {proposals.map((proposal, index) => (
           <ProposalsList
-          key={index}
+            key={index}
             proposal={proposal}
             onChangeEstado={readOnly ? onChangeEstado : undefined}
             readOnly={readOnly}

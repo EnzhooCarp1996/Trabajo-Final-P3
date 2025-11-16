@@ -21,11 +21,16 @@ export interface IUser {
 
 export interface IChallenge {
   _id: string;
-  empresaId: string;
+  empresaId: ICompanyRef;
   titulo: string;
   descripcion: string;
   estado: ChallengeStatus;
   createdAt: Date;
+}
+
+export interface ICompanyRef {
+  _id: string;
+  nombreEmpresa: string;
 }
 
 export interface IProposal {

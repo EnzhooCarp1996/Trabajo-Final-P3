@@ -14,7 +14,6 @@ interface AppSidebarProps {
 export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const currentCompanyId = "1";
     const { role } = useAuth();
 
     return (
@@ -88,10 +87,10 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                     },
                     role === "empresa" ?
                         {
-                            key: `/Challenge/${currentCompanyId}`,
+                            key: `/ChallengeById`,
                             icon: <FlagOutlined />,
                             label: "Mis Desafíos",
-                            onClick: () => navigate(`/Challenge/${currentCompanyId}`),
+                            onClick: () => navigate(`/ChallengeById`),
                         } :
                         {
                             key: `/ProposalById`,
