@@ -10,6 +10,7 @@ import { Form, Modal } from "antd";
 import { proposalService } from "../../services/ProposalService";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/Auth/useAuth";
+import { estados } from "../../utils/utilsProposals";
 
 export const useProposal = () => {
   const { _id } = useAuth();
@@ -18,6 +19,8 @@ export const useProposal = () => {
   const [proposals, setProposals] = useState<IProposal[]>([]);
   const [loading, setLoading] = useState(false);
   const formProposal = Form.useForm()[0];
+  const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estados[0].value as ProposalStatus);
+  const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado);
 
   useEffect(() => {
     const fetchProposals = async () => {
@@ -115,27 +118,20 @@ export const useProposal = () => {
     });
     };
 
-  const onChangeEstado = (id: string, nuevoEstado: ProposalStatus) => {
-    const updated = proposals.map((p) =>
-      p._id === id ? { ...p, estado: nuevoEstado } : p
-    );
 
-    setProposals(updated);
-    storage.setProposals(updated);
-  };
 
   return {
     loading,
     formProposal,
     votedProposals,
-    proposals,
+    proposalsFiltradas,
+    setFiltroEstado,
     isModalProposalOpen,
     editingProposal,
     selectedChallenge,
     handleSubmitProposal,
     openModalProposal,
     closeModalProposal,
-    onChangeEstado,
     toggleVoto,
   };
 };

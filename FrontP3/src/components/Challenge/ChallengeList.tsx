@@ -10,7 +10,6 @@ interface ChallengeListProps {
     openModal?: (challenge: IChallenge) => void;
     handleDelete?: (id: string) => void;
     readOnly?: boolean;
-    showButtonNew?: boolean;
     openModalProposal?: (challenge?: IChallenge) => void;
 }
 
@@ -20,7 +19,6 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
     openModal,
     handleDelete,
     readOnly,
-    showButtonNew,
     openModalProposal,
 }) => {
     return (
@@ -52,7 +50,6 @@ export const ChallengeList: React.FC<ChallengeListProps> = ({
                         }
                         onEdit={!readOnly ? () => openModal && openModal(challenge) : undefined}
                         onDelete={!readOnly ? () => handleDelete && handleDelete(challenge._id) : undefined}
-                        showButtonNew={challenge.estado === "activo" && showButtonNew}
                         onNuevoClick={challenge.estado === "activo" ? () => openModalProposal?.(challenge) : undefined}
 
 

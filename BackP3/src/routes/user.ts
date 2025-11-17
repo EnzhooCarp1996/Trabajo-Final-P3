@@ -106,6 +106,9 @@ async function updateUser(
 
   // No se puede actualizar el role
   delete req.body.role;
+  if (!req.body.password) {
+    delete req.body.password;
+  }
 
   try {
     const userToUpdate = await User.findById(req.params.id)

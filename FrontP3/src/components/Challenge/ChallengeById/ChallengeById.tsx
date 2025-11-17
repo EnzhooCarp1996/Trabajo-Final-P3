@@ -13,10 +13,9 @@ import { GridRow } from "../../GridRow";
 
 interface ChallengesViewProps {
     readOnly?: boolean;
-    showButtonNew?: boolean;
 }
 
-export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly, showButtonNew }) => {
+export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
     const { _id } = useAuth();
     const [formChallenge] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -160,7 +159,6 @@ export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly, showBu
                                 openModal={!readOnly ? openModal : undefined}
                                 handleDelete={!readOnly ? handleDelete : undefined}
                                 readOnly={readOnly}
-                                showButtonNew={showButtonNew}
                             />
                         ))}
                     </GridRow>

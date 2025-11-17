@@ -1,7 +1,8 @@
 import { getToken, isTokenExpired } from "./SessionService";
-import type { LoginResponse } from "../types/types";
+import type { IUser, LoginResponse } from "../types/types";
 import { jwtDecode } from "jwt-decode";
 import axiosInstance from "./AxiosService";
+import type { CreateUserRequest } from "./UserService";
 
 export interface JWTPayload {
   _id: string;
@@ -18,6 +19,7 @@ export interface JWTPayload {
 // -------------------------
 export interface AuthService {
   logIn: (email: string, password: string) => Promise<LoginResponse>;
+  create: (data: CreateUserRequest) => Promise<IUser>;
   getUserInfo: () => { _id: string, email: string, nombre: string, role: string };
 }
 
@@ -33,6 +35,9 @@ export const authService: AuthService = {
       const msg = err.response?.data?.message || "Credenciales inválidas";
       throw new Error(msg);
     }),
+
+  create: (data) =>
+    axiosInstance.post<IUser>(`/auth/register`, data).then(res => res.data),
 
   // -------------------------
   // USUARIO ACTUAL

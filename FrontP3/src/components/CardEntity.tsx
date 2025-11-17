@@ -1,24 +1,25 @@
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Card, Typography } from "antd";
 import { ButtonNuevo } from "./ButtonNuevo";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 const { Text } = Typography;
 
 interface CardEntityProps {
   tituloBoton?: string;
   title?: string;
-  icon?: React.ReactNode;
-  children?: React.ReactNode;
+  icon?: ReactNode;
+  children?: ReactNode;
   borderColor?: string;
   onEdit?: () => void;
   onDelete?: () => void;
-  extraActions?: React.ReactNode[];
+  extraActions?: ReactNode[];
   backgroundColor?: string;
   readOnly?: boolean
   showButtonNew?: boolean;
   onNuevoClick?: () => void;
   iconoBoton?: ReactNode
+  styles?: CSSProperties;
 }
 
 export const CardEntity: React.FC<CardEntityProps> = ({
@@ -35,6 +36,7 @@ export const CardEntity: React.FC<CardEntityProps> = ({
   showButtonNew = false,
   onNuevoClick,
   iconoBoton,
+  styles
 }) => {
   const actions = readOnly
     ? []
@@ -43,7 +45,8 @@ export const CardEntity: React.FC<CardEntityProps> = ({
       ...(onEdit ? [<EditOutlined key="edit" onClick={onEdit} />] : []),
       ...(onDelete ? [<DeleteOutlined key="delete" onClick={onDelete} style={{ color: "#d10b0bff", }} />] : []),
     ];
-
+  
+    
   return (
     
     <Card
@@ -58,7 +61,7 @@ export const CardEntity: React.FC<CardEntityProps> = ({
           )}
         </div>
       }
-      style={{ background: backgroundColor, color: "white", border: `1px solid ${borderColor}`, borderRadius: 12, }}
+      style={{ background: backgroundColor, color: "white", border: `1px solid ${borderColor}`, borderRadius: 12, ...styles }}
       actions={actions}
     >
       <Text style={{ color: "#ccc" }}>{children}</Text>

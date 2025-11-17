@@ -10,10 +10,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/Auth/useAuth";
 import { userService, type CreateUserRequest } from "../../services/UserService";
 import { ChallengeTable } from './../Challenge/ChallengeTable';
+import { ProposalsSwiper } from "../Proposal/ProposalsSwiper";
+import { FormGeneralItem } from "../FormGeneralItem";
 
 const { Title, Text } = Typography;
 
-export const UserProfile: React.FC = () => {
+export const UserProfile = () => {
     const { _id, role } = useAuth();
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,77 +59,78 @@ export const UserProfile: React.FC = () => {
         <>
             <HeaderEntity titulo="Perfil" />
             <div style={{ minHeight: "200px", overflowY: "auto" }}>
-            <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "800px", margin: "0 auto", boxSizing: "border-box", }}>
+                <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "800px", margin: "0 auto", boxSizing: "border-box", }}>
 
-                {/*Información Básica del Usuario */}
-                <Card
-                    style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "#002140", color: "#fff" }}
-                    title={
-                        <div style={{ color: "#089717ff", display: "flex", alignItems: "center" }}>
-                            {role === "emprendedor" ? (<UserOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
-                            ) : (
-                                <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
-                            )}
-                            <div>
-                                <Title style={{ color: "#ccc" }} level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
+                    {/*Información Básica del Usuario */}
+                    <Card
+                        style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "#002140", color: "#fff" }}
+                        title={
+                            <div style={{ color: "#089717ff", display: "flex", alignItems: "center" }}>
+                                {role === "emprendedor" ? (<UserOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
+                                ) : (
+                                    <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
+                                )}
+                                <div>
+                                    <Title style={{ color: "#ccc" }} level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
 
+                                </div>
                             </div>
-                        </div>
-                    }
-                    actions={[
-                        <Button icon={<EditOutlined />} onClick={openModal} type="link">
-                            Editar Perfil
-                        </Button>,
-                    ]}
-                >
-                    <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Fecha de Registro: {currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : ""}</Text>
-                    </div>
-                    <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Telefono: {currentUser?.telefono}</Text>
-                    </div>
-                    <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Email <MailOutlined />: {currentUser?.email}</Text>
-                    </div>
-
-                    {role === "emprendedor" ? (
+                        }
+                        actions={[
+                            <Button icon={<EditOutlined />} onClick={openModal} type="link">
+                                Editar Perfil
+                            </Button>,
+                        ]}
+                    >
                         <div style={{ marginBottom: "12px" }}>
-                            <Text style={{ color: "#ccc" }}>Edad: {currentUser?.edad}</Text>
+                            <Text style={{ color: "#ccc" }}>Fecha de Registro: {currentUser?.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : ""}</Text>
                         </div>
-                    ) : (
-                        <>
-                            <div style={{ marginBottom: "12px" }}>
-                                <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser?.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser?.sitioWeb}</a></Text>
-                            </div>
-                            <div style={{ marginBottom: "12px" }}>
-                                <Text style={{ color: "#fff" }}>Descripción: {currentUser?.descripcion}</Text>
-                            </div>
-                        </>
-                    )}
-                    <div style={{ marginBottom: "12px" }}>
-                        <Text style={{ color: "#ccc" }}>Estado: {currentUser?.activo ? "Activo" : "Inactivo"}</Text>
-                    </div>
-                </Card>
-            </div >
-            <Title style={{ textAlign: "center" }} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
+                        <div style={{ marginBottom: "12px" }}>
+                            <Text style={{ color: "#ccc" }}>Telefono: {currentUser?.telefono}</Text>
+                        </div>
+                        <div style={{ marginBottom: "12px" }}>
+                            <Text style={{ color: "#ccc" }}>Email <MailOutlined />: {currentUser?.email}</Text>
+                        </div>
 
-            {role === "emprendedor" ? (
-                <ChallengeTable />
-            ) : (
-                <ChallengeTable />
-            )}
+                        {role === "emprendedor" ? (
+                            <div style={{ marginBottom: "12px" }}>
+                                <Text style={{ color: "#ccc" }}>Edad: {currentUser?.edad}</Text>
+                            </div>
+                        ) : (
+                            <>
+                                <div style={{ marginBottom: "12px" }}>
+                                    <Text style={{ color: "#fff" }}>Sitio Web: <a href={currentUser?.sitioWeb} target="_blank" style={{ color: "#91caff" }}>{currentUser?.sitioWeb}</a></Text>
+                                </div>
+                                <div style={{ marginBottom: "12px" }}>
+                                    <Text style={{ color: "#fff" }}>Descripción: {currentUser?.descripcion}</Text>
+                                </div>
+                            </>
+                        )}
+                        <div style={{ marginBottom: "12px" }}>
+                            <Text style={{ color: "#ccc" }}>Estado: {currentUser?.activo ? "Activo" : "Inactivo"}</Text>
+                        </div>
+                    </Card>
+                </div >
+                <Title style={{ textAlign: "center" }} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
 
-            <ModalGeneral
-                titulo={"Usuario"}
-                isOpen={isModalOpen}
-                editing={true}
-                onClose={closeModal}
-                onOk={() => form.submit()}
-            >
-                <FormGeneral form={form} handleSubmit={handleSubmit}>
-                    {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
-                </FormGeneral>
-            </ModalGeneral>
+                {role === "emprendedor" ? (
+                    <ProposalsSwiper />
+                ) : (
+                    <ChallengeTable />
+                )}
+
+                <ModalGeneral
+                    titulo={"Usuario"}
+                    isOpen={isModalOpen}
+                    editing={true}
+                    onClose={closeModal}
+                    onOk={() => form.submit()}
+                >
+                    <FormGeneral form={form} handleSubmit={handleSubmit}>
+                        {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
+                        <FormGeneralItem form={form} />
+                    </FormGeneral>
+                </ModalGeneral>
             </div>
         </>
     );

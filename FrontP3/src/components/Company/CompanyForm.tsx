@@ -26,14 +26,6 @@ export const CompanyForm = () => {
             >
                 <Input type="url" />
             </Form.Item>
-
-            <Form.Item
-                name="telefono"
-                label="Teléfono"
-                rules={[{ required: true, message: "Ingrese un número de teléfono" }]}
-            >
-                <Input type="tel" />
-            </Form.Item>
         </>
     )
 }

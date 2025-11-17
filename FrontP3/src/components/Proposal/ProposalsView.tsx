@@ -1,35 +1,48 @@
 import { useProposal } from "../../hooks/Proposal/useProposal";
+import { estados } from "../../utils/utilsProposals";
 import { ProposalsList } from "./ProposalsList";
 import { HeaderEntity } from "../HeaderEntity";
+import { EstadoSwiper } from "../EstadoSwiper";
 import { GridRow } from "../GridRow";
+import "swiper/css/navigation";
+import "swiper/css";
 
-interface ProposalsViewProps {
-  titulo: string;
-  readOnly?: boolean;
-}
 
-export const ProposalsView: React.FC<ProposalsViewProps> = ({ titulo, readOnly }) => {
+export const ProposalsView: React.FC = () => {
   const {
-    proposals,
-    onChangeEstado,
+    proposalsFiltradas,
+    setFiltroEstado,
   } = useProposal();
 
   return (
     <>
-      {/* Encabezado */}
-      <HeaderEntity titulo={titulo} />
+      <HeaderEntity titulo={"Propuestas"} />
 
-      {/* lista de propuestas */}
+      {/* CONTENEDOR DEL SWIPER */}
+      <EstadoSwiper
+        items={estados}
+        onChange={(value) => setFiltroEstado(value as any)}
+      />
+
+      {/* LISTA FILTRADA */}
       <GridRow>
-        {proposals.map((proposal, index) => (
+        {proposalsFiltradas.map((proposal, index) => (
           <ProposalsList
             key={index}
+            iconoBoton={<span
+                    style={{
+                        cursor: "pointer",
+                        fontSize: "25px",
+                        transition: "0.2s",
+                    }}
+                >
+                    ★
+                </span>}
             proposal={proposal}
-            onChangeEstado={readOnly ? onChangeEstado : undefined}
-            readOnly={readOnly}
+            readOnly
           />
         ))}
       </GridRow>
     </>
   );
-}
+};

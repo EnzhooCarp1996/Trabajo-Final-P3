@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppContent } from './components/Layout/AppContent';
-import { LoginForm } from './components/Login/LoginForm';
+import { LoginPage } from './components/Login/LoginPage';
 import { PrivateRoutes } from './routes/PrivateRoutes';
 import { useAuth } from './context/Auth/useAuth';
 
@@ -17,7 +17,7 @@ function App() {
         {/* LOGIN */}
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/UserProfile" /> : <LoginForm />}
+          element={isAuthenticated ? <Navigate to="/UserProfile" /> : <LoginPage />}
         />
 
         {/* RUTAS PRIVADAS */}
