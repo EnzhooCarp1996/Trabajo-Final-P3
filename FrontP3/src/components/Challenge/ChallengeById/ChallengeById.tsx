@@ -1,21 +1,20 @@
 import type { ChallengeStatus, IChallenge } from "../../../types/types";
-import { ChallengeList } from "./../ChallengeList";
+import { challengeService } from "../../../services/ChallengeService";
+import { ChallengeDescriptions } from "./ChallengeDescriptions";
+import { useAuth } from "../../../context/Auth/useAuth";
+import { Card, Form, List, Modal, Typography } from "antd";
 import { ChallengeForm } from "./../ChallengeForm";
-import { HeaderEntity } from "../../HeaderEntity";
+import { HeaderReturn } from "../../HeaderReturn";
 import { ModalGeneral } from "../../ModalGeneral";
+import { TrophyOutlined } from "@ant-design/icons";
 import { FormGeneral } from "../../FormGeneral";
 import { useEffect, useState } from "react";
-import { Button, Form, Modal } from "antd";
-import { challengeService } from "../../../services/ChallengeService";
 import toast from "react-hot-toast";
-import { useAuth } from "../../../context/Auth/useAuth";
-import { GridRow } from "../../GridRow";
+import { ChallengeHeader } from "./ChallengeHeader";
 
-interface ChallengesViewProps {
-    readOnly?: boolean;
-}
+const { Title } = Typography;
 
-export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
+export const ChallengesById: React.FC = () => {
     const { _id } = useAuth();
     const [formChallenge] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,6 +38,7 @@ export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
 
         fetchChallenges();
     }, []);
+
 
 
     const openModal = (challenge?: IChallenge) => {
@@ -97,7 +97,6 @@ export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
         });
     };
 
-
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "Eliminar desafio",
@@ -117,11 +116,9 @@ export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
         });
     };
 
-    const toggleStatus = async (challenge: IChallenge) => {
-        const nuevoEstado: ChallengeStatus = challenge.estado === "activo" ? "inactivo" : "activo";
-
+    const toggleStatus = async (challenge: IChallenge, newEstado: ChallengeStatus) => {
         try {
-            const updatedChallenge = await challengeService.update(challenge._id, { estado: nuevoEstado });
+            const updatedChallenge = await challengeService.update(challenge._id, { estado: newEstado });
 
             setChallenges(prev =>
                 prev.map(c => (c._id === updatedChallenge._id ? updatedChallenge : c))
@@ -136,51 +133,75 @@ export const ChallengesById: React.FC<ChallengesViewProps> = ({ readOnly }) => {
 
 
     return (
-        <>
+        <div style={{ padding: '0 16px' }}>
             {/* Encabezado */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-                <HeaderEntity titulo="Desafíos" />
-                <Button type="primary" onClick={() => openModal()}>
-                    Nuevo
-                </Button>
+            <HeaderReturn titulo={"Mis Desafíos"} />
+
+            {/* Estadísticas y Botón */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: 8,
+                padding: '16px 24px',
+                backgroundColor: '#fff',
+                borderRadius: 12,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+            }}>
+                <ChallengeHeader challenges={challenges} openModal={openModal} />
             </div>
-            {/* onClick={() => openModal()} readOnly={readOnly} */}
-            {/* lista de desafíos */}
+
+            {/* Lista de desafíos */}
             {loading ? (
-                <p>Cargando...</p>
+                <Card style={{ textAlign: 'center', padding: 60, borderRadius: 12, backgroundColor: '#fafafa' }} >
+                    <div style={{ color: '#8c8c8c', fontSize: 16 }}>
+                        Cargando desafíos...
+                    </div>
+                </Card>
+            ) : challenges.length === 0 ? (
+                <Card style={{ textAlign: 'center', padding: 60, borderRadius: 12, border: '2px dashed #d9d9d9'}}>
+                    <TrophyOutlined style={{ fontSize: 48, color: '#bfbfbf', marginBottom: 16 }} />
+                    <Title level={4} style={{ color: '#8c8c8c', marginBottom: 16 }}>
+                        No hay desafíos creados
+                    </Title>
+                </Card>
             ) : (
                 <>
-                    <GridRow>
-                        {challenges.map((challenge, index) => (
-                            <ChallengeList
-                                key={index}
-                                challenge={challenge}
-                                toggleStatus={!readOnly ? toggleStatus : undefined}
-                                openModal={!readOnly ? openModal : undefined}
-                                handleDelete={!readOnly ? handleDelete : undefined}
-                                readOnly={readOnly}
-                            />
-                        ))}
-                    </GridRow>
+                    <Card
+                        style={{ borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: 'none', maxHeight: "60vh", overflowY: "auto" }}
+                        styles={{ body: { padding: "8px 0", backgroundColor: "#fafafa",}}}
+                    >
+                        <List
+                            style={{ backgroundColor: 'transparent' }}
+                            dataSource={challenges}
+                            renderItem={(challenge) => (
+                                <div style={{ margin: '8px 16px', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                                    <ChallengeDescriptions
+                                        key={challenge._id}
+                                        challenge={challenge}
+                                        toggleStatus={toggleStatus}
+                                        openModal={openModal}
+                                        handleDelete={handleDelete}
+                                    />
+                                </div>
+                            )}
+                        />
+                    </Card>
 
                     {/* Modal de creación */}
-                    {!readOnly && (
-                        <ModalGeneral
-                            titulo={"Desafio"}
-                            isOpen={isModalOpen}
-                            onClose={closeModal}
-                            onOk={() => formChallenge.submit()}
-                            editing={!!editing}
-                        >
-                            <FormGeneral form={formChallenge} handleSubmit={handleSubmitChallenge}>
-                                <ChallengeForm />
-                            </FormGeneral>
-                        </ModalGeneral>
-                    )}
+                    <ModalGeneral
+                        titulo={editing ? "Editar Desafío" : "Nuevo Desafío"}
+                        isOpen={isModalOpen}
+                        onClose={closeModal}
+                        onOk={() => formChallenge.submit()}
+                        editing={!!editing}
+                    >
+                        <FormGeneral form={formChallenge} handleSubmit={handleSubmitChallenge}>
+                            <ChallengeForm />
+                        </FormGeneral>
+                    </ModalGeneral>
                 </>
             )}
-        </>
+        </div>
     );
-}
-
-
+};

@@ -36,7 +36,6 @@ export const EntrepreneurProposals: FC<EntrepreneurProposalsProps> = ({ _id }) =
       {proposals.map((p) => (
         <div key={p._id} style={{ display: "flex", flexDirection:"column",padding: 8, background: "#006db2", borderRadius: 6 }}>
           <strong>{p.tituloPropuesta}</strong>
-          <small>Estado: {p.estado}</small>
         </div>
       ))}
     </div>

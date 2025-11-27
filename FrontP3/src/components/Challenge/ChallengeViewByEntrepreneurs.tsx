@@ -1,7 +1,6 @@
 import { useProposal } from "../../hooks/Proposal/useProposal";
 import type { IChallenge } from "../../types/types";
 import { ProposalForm } from "../Proposal/ProposalForm";
-import { HeaderEntity } from "../HeaderEntity";
 import { ModalGeneral } from "../ModalGeneral";
 import { FormGeneral } from "../FormGeneral";
 import { useEffect, useRef, useState } from "react";
@@ -35,7 +34,7 @@ export const ChallengesViewByEntrepreneurs: React.FC = () => {
         const fetchChallenges = async () => {
             setLoading(true);
             try {
-                const data = await challengeService.getAll({ estado: "activo" });
+                const data = await challengeService.getAll({ estado: ["activo"] });
                 setChallenges(data);
             } catch (error) {
                 console.error(error);
@@ -50,9 +49,7 @@ export const ChallengesViewByEntrepreneurs: React.FC = () => {
 
     return (
         <>
-            {/* Encabezado */}
-            <HeaderEntity titulo="Desafíos" />
-            {/* onClick={() => openModal()} readOnly={readOnly} */}
+
             {/* lista de desafíos */}
             {loading ? (
                 <p>Cargando...</p>
@@ -64,10 +61,14 @@ export const ChallengesViewByEntrepreneurs: React.FC = () => {
                             justifyContent: "center",
                             alignItems: "center",
                             width: "100%",
-                            height: "100%",
+                            minHeight: "80vh", // <<✔ ahora sí se puede centrar verticalmente
+                            padding: "20px 0",
+                            flexDirection: "column"
                         }}
                     >
-                        <div style={{ width: "100%", maxWidth: 700, height: "100%", maxHeight: 700, minHeight: 300, marginTop: 12 }}>
+
+                        <div style={{ width: "100%", maxWidth: 700, minHeight: 300 }}>
+
                             <div style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
                                 <Carousel
                                     dotPosition="bottom"

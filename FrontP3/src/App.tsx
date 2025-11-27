@@ -17,7 +17,7 @@ function App() {
         {/* LOGIN */}
         <Route
           path="/login"
-          element={isAuthenticated ? <Navigate to="/UserProfile" /> : <LoginPage />}
+          element={isAuthenticated ? <Navigate to="/UserProfile" replace/> : <LoginPage />}
         />
 
         {/* RUTAS PRIVADAS */}

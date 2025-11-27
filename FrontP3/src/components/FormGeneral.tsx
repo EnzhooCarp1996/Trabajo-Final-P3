@@ -12,7 +12,7 @@ export const FormGeneral: React.FC<FormGeneralProps> = ({ form, handleSubmit, ch
             form={form}
             layout="vertical"
             onFinish={handleSubmit}
-            style={{ marginTop: 16 }}
+            style={{ width: "100%", maxWidth: "100%", }}
         >
             {children}
         </Form>

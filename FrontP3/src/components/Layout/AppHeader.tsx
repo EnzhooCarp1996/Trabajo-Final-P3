@@ -1,7 +1,9 @@
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Layout, Typography, Button, Space } from "antd";
-import { useNavigate } from "react-router-dom";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { Layout, Typography, Button, Space, Avatar } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/Auth/useAuth";
+import { useEffect, useRef, useState } from "react";
+import { UserDropdownCard } from "./UserDropdownCard";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -9,13 +11,37 @@ const { Title } = Typography;
 interface AppHeaderProps {
     collapsed: boolean;
     setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-    //   role: string;
-    //   logout: () => void;
 }
+
+const pageTitles: Record<string, string> = {
+    "/UserProfile": "Perfil",
+    "/Company": "Empresas",
+    "/Entrepreneur": "Emprendedores",
+    "/Proposal": "Propuestas",
+    "/Challenge": "Desafíos",
+    "/ChallengesByEntrepreneur": "Desafíos",
+    "/ChallengeById": "Mis Desafíos",
+    "/ProposalById": "Mis Propuestas",
+};
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed }) => {
     const navigate = useNavigate();
-    const { nombre, role, logout } = useAuth();
+    const location = useLocation();
+    const { nombre, role, email, logout } = useAuth();
+    const [open, setOpen] = useState(false);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    const title = pageTitles[location.pathname] || "Plataforma de Desafíos";
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     const handleClick = () => {
         navigate("/UserProfile");
@@ -46,27 +72,40 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed })
             />
 
             <Title level={4} style={{ color: "white", margin: 0 }}>
-                Panel {role}
+                {title}
             </Title>
 
             <Space size="middle">
-                <Button
-                    type="primary"
-                    icon={<UserOutlined />}
-                    style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
-                    onClick={handleClick}
-                >
-                    {nombre} 
-                    {/* ({role}) */}
-                </Button>
 
-                <Button
-                    type="primary"
-                    icon={<LogoutOutlined />}
-                    danger
-                    onClick={logout}
-                    style={{ backgroundColor: "#f5222d", borderColor: "#f5222d" }}
-                />
+                <div ref={wrapperRef} style={{ position: "relative" }}>
+                    <Avatar
+                        size={48}
+                        style={{ cursor: "pointer", backgroundColor: "#1890ff" }}
+                        onClick={() => setOpen(!open)}
+                    >
+                        {nombre || "U"}
+                    </Avatar>
+
+                    {open && (
+                        <div
+                            style={{
+                                position: "absolute",
+                                right: 0,
+                                top: 60,
+                                zIndex: 9999,
+                            }}
+                        >
+                            <UserDropdownCard
+                                nombre={nombre}
+                                role={role}
+                                email={email}
+                                onProfile={handleClick}
+                                onLogout={logout}
+                            />
+                        </div>
+                    )}
+                </div>
+
             </Space>
         </Header>
     );

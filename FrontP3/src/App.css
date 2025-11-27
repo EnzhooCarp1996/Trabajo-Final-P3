@@ -13,3 +13,19 @@ body,
   width: 100%;
   max-width: none;
 }
+
+/* Mensajes de Ant Design siempre abajo a la derecha del viewport */
+.ant-message {
+  position: fixed !important;
+  top: auto !important;
+  bottom: 40px !important;
+  right: 0px !important;
+  left: auto !important;
+  width: auto !important;
+  z-index: 9999 !important;
+  pointer-events: none;
+}
+
+.ant-message-notice {
+  pointer-events: all; /* Permite cerrar el mensaje */
+}

@@ -49,7 +49,7 @@ export const LoginPage = () => {
           background: "#12395B",
           borderRadius: "14px",
           overflow: "hidden",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
+          boxShadow: "0 40px 40px rgba(0,0,0,0.4)",
           flexDirection: "row",
           flexWrap: "wrap",
         }}

@@ -59,7 +59,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               name="password"
               rules={[
                 { required: true, message: "La contraseña es obligatoria" },
-                { min: 4, message: "La contraseña debe tener al menos 4 caracteres" }
+                { min: 3, message: "La contraseña debe tener al menos 4 caracteres" }
               ]}
             >
               <Input.Password

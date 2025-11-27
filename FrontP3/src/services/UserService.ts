@@ -11,7 +11,7 @@ export interface CreateUserRequest {
   activo: boolean;
   telefono: string;
   nombreEmpresa?: string;
-  descripcion?: string;
+  descripcion: string;
   sitioWeb?: string;
   nombreCompleto?: string;
   edad?: number;

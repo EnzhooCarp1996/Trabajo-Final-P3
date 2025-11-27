@@ -88,12 +88,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                                 label: "Desafíos",
                                 onClick: () => navigate("/Challenge"),
                             },
-                            {
-                                key: `/ChallengeById`,
-                                icon: <FlagOutlined />,
-                                label: "Mis Desafíos",
-                                onClick: () => navigate(`/ChallengeById`),
-                            }
                         ]
                         :
                         [
@@ -103,12 +97,6 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                                 label: "Desafíos",
                                 onClick: () => navigate("/ChallengesByEntrepreneur"),
                             },
-                            {
-                                key: `/ProposalById`,
-                                icon: <FileTextOutlined />,
-                                label: "Mis Propuestas",
-                                onClick: () => navigate(`/ProposalById`),
-                            }
                         ])
                 ]}
             />

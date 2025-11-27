@@ -24,7 +24,7 @@ export const AppContent: React.FC<AppContent> = ({ children }) => {
         <Content
           style={{
             backgroundColor: "#0a1f44",
-            padding: "24px 32px",
+           
             color: "white",
             minHeight: "calc(100vh - 128px)",
           }}

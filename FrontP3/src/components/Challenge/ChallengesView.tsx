@@ -17,7 +17,7 @@ export const ChallengesView: FC = () => {
         const fetchChallenges = async () => {
             setLoading(true);
             try {
-                const data = await challengeService.getAll({ estado: "activo" });
+                const data = await challengeService.getAll({ estado: ["activo"] });
                 setChallenges(data);
             } catch (error) {
                 console.error(error);

@@ -1,14 +1,17 @@
-export type ChallengeStatus = "activo" | "inactivo";
+export type ChallengeStatus = "activo" | "inactivo" | "finalizado";
 
 export type ProposalStatus = "en revision" | "seleccionada" | "descartada";
 
-export type Role = "empresa" | "emprendedor";
+export interface Role {
+  _id: string;
+  nombre: "empresa" | "emprendedor";
+} 
 
 export interface IUser {
   _id: string;
   email: string;
   password: string;
-  role: string;
+  role: Role;
   activo: boolean;
   telefono: string;
   createdAt?: Date;

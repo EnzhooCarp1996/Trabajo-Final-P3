@@ -15,7 +15,7 @@ router.delete('/:id', validateIdParam, deleteChallenge)
 
 // Obtener todos los desafios activos, o por empresa
 async function getAllChallenges(
-  req: Request<{}, {}, {}, { estado?: ChallengeStatus; empresaId?: string }>,
+  req: Request<{}, {}, {}, { estado?: ChallengeStatus | ChallengeStatus[]; empresaId?: string }>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
@@ -24,9 +24,29 @@ async function getAllChallenges(
   try {
     const filter: any = {}
 
-    if (estado && ['activo', 'inactivo'].includes(estado)) filter.estado = estado
+    if (estado) {
+      const estadosValidos = ['activo', 'inactivo', 'finalizado']
+
+      let estadosArray: string[] = []
+
+      if (Array.isArray(estado)) {
+        estadosArray = estado
+      } else if (typeof estado === 'string') {
+        // axios envía "activo,finalizado"
+        estadosArray = estado.split(',')
+      }
+
+      // Filtrar solo estados válidos
+      estadosArray = estadosArray.filter((e) => estadosValidos.includes(e))
+
+      if (estadosArray.length > 0) {
+        filter.estado = { $in: estadosArray }
+      }
+    }
 
     if (empresaId) filter.empresaId = empresaId
+    console.log("Filtro aplicado:", filter);
+
 
     const challenges = await Challenge.find(filter).populate({
       path: 'empresaId',

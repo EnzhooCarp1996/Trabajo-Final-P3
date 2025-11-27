@@ -8,6 +8,7 @@ export const useEntrepreneurView = () => {
     const [loading, setLoading] = useState(false);
     const [selectedEntrepreneur, setSelectedEntrepreneur] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [view, setView] = useState<"entrepreneurs" | "proposals">("entrepreneurs");
   
     useEffect(() => {
       const fetchEntrepreneurs = async () => {
@@ -37,10 +38,12 @@ export const useEntrepreneurView = () => {
     };
 
   return {
+    view,
     entrepreneurs,
     loading,
     selectedEntrepreneur,
     isModalOpen,
+    setView,
     openModal,
     closeModal
   };

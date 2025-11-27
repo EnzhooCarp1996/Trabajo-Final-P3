@@ -5,7 +5,7 @@ import { validarTipoUsuario } from "../utils/validarTipoUsuario";
 const { ObjectId } = Schema.Types;
 
 // Posibles estados de un challenge
-const challengeStatuses: ChallengeStatus[] = ["activo", "inactivo"];
+const challengeStatuses: ChallengeStatus[] = ["activo", "inactivo", "finalizado"];
 
 // Definición del schema
 const challengeSchema = new Schema<IChallenge>(

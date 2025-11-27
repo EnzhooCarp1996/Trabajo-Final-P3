@@ -13,7 +13,6 @@ export const useProposalViewById = () => {
   const [editing, setEditing] = useState<IProposal | null>(null);
   const [proposals, setProposals] = useState<IProposal[]>([]);
 
-
   useEffect(() => {
     const fetchProposals = async () => {
       try {

@@ -1,10 +1,10 @@
-import type { IChallenge } from "../types/types";
+import type { ChallengeStatus, IChallenge } from "../types/types";
 import axiosInstance from "./AxiosService";
 
-export type ChallengeStatus = "activo" | "inactivo";
 
 export interface ChallengeFilters {
-  estado?: ChallengeStatus;
+  // estado?: ChallengeStatus;
+  estado?: ChallengeStatus[];
   empresaId?: string;
 }
 

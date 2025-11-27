@@ -1,11 +1,10 @@
 import { useProposal } from "../../hooks/Proposal/useProposal";
 import { estados } from "../../utils/utilsProposals";
 import { ProposalsList } from "./ProposalsList";
-import { HeaderEntity } from "../HeaderEntity";
-import { EstadoSwiper } from "../EstadoSwiper";
 import { GridRow } from "../GridRow";
 import "swiper/css/navigation";
 import "swiper/css";
+import { EstadoTabs } from "../TabsProposals";
 
 
 export const ProposalsView: React.FC = () => {
@@ -16,10 +15,9 @@ export const ProposalsView: React.FC = () => {
 
   return (
     <>
-      <HeaderEntity titulo={"Propuestas"} />
 
       {/* CONTENEDOR DEL SWIPER */}
-      <EstadoSwiper
+      <EstadoTabs
         items={estados}
         onChange={(value) => setFiltroEstado(value as any)}
       />
@@ -43,6 +41,7 @@ export const ProposalsView: React.FC = () => {
           />
         ))}
       </GridRow>
+      
     </>
   );
 };

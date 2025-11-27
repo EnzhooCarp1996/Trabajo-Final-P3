@@ -7,24 +7,18 @@ export const CompanyForm = () => {
                 name="nombreEmpresa"
                 label="Nombre de la Empresa"
                 rules={[{ required: true, message: "Ingrese el nombre de la empresa" }]}
+                style={{ marginBottom: 4 }}
             >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                name="descripcion"
-                label="Descripción"
-                rules={[{ required: true, message: "Ingrese una descripción" }]}
-            >
-                <Input.TextArea rows={3} />
+                <Input style={{ width: "100%" }} />
             </Form.Item>
 
             <Form.Item
                 name="sitioWeb"
                 label="Sitio Web"
                 rules={[{ required: true, message: "Ingrese un sitio web válido" }]}
+                style={{ marginBottom: 4 }}
             >
-                <Input type="url" />
+                <Input style={{ width: "100%" }} type="url" />
             </Form.Item>
         </>
     )

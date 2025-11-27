@@ -1,25 +1,17 @@
 import { BankOutlined, EditOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import type { IUser } from "../../types/types";
-import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
-import { Card, Typography, Button, Form } from "antd";
-import { CompanyForm } from "../Company/CompanyForm";
-import { HeaderEntity } from "../HeaderEntity";
-import { ModalGeneral } from "../ModalGeneral";
-import { FormGeneral } from "../FormGeneral";
+import { Card, Typography, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/Auth/useAuth";
-import { userService, type CreateUserRequest } from "../../services/UserService";
-import { ChallengeTable } from './../Challenge/ChallengeTable';
-import { ProposalsSwiper } from "../Proposal/ProposalsSwiper";
-import { FormGeneralItem } from "../FormGeneralItem";
+import { userService } from "../../services/UserService";
+
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
 export const UserProfile = () => {
     const { _id, role } = useAuth();
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [form] = Form.useForm();
 
     useEffect(() => {
         if (!_id) return;
@@ -30,56 +22,62 @@ export const UserProfile = () => {
 
     }, [_id]);
 
-    const handleSubmit = async (values: CreateUserRequest) => {
-        if (!currentUser?._id) {
-            console.error("No se encontró el ID del usuario");
-            return;
-        }
-
-        try {
-            const updatedUser = await userService.update(currentUser._id, values);
-            setCurrentUser(updatedUser);
-            setIsModalOpen(false);
-        } catch (error) {
-            console.error("Error actualizando usuario", error);
-        }
-    };
-
-    const openModal = () => {
-        form.setFieldsValue(currentUser); // carga los datos actuales del usuario en el formulario
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        form.resetFields();
-        setIsModalOpen(false);
-    };
 
     return (
         <>
-            <HeaderEntity titulo="Perfil" />
             <div style={{ minHeight: "200px", overflowY: "auto" }}>
-                <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "800px", margin: "0 auto", boxSizing: "border-box", }}>
+                <div style={{ backgroundColor: "#0a1f44", borderRadius: "8px", width: "100%", maxWidth: "650px", margin: "0 auto", boxSizing: "border-box", }}>
 
                     {/*Información Básica del Usuario */}
                     <Card
                         style={{ borderColor: "#089717ff", marginBottom: "20px", backgroundColor: "#002140", color: "#fff" }}
                         title={
-                            <div style={{ color: "#089717ff", display: "flex", alignItems: "center" }}>
-                                {role === "emprendedor" ? (<UserOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
-                                ) : (
-                                    <BankOutlined style={{ marginRight: "28px", fontSize: "3em" }} />
-                                )}
+                            <div style={{ color: "#089717ff", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                 <div>
-                                    <Title style={{ color: "#ccc" }} level={3} >{role === "emprendedor" ? currentUser?.nombreCompleto : currentUser?.nombreEmpresa}</Title>
-
+                                    <Title style={{ color: "#ccc" }} level={3} >
+                                        {role === "emprendedor" ? (
+                                            <>
+                                                <UserOutlined style={{ marginRight: "20px", fontSize: "2em" }} />
+                                                {currentUser?.nombreCompleto}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <BankOutlined style={{ marginRight: "20px", fontSize: "3em" }} />
+                                                {currentUser?.nombreEmpresa}
+                                            </>
+                                        )
+                                        }
+                                    </Title>
+                                </div>
+                                <div>
+                                    <Title level={3} style={{ textAlign: "center", color: "white", cursor: "pointer", transition: "0.2s", }}>
+                                        <Link
+                                            to={role === "emprendedor" ? "/ProposalById" : "/ChallengeById"}
+                                            style={{ color: "inherit", textDecoration: "none" }}
+                                            onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                                            onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+                                        >
+                                            Mis {role === "emprendedor" ? "Propuestas" : "Desafíos"}
+                                        </Link>
+                                    </Title>
                                 </div>
                             </div>
                         }
                         actions={[
-                            <Button icon={<EditOutlined />} onClick={openModal} type="link">
-                                Editar Perfil
-                            </Button>,
+                            <Link to="/ProfileEdit">
+                                <Button
+                                    icon={<EditOutlined />}
+                                    style={{
+                                        backgroundColor: "#1677ff",
+                                        color: "white",
+                                        borderRadius: 8,
+                                        padding: "4px 12px",
+                                        border: "none"
+                                    }}
+                                >
+                                    Editar Perfil
+                                </Button>
+                            </Link>
                         ]}
                     >
                         <div style={{ marginBottom: "12px" }}>
@@ -111,26 +109,15 @@ export const UserProfile = () => {
                         </div>
                     </Card>
                 </div >
-                <Title style={{ textAlign: "center" }} level={3} >Mis {role === "emprendedor" ? "Propuestas" : "Desafios"}</Title>
 
+                {/* 
                 {role === "emprendedor" ? (
                     <ProposalsSwiper />
                 ) : (
                     <ChallengeTable />
-                )}
+                )} */}
 
-                <ModalGeneral
-                    titulo={"Usuario"}
-                    isOpen={isModalOpen}
-                    editing={true}
-                    onClose={closeModal}
-                    onOk={() => form.submit()}
-                >
-                    <FormGeneral form={form} handleSubmit={handleSubmit}>
-                        {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
-                        <FormGeneralItem form={form} />
-                    </FormGeneral>
-                </ModalGeneral>
+
             </div>
         </>
     );

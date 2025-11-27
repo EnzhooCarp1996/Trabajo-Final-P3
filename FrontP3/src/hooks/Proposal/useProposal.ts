@@ -22,6 +22,8 @@ export const useProposal = () => {
   const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estados[0].value as ProposalStatus);
   const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado);
 
+
+
   useEffect(() => {
     const fetchProposals = async () => {
       setLoading(true);

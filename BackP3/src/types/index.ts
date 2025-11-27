@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose'
 
-export type ChallengeStatus = 'activo' | 'inactivo'
+export type ChallengeStatus = 'activo' | 'inactivo' | "finalizado"
 
 export type ProposalStatus = 'en revision' | 'seleccionada' | 'descartada'
 

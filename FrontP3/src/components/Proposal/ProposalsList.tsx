@@ -3,7 +3,8 @@ import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icon
 import { CardEntity } from "../CardEntity";
 import type { IProposal } from "../../types/types";
 import { getStatusColor } from "../../utils/utilsProposals";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { ProfileModal } from "../UserProfile/ProfileModal";
 
 interface ProposalsListProps {
     proposal: IProposal;
@@ -22,6 +23,11 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
     showButtonNew,
     iconoBoton,
 }) => {
+    const [openProfile, setOpenProfile] = useState(false);
+    
+    const openProfileModal = () => {
+        setOpenProfile(true);
+    };
 
 
     return (
@@ -35,48 +41,42 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                 onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
                 showButtonNew={showButtonNew}
             >
-                {proposal.descripcion}
-
                 <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                         <TrophyOutlined /> {proposal.desafioId.titulo}
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                        <UserOutlined /> {proposal.emprendedorId.nombreCompleto}
-                    </div>
-
-                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-
-                        <span
+                        <div
+                            onClick={openProfileModal}
                             style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 4,
                                 cursor: "pointer",
-                                fontSize: "25px",
-                                transition: "0.2s",
+                                textDecoration: "underline",
+                                color: "#69b1ff",
                             }}
                         >
-                            ★
-                        </span>
+                            <UserOutlined />
+                            {proposal.emprendedorId.nombreCompleto}
+                        </div>
 
                     </div>
+
+            
 
                     <span>{proposal.puntos} puntos</span>
-                    <div style={{ marginTop: 4 }}>
-                        <span
-                            style={{
-                                padding: "2px 6px",
-                                borderRadius: 4,
-                                fontSize: 12,
-                                fontWeight: 600,
-                                backgroundColor: getStatusColor(proposal.estado),
-                                color: "#fff",
-                            }}
-                        >
-                            {proposal.estado}
-                        </span>
-                    </div>
+                    
                 </div>
             </CardEntity>
+            
+            <ProfileModal
+                open={openProfile}
+                onClose={() => setOpenProfile(false)}
+                _id={proposal.emprendedorId._id}
+            />
+
         </Col>
 
     );

@@ -1,14 +1,44 @@
 import { Form, Input } from "antd";
 
 export const EntrepreneurForm = () => {
+    // validators.ts
+    const validarEdad = () => {
+        return {
+            validator: (_: any, value: any) => {
+                if (!value) {
+                    return Promise.reject("Ingrese la edad");
+                }
+                if (isNaN(value)) {
+                    return Promise.reject("La edad debe ser un número");
+                }
+                if (value < 18 || value > 100) {
+                    return Promise.reject("Edad debe estar entre 18 y 100");
+                }
+                return Promise.resolve();
+            },
+        };
+    };
+
     return (
         <>
             <Form.Item
                 name="nombreCompleto"
                 label="Nombre Completo"
                 rules={[{ required: true, message: "Ingrese el nombre completo" }]}
+                style={{ marginBottom: 4 }}
             >
-                <Input />
+                <Input style={{ width: "100%" }} />
+            </Form.Item>
+            <Form.Item
+                name="edad"
+                label="Edad"
+                rules={[
+                    { required: true, message: "Ingrese la edad" },
+                    validarEdad()
+                ]}
+                style={{ marginBottom: 4 }}
+            >
+                <Input style={{ width: "100%" }} />
             </Form.Item>
 
         </>
