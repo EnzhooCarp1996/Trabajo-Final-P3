@@ -61,27 +61,16 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                         label: "Perfil",
                         onClick: () => navigate("/UserProfile"),
                     },
-                    {
-                        key: "/Company",
-                        icon: <BankOutlined />,
-                        label: "Empresas",
-                        onClick: () => navigate("/Company"),
-                    },
-                    {
-                        key: "/Entrepreneur",
-                        icon: <UsergroupDeleteOutlined />,
-                        label: "Emprendedores",
-                        onClick: () => navigate("/Entrepreneur"),
-                    },
 
-                    {
-                        key: "/Proposal",
-                        icon: <FileTextOutlined />,
-                        label: "Propuestas",
-                        onClick: () => navigate("/Proposal"),
-                    },
+
                     ...(role === "empresa" ?
                         [
+                            {
+                                key: "/Entrepreneur",
+                                icon: <UsergroupDeleteOutlined />,
+                                label: "Emprendedores",
+                                onClick: () => navigate("/Entrepreneur"),
+                            },
                             {
                                 key: "/Challenge",
                                 icon: <FlagOutlined />,
@@ -92,12 +81,24 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                         :
                         [
                             {
+                                key: "/Company",
+                                icon: <BankOutlined />,
+                                label: "Empresas",
+                                onClick: () => navigate("/Company"),
+                            },
+                            {
                                 key: "/ChallengesByEntrepreneur",
                                 icon: <FlagOutlined />,
                                 label: "Desafíos",
                                 onClick: () => navigate("/ChallengesByEntrepreneur"),
                             },
-                        ])
+                        ]),
+                    {
+                        key: "/Proposal",
+                        icon: <FileTextOutlined />,
+                        label: "Propuestas",
+                        onClick: () => navigate("/Proposal"),
+                    },
                 ]}
             />
         </Sider>

@@ -1,8 +1,8 @@
 import { userService, type CreateUserRequest } from "../../services/UserService";
-import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
+import { EntrepreneurForm } from "./EntrepreneurForm";
 import { Button, Form, message, Typography } from "antd";
 import { FormGeneralItem } from "../FormGeneralItem";
-import { CompanyForm } from "../Company/CompanyForm";
+import { CompanyForm } from "./CompanyForm";
 import { useAuth } from "../../context/Auth/useAuth";
 import type { IUser } from "../../types/types";
 import { HeaderReturn } from "../HeaderReturn";

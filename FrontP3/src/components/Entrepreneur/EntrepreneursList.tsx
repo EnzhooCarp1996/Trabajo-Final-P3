@@ -12,7 +12,7 @@ interface EntrepreneursListProps {
 export const EntrepreneursList: React.FC<EntrepreneursListProps> = ({ entrepreneurs, getProposalCount }) => {
     return (
         <GridRow>
-            {entrepreneurs.filter(u => u.role === "emprendedor").map((entrepreneur) => (
+            {entrepreneurs.map((entrepreneur) => (
                 <Col xs={24} sm={12} lg={8} key={entrepreneur._id}>
                     <CardEntity
                         title={entrepreneur.nombreCompleto}

@@ -5,9 +5,12 @@ import { StatusSelect } from "./StatusSelect";
 
 interface ChallengeDescriptionsProps {
     challenge: IChallenge;
-  toggleStatus: (challenge: IChallenge, newEstado: ChallengeStatus) => Promise<void>;
+    toggleStatus: (challenge: IChallenge, newEstado: ChallengeStatus) => Promise<void>;
     openModal: (challenge: IChallenge) => void;
     handleDelete: (id: string) => void;
+    setView: React.Dispatch<React.SetStateAction<"challenges" | "proposals">>;
+    setSelectedChallenge: (value: any) => void;
+
 }
 
 export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
@@ -15,13 +18,15 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
     toggleStatus,
     openModal,
     handleDelete,
+    setView,
+    setSelectedChallenge,
 }) => {
 
 
     return (
         <List.Item
             style={{
-                backgroundColor: '#fff',
+                backgroundColor: '#8dc8f4',
                 marginBottom: '8px',
                 borderRadius: '8px',
                 padding: '16px'
@@ -51,13 +56,24 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
                         icon={<TrophyOutlined />}
                         style={{
                             backgroundColor: challenge.estado === "activo" ? "#52c41a" :
-                                challenge.estado === "finalizado" ? "#1677ff" : "#d9d9d9"
+                                challenge.estado === "finalizado" ? "#1677ff" : "red"
                         }}
                     />
                 }
                 title={
                     <Space style={{ justifyContent: "space-between", width: "100%" }}>
-                        <span>{challenge.titulo}</span>
+                        <div>
+                            <strong
+                                style={{ color: "#69b1ff", textDecoration: "underline", cursor: "pointer" }}
+                                onClick={() => {
+                                    setView("proposals");
+                                    setSelectedChallenge(challenge);
+                                }}
+                            >
+                                {challenge.titulo}
+                            </strong>
+
+                        </div>
 
                         <StatusSelect
                             estado={challenge.estado}

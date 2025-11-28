@@ -4,8 +4,8 @@ import { Layout, Card, Typography, Button, Segmented } from "antd";
 import { LoginForm } from "./LoginForm";
 import { FlagOutlined } from "@ant-design/icons";
 import { FormGeneralItem } from "../FormGeneralItem";
-import { CompanyForm } from "../Company/CompanyForm";
-import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
+import { CompanyForm } from "../UserProfile/CompanyForm";
+import { EntrepreneurForm } from "../UserProfile/EntrepreneurForm";
 import { FormGeneral } from "../FormGeneral";
 
 const { Title, Text } = Typography;

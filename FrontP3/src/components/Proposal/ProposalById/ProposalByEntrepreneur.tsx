@@ -5,21 +5,21 @@ import { useEffect, useState } from "react";
 import { proposalService } from "../../../services/ProposalService";
 import toast from "react-hot-toast";
 
-interface ProposalTableProps {
+interface ProposalByEntrepreneurProps {
   emprendedorId: string;
 }
 
-export const ProposalTable = ({ emprendedorId }: ProposalTableProps) => {
-    const tableHeaderStyle: React.CSSProperties = {
-        backgroundColor: "#001529",
-        color: "white",
-        fontWeight: "bold",
-    };
-    const cellBodyStyle: React.CSSProperties = {
-        backgroundColor: "#002140",
-        color: "white",
-        borderBottom: "3px solid #003a6c",
-    };
+export const ProposalByEntrepreneur = ({ emprendedorId }: ProposalByEntrepreneurProps) => {
+  const tableHeaderStyle: React.CSSProperties = {
+    backgroundColor: "#001529",
+    color: "white",
+    fontWeight: "bold",
+  };
+  const cellBodyStyle: React.CSSProperties = {
+    backgroundColor: "#002140",
+    color: "white",
+    borderBottom: "3px solid #003a6c",
+  };
 
   const columns: ColumnsType<IProposal> = [
     {
@@ -75,7 +75,7 @@ export const ProposalTable = ({ emprendedorId }: ProposalTableProps) => {
     };
 
     fetchProposals();
-  }, [emprendedorId ]);
+  }, [emprendedorId]);
 
   return (
     <div style={{ width: "auto", margin: "0 auto", minHeight: 400 }}>

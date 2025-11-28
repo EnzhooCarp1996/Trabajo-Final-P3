@@ -3,12 +3,12 @@ import { Button, Tag } from "antd";
 import type { IChallenge } from "../../../types/types";
 import { useEffect, useState } from "react";
 
-interface ChallengeHeaderProps {
+interface ChallengeStatisticsProps {
     challenges: IChallenge[];
     openModal: () => void;
 }
 
-export const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({ challenges, openModal }) => {
+export const ChallengeStatistics: React.FC<ChallengeStatisticsProps> = ({ challenges, openModal }) => {
 
     // Detectar mobile para cambiar estilos en línea
     const [isMobile, setIsMobile] = useState(false);
@@ -52,9 +52,9 @@ export const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({ challenges, op
                 <TrophyOutlined
                     style={{
                         fontSize: 24,
-                        color: "#1677ff",
+                        color: "white",
                         padding: 8,
-                        backgroundColor: "#f0f6ff",
+                        backgroundColor: "#efb810",
                         borderRadius: 8,
                     }}
                 />
@@ -68,10 +68,10 @@ export const ChallengeHeader: React.FC<ChallengeHeaderProps> = ({ challenges, op
                         borderRadius: 12,
                     }}
                 >
-                    <Tag style={{borderRadius: 12}} color="green">Activos: {activeChallenges}</Tag>
-                    <Tag style={{borderRadius: 12}} color="blue">Finalizados: {finishedChallenges}</Tag>
-                    <Tag style={{borderRadius: 12}} color="red">Inactivos: {inactiveChallenges}</Tag>
-                    <Tag style={{borderRadius: 12}} color="default">Total: {totalChallenges}</Tag>
+                    <Tag style={{ borderRadius: 12, backgroundColor: "green" }} color="white">Activos: {activeChallenges}</Tag>
+                    <Tag style={{ borderRadius: 12, backgroundColor: "blue" }} color="white">Finalizados: {finishedChallenges}</Tag>
+                    <Tag style={{ borderRadius: 12, backgroundColor: "red" }} color="white">Inactivos: {inactiveChallenges}</Tag>
+                    <Tag style={{ borderRadius: 12, backgroundColor: "grey" }} color="white">Total: {totalChallenges}</Tag>
                 </div>
             </div>
 

@@ -23,7 +23,7 @@ export const EntrepreneurForm = () => {
         <>
             <Form.Item
                 name="nombreCompleto"
-                label="Nombre Completo"
+                label={<span style={{ color: "white" }}>Nombre Completo</span>}
                 rules={[{ required: true, message: "Ingrese el nombre completo" }]}
                 style={{ marginBottom: 4 }}
             >
@@ -31,7 +31,7 @@ export const EntrepreneurForm = () => {
             </Form.Item>
             <Form.Item
                 name="edad"
-                label="Edad"
+                label={<span style={{ color: "white" }}>Edad</span>}
                 rules={[
                     { required: true, message: "Ingrese la edad" },
                     validarEdad()

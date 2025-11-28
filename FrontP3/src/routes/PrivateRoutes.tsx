@@ -5,8 +5,8 @@ import { EntrepreneurView } from "../components/Entrepreneur/EntrepreneurView";
 import { ChallengesView } from "../components/Challenge/ChallengesView";
 import { ProposalsView } from "../components/Proposal/ProposalsView";
 import { ProposalsViewById } from "../components/Proposal/ProposalById/ProposalViewById";
-import { ChallengesById } from "../components/Challenge/ChallengeById/ChallengeById";
-import { ChallengesViewByEntrepreneurs } from "../components/Challenge/ChallengeViewByEntrepreneurs";
+import { ChallengesByProfile } from "../components/Challenge/ChallengeToCompany/ChallengeByProfile";
+import { ChallengesByEntrepreneurs } from "../components/Challenge/ChallengeToEntrepreneur/ChallengeByEntrepreneurs";
 import { ProfileEdit } from "../components/UserProfile/ProfileEdit";
 
 export const PrivateRoutes: React.FC = () => {
@@ -17,10 +17,10 @@ export const PrivateRoutes: React.FC = () => {
             <Route path="/ProfileEdit" element={<ProfileEdit />} />
             <Route path="/Company" element={<CompanyView />} />
             <Route path="/Challenge" element={<ChallengesView />} />
-            <Route path="/ChallengesByEntrepreneur" element={<ChallengesViewByEntrepreneurs />} />
+            <Route path="/ChallengesByEntrepreneur" element={<ChallengesByEntrepreneurs />} />
             <Route path="/Entrepreneur" element={<EntrepreneurView />} />
             <Route path="/Proposal" element={<ProposalsView />} />
-            <Route path="/ChallengeById" element={<ChallengesById />} />
+            <Route path="/ChallengeById" element={<ChallengesByProfile />} />
             <Route path="/ProposalById" element={<ProposalsViewById />} />
         </Routes>
     );

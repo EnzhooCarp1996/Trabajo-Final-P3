@@ -12,7 +12,7 @@ export const FormGeneralItem: React.FC<FormGeneralItemProps> = ({ form, requireP
         <>
             <Form.Item
                 name="telefono"
-                label="telefono"
+                label={<span style={{ color: "white" }}>Telefono</span>}
                 rules={[{ required: true, message: "Ingrese telefono" }]}
                 style={{ marginBottom: 4 }}
             >
@@ -20,7 +20,7 @@ export const FormGeneralItem: React.FC<FormGeneralItemProps> = ({ form, requireP
             </Form.Item>
             <Form.Item
                 name="email"
-                label="Email"
+                label={<span style={{ color: "white" }}>Email</span>}
                 rules={[
                     { required: true, message: "Ingrese el email" },
                     { type: "email", message: "Ingrese un email válido" }
@@ -31,15 +31,16 @@ export const FormGeneralItem: React.FC<FormGeneralItemProps> = ({ form, requireP
             </Form.Item>
             <Form.Item
                 name="descripcion"
-                label="Descripción"
+                label={<span style={{ color: "white" }}>Descripción</span>}
                 rules={[{ required: true, message: "Ingrese una descripción" }]}
                 style={{ marginBottom: 4 }}
+                labelCol={{ style: { color: "white" } }}
             >
                 <Input.TextArea style={{ width: "100%" }} rows={3} />
             </Form.Item>
             <Form.Item
                 name="password"
-                label="Contraseña"
+                label={<span style={{ color: "white" }}>Contraseña</span>}
                 rules={[
                     ...(requirePassword
                         ? [
@@ -56,7 +57,7 @@ export const FormGeneralItem: React.FC<FormGeneralItemProps> = ({ form, requireP
 
             <Form.Item
                 name="confirmPassword"
-                label="Repetir Contraseña"
+                label={<span style={{ color: "white" }}>Repetir Contraseña</span>}
                 dependencies={["password"]}
                 rules={[
                     validateConfirmPassword(form)

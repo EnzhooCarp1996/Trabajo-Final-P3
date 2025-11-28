@@ -1,19 +1,19 @@
-import { useProposal } from "../../hooks/Proposal/useProposal";
-import type { IChallenge } from "../../types/types";
-import { ProposalForm } from "../Proposal/ProposalForm";
-import { ModalGeneral } from "../ModalGeneral";
-import { FormGeneral } from "../FormGeneral";
+import { useProposal } from "../../../hooks/Proposal/useProposal";
+import type { IChallenge } from "../../../types/types";
+import { ProposalForm } from "../../Proposal/ProposalForm";
+import { ModalGeneral } from "../../ModalGeneral";
+import { FormGeneral } from "../../FormGeneral";
 import { useEffect, useRef, useState } from "react";
-import { challengeService } from "../../services/ChallengeService";
+import { challengeService } from "../../../services/ChallengeService";
 import toast from "react-hot-toast";
 import { Button, Carousel } from 'antd';
 import type { CarouselRef } from "antd/es/carousel";
 import { CalendarOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
-import { CardEntity } from "../CardEntity";
-import { ButtonNuevo } from "../ButtonNuevo";
+import { CardEntity } from "../../CardEntity";
+import { ButtonNuevo } from "../../ButtonNuevo";
 
 
-export const ChallengesViewByEntrepreneurs: React.FC = () => {
+export const ChallengesByEntrepreneurs: React.FC = () => {
 
     const [challenges, setChallenges] = useState<IChallenge[]>([]);
     const {

@@ -1,18 +1,16 @@
-// import { HeaderEntity } from "../../HeaderEntity";
+import { useProposalViewById } from "../../../hooks/Proposal/useProposalViewById";
+import { ProposalDescriptions } from "./ProposalDescriptions";
+import { ProposalStatistics } from "./ProposalStatistics";
+import { FileTextOutlined } from "@ant-design/icons";
+import { HeaderReturn } from "../../HeaderReturn";
 import { ModalGeneral } from "../../ModalGeneral";
 import { ProposalForm } from "./../ProposalForm";
 import { FormGeneral } from "../../FormGeneral";
-import { useProposalViewById } from "../../../hooks/Proposal/useProposalViewById";
-import { GridRow } from "../../GridRow";
-import { Col } from "antd";
-import { getStatusColor } from "../../../utils/utilsProposals";
-import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
-import { CardProposalById } from "./CardProposalById";
-import { HeaderReturn } from "../../HeaderReturn";
+import { Card, List, Typography } from "antd";
 
+const { Title } = Typography;
 
-export const ProposalsViewById = () => {
-
+export const ProposalsViewById: React.FC = () => {
   const {
     formProposal,
     proposals,
@@ -27,67 +25,68 @@ export const ProposalsViewById = () => {
 
 
   return (
-    <>
+    <div style={{ padding: '0 16px' }}>
       {/* Encabezado */}
       <HeaderReturn titulo={"Mis Propuestas"} />
 
-      {/* lista de propuestas */}
-      <GridRow>
-        {proposals.map((proposal) => (
-          <Col xs={24} sm={12} lg={8} key={proposal._id}>
-            <CardProposalById
-              title={proposal.tituloPropuesta}
-              icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
-              borderColor={getStatusColor(proposal.estado)}
-              onEdit={() => openModalProposal && openModalProposal(proposal)}
-              onDelete={() => handleDelete && handleDelete(proposal._id)}
-            >
-              {proposal.descripcion}
+      {/* Estadísticas y Botón */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+        padding: '16px 24px',
+        backgroundColor: '#213ac4',
+        borderRadius: 12,
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+      }}>
+        <ProposalStatistics proposals={proposals} />
+      </div>
 
-              <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <TrophyOutlined /> {proposal.desafioId.titulo}
+      {/* Lista de propuestas */}
+      {proposals.length === 0 ? (
+        <Card style={{ textAlign: 'center', padding: 60, borderRadius: 12, border: '2px dashed #d9d9d9' }}>
+          <FileTextOutlined style={{ fontSize: 48, color: '#bfbfbf', marginBottom: 16 }} />
+          <Title level={4} style={{ color: '#8c8c8c', marginBottom: 16 }}>
+            No hay propuestas creadas
+          </Title>
+        </Card>
+      ) : (
+        <>
+          {/* Vista de lista */}
+          <Card
+            style={{
+              borderRadius: 12,
+              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+              border: 'none',
+              maxHeight: "60vh",
+              overflowY: "auto",
+              marginBottom: 16
+            }}
+            styles={{ body: { padding: "8px 0", backgroundColor: '#213ac4' } }}
+          >
+            <List
+              style={{ backgroundColor: 'transparent' }}
+              dataSource={proposals}
+              renderItem={(proposal) => (
+                <div style={{
+                  margin: '8px 16px',
+                  backgroundColor: '#fff',
+                  borderRadius: 8,
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                }}>
+                  <ProposalDescriptions
+                    key={proposal._id}
+                    proposal={proposal}
+                    openModal={openModalProposal}
+                    handleDelete={handleDelete}
+                  />
                 </div>
-
-                <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                  <UserOutlined /> {proposal.emprendedorId.nombreCompleto}
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-
-                  <span
-                    style={{
-                      cursor: "pointer",
-                      fontSize: "25px",
-                      transition: "0.2s",
-                    }}
-                  >
-                    ★
-                  </span>
-
-                </div>
-
-                <span>{proposal.puntos} puntos</span>
-                <div style={{ marginTop: 4 }}>
-                  <span
-                    style={{
-                      padding: "2px 6px",
-                      borderRadius: 4,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      backgroundColor: getStatusColor(proposal.estado),
-                      color: "#fff",
-                    }}
-                  >
-                    {proposal.estado}
-                  </span>
-                </div>
-              </div>
-            </CardProposalById>
-          </Col>
-        ))}
-      </GridRow>
-
+              )}
+            />
+          </Card>
+        </>
+      )}
 
       {/* Modal de edición */}
       <ModalGeneral
@@ -101,7 +100,6 @@ export const ProposalsViewById = () => {
           <ProposalForm selectedChallenge={selectedChallenge} />
         </FormGeneral>
       </ModalGeneral>
-      
-    </>
+    </div>
   );
-}
+};

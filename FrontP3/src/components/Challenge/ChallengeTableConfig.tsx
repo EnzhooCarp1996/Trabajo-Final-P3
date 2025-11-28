@@ -57,22 +57,28 @@ export const getChallengeColumns = (openModalProposal: (record: IChallenge) => v
   ...(role !== "empresa"
     ? [
       {
-        title: "Agregar Propuesta",
         key: "acciones",
         width: 80,
         onCell: () => ({ style: cellBodyStyle }),
         render: (_: any, record: IChallenge) =>
           record.estado === "finalizado" ? null : (
-            <PlusOutlined
-              style={{
-                fontSize: 20,
-                color: "#1677ff",
-                cursor: "pointer",
-              }}
+            <div
               onClick={() => openModalProposal(record)}
-            />
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                cursor: "pointer",
+                color: "#1677ff",
+                fontWeight: 500
+              }}
+            >
+              <PlusOutlined style={{ fontSize: 18 }} />
+              <span>Propuesta</span>
+            </div>
           ),
-      },
+      }
+
     ]
     : []),
 ];

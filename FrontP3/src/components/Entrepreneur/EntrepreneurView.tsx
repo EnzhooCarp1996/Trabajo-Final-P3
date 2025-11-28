@@ -1,20 +1,20 @@
 import { useEntrepreneurView } from "../../hooks/EntrePreneur/useEntrepreneurView";
-import { Card, Space, Modal } from "antd";
-import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
-import { EntrepreneurProposals } from "./EntrepreneurProposals";
-import { ProposalTable } from "../Proposal/ProposalById/ProposalTable";
+import { Card, Space } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ProposalByEntrepreneur } from "../Proposal/ProposalById/ProposalByEntrepreneur";
+import { ProfileModal } from "../UserProfile/ProfileModal";
 
 export const EntrepreneurView = () => {
     const { view, entrepreneurs, loading, selectedEntrepreneur, isModalOpen, openModal, closeModal, setView } = useEntrepreneurView();
+
     if (view === "entrepreneurs") {
         return (
             <>
-
                 {/* Lista */}
                 {loading ? (
                     <p>Cargando...</p>
                 ) : (
-                    <Space wrap size="large">
+                    <Space wrap size="large" style={{ width: "100%" }}>
                         {entrepreneurs.map((entrepreneur) => (
                             <Card
                                 key={entrepreneur._id}
@@ -23,17 +23,36 @@ export const EntrepreneurView = () => {
                                 style={{
                                     backgroundColor: "rgba(255,255,255,0.1)",
                                     color: "white",
-                                    border: `1px solid`,
+                                    border: `1px solid rgba(255,255,255,0.2)`,
                                     borderRadius: 12,
                                     cursor: "pointer",
-                                    width: 300,
+                                    width: 280,
+                                    minHeight: 120,
                                 }}
+                                styles={{ body: { padding: "16px" } }}
                             >
-                                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <span style={{ color: "white", display: "flex", alignItems: "center", gap: 8, fontSize: 20 }}>
-                                        <UserOutlined />
-                                        {entrepreneur.nombreCompleto}
-                                    </span>
+                                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                    {/* Nombre */}
+                                    <div>
+                                        <div style={{ color: "white", fontSize: 16, fontWeight: "bold", marginBottom: 4 }}>
+                                            {entrepreneur.nombreCompleto}
+                                        </div>
+                                        <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 14, marginBottom: 4 }}>
+                                            {entrepreneur.email}
+                                        </div>
+                                        <div style={{ color: "rgba(255,255,255,0.6)", fontSize: 13 }}>
+
+                                        </div>
+                                    </div>
+
+                                    {/* Separador */}
+                                    <div style={{
+                                        height: "1px",
+                                        backgroundColor: "rgba(255,255,255,0.2)",
+                                        margin: "8px 0"
+                                    }}></div>
+
+
                                 </div>
                             </Card>
                         ))}
@@ -41,45 +60,18 @@ export const EntrepreneurView = () => {
                 )}
 
                 {/* Modal con los datos del emprendedor */}
-                <Modal
-                    open={isModalOpen}
-                    onCancel={closeModal}
-                    footer={null}
-                    styles={{
-                        body: {
-                            backgroundColor: "#002a5e",   // color de fondo del cuerpo del modal
-                            color: "#7bb4e3",               // color del texto si querés
-                            padding: 20                   // opcional
-                        },
-                        content: {
-                            backgroundColor: "#002a5e"    // cambia el fondo del modal completo
-                        }
-                    }}
-                >
-                    {selectedEntrepreneur && (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 18, }}>
-                            <div style={{ fontSize: 20 }}><strong>{selectedEntrepreneur.nombreCompleto}</strong></div>
-                            <div><strong>Edad:</strong> {selectedEntrepreneur.edad} años</div>
-                            <div><strong>Teléfono:</strong> {selectedEntrepreneur.telefono}</div>
-                            <div>
-                                <strong
-                                    style={{
-                                        color: "#69b1ff",
-                                        textDecoration: "underline",
-                                        cursor: "pointer"
-                                    }}
-                                    onClick={() => setView("proposals")}
-                                >
-                                    Propuestas:
-                                </strong>
-                                <EntrepreneurProposals _id={selectedEntrepreneur._id} />
-                            </div>
-                        </div>
-                    )}
-                </Modal>
+                {selectedEntrepreneur && (
+                    <ProfileModal
+                        open={isModalOpen}
+                        onClose={closeModal}
+                        _id={selectedEntrepreneur._id}
+                        setView={setView}
+                    />
+                )}
             </>
         );
     };
+
     if (view === "proposals" && selectedEntrepreneur) {
         return (
             <div style={{ padding: 20 }}>
@@ -93,9 +85,8 @@ export const EntrepreneurView = () => {
                     <span style={{ color: "white", fontSize: 18 }}>{selectedEntrepreneur.nombreCompleto}</span>
                 </div>
 
-                <ProposalTable emprendedorId={selectedEntrepreneur._id} />
+                <ProposalByEntrepreneur emprendedorId={selectedEntrepreneur._id} />
             </div>
         );
     }
 }
-

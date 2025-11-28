@@ -5,7 +5,7 @@ export const CompanyForm = () => {
         <>
             <Form.Item
                 name="nombreEmpresa"
-                label="Nombre de la Empresa"
+                label={<span style={{ color: "white" }}>Nombre de la Empresa</span>}
                 rules={[{ required: true, message: "Ingrese el nombre de la empresa" }]}
                 style={{ marginBottom: 4 }}
             >
@@ -14,7 +14,7 @@ export const CompanyForm = () => {
 
             <Form.Item
                 name="sitioWeb"
-                label="Sitio Web"
+                label={<span style={{ color: "white" }}>Sitio Web</span>}
                 rules={[{ required: true, message: "Ingrese un sitio web válido" }]}
                 style={{ marginBottom: 4 }}
             >

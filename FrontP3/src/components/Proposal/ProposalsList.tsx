@@ -11,7 +11,6 @@ interface ProposalsListProps {
     openModalProposal?: (proposal: IProposal) => void;
     handleDelete?: (id: string) => void;
     readOnly?: boolean;
-    showButtonNew?: boolean;
     iconoBoton?: ReactNode;
 }
 
@@ -20,7 +19,6 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
     openModalProposal,
     handleDelete,
     readOnly = false,
-    showButtonNew,
     iconoBoton,
 }) => {
     const [openProfile, setOpenProfile] = useState(false);
@@ -39,7 +37,6 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                 borderColor={getStatusColor(proposal.estado)}
                 onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
                 onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
-                showButtonNew={showButtonNew}
             >
                 <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
