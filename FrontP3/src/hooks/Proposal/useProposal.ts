@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
-import type {
-  IProposal,
-  IChallenge,
-  ProposalStatus,
-  IChallengeRef,
-} from "../../types/types";
-import { storage } from "../../storage";
-import { Form, Modal } from "antd";
-import { proposalService } from "../../services/ProposalService";
-import toast from "react-hot-toast";
-import { useAuth } from "../../context/Auth/useAuth";
-import { estados } from "../../utils/utilsProposals";
+import { useEffect, useState } from 'react'
+import type { IProposal, IChallenge, ProposalStatus, IChallengeRef } from '../../types/types'
+import { storage } from '../../storage'
+import { Form, Modal } from 'antd'
+import { proposalService } from '../../services/ProposalService'
+import toast from 'react-hot-toast'
+import { useAuth } from '../../context/Auth/useAuth'
+import { estadosPropuestas } from '../../utils/utilsProposals'
 
 export const useProposal = () => {
   const { _id } = useAuth();
@@ -19,121 +14,122 @@ export const useProposal = () => {
   const [proposals, setProposals] = useState<IProposal[]>([]);
   const [loading, setLoading] = useState(false);
   const formProposal = Form.useForm()[0];
-  const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estados[0].value as ProposalStatus);
+  const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estadosPropuestas[0].value as ProposalStatus);
   const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado);
-
-
+  const [activeTab, setActiveTab] = useState<ProposalStatus>('en revision');
 
   useEffect(() => {
     const fetchProposals = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const data = await proposalService.getAll();
-        setProposals(data);
+        const data = await proposalService.getAll()
+        setProposals(data)
       } catch (error) {
-        console.error(error);
-        toast.error("Error al cargar las propuestas");
+        console.error(error)
+        toast.error('Error al cargar las propuestas')
       } finally {
-          setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchProposals();
-  }, []);
+    fetchProposals()
+  }, [])
+
+  useEffect(() => {
+    const savedTab = localStorage.getItem('activeProposalTab')
+    if (savedTab) {
+      setActiveTab(savedTab as ProposalStatus)
+      setFiltroEstado(savedTab as any)
+    }
+  }, [])
 
   const [votedProposals, setVotedProposals] = useState<string[]>(
-    JSON.parse(localStorage.getItem("votedProposals") || "[]")
-  );
+    JSON.parse(localStorage.getItem('votedProposals') || '[]')
+  )
 
   const toggleVoto = (proposalId: string) => {
-    const yaVoto = votedProposals.includes(proposalId);
+    const yaVoto = votedProposals.includes(proposalId)
 
     const updated = proposals.map((p) => {
       if (p._id === proposalId) {
-        return { ...p, puntos: yaVoto ? p.puntos - 1 : p.puntos + 1 };
+        return { ...p, puntos: yaVoto ? p.puntos - 1 : p.puntos + 1 }
       }
-      return p;
-    });
+      return p
+    })
 
-    setProposals(updated);
-    storage.setProposals(updated);
+    setProposals(updated)
+    storage.setProposals(updated)
 
-    let updatedVotes;
+    let updatedVotes
 
     if (yaVoto) {
-      updatedVotes = votedProposals.filter((id) => id !== proposalId);
+      updatedVotes = votedProposals.filter((id) => id !== proposalId)
     } else {
-      updatedVotes = [...votedProposals, proposalId];
+      updatedVotes = [...votedProposals, proposalId]
     }
 
-    setVotedProposals(updatedVotes);
-    localStorage.setItem("votedProposals", JSON.stringify(updatedVotes));
-  };
+    setVotedProposals(updatedVotes)
+    localStorage.setItem('votedProposals', JSON.stringify(updatedVotes))
+  }
 
-  const [selectedChallenge, setSelectedChallenge] = useState<IChallengeRef | null>(
-    null
-  );
+  const [selectedChallenge, setSelectedChallenge] = useState<IChallengeRef | null>(null)
 
-
-  const openModalProposal = (
-    challenge?: IChallenge
-  ) => {
-      setEditingProposal(null);
-      setSelectedChallenge(challenge ?? null);
-      formProposal?.resetFields();
-      formProposal?.setFieldsValue({
-        desafioId: challenge ? challenge.titulo : "",
-        emprendedorId: _id,
-        puntos: 0,
-      });
-    setIsModalProposalOpen(true);
-  };
+  const openModalProposal = (challenge?: IChallenge) => {
+    setEditingProposal(null)
+    setSelectedChallenge(challenge ?? null)
+    formProposal?.resetFields()
+    formProposal?.setFieldsValue({
+      desafioId: challenge ? challenge.titulo : '',
+      emprendedorId: _id,
+      puntos: 0,
+    })
+    setIsModalProposalOpen(true)
+  }
 
   const closeModalProposal = () => {
-    setIsModalProposalOpen(false);
-    setEditingProposal(null);
-  };
+    setIsModalProposalOpen(false)
+    setEditingProposal(null)
+  }
 
-    const handleSubmitProposal = async (values: any) => {
-      if (!selectedChallenge) return;
-        Modal.confirm({
-      title: "Enviar propuesta",
-      content: "¿Estás seguro de que quieres hacer esta Propuesta?",
-      okText: "Sí",
-      cancelText: "No",
+  const handleSubmitProposal = async (values: any) => {
+    if (!selectedChallenge) return
+    Modal.confirm({
+      title: 'Enviar propuesta',
+      content: '¿Estás seguro de que quieres hacer esta Propuesta?',
+      okText: 'Sí',
+      cancelText: 'No',
       onOk: async () => {
         try {
-        
-      const newProposal = await proposalService.create({
-        ...values,
-        desafioId: selectedChallenge?._id,
-        emprendedorId: _id,
-      });
-      setProposals(prev => [...prev, newProposal]);
-        
-      closeModalProposal();
-      } catch (error) {
-        console.error("Error al crear la propuesta", error);
-        toast.error("No se pudo crear la propuesta");
-      }
-          },
-    });
-    };
+          const newProposal = await proposalService.create({
+            ...values,
+            desafioId: selectedChallenge?._id,
+            emprendedorId: _id,
+          })
+          setProposals((prev) => [...prev, newProposal])
 
-
+          closeModalProposal()
+        } catch (error) {
+          console.error('Error al crear la propuesta', error)
+          toast.error('No se pudo crear la propuesta')
+        }
+      },
+    })
+  }
 
   return {
     loading,
     formProposal,
     votedProposals,
     proposalsFiltradas,
-    setFiltroEstado,
     isModalProposalOpen,
     editingProposal,
     selectedChallenge,
+    activeTab,
+    setActiveTab,
+    setFiltroEstado,
     handleSubmitProposal,
     openModalProposal,
     closeModalProposal,
     toggleVoto,
-  };
-};
+  }
+}

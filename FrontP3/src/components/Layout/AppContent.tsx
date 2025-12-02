@@ -33,7 +33,7 @@ export const AppContent: React.FC<AppContent> = ({ children }) => {
             style={{
               background: "rgba(255,255,255,0.05)",
               borderRadius: 12,
-              padding: "24px",
+              padding: "10px",
               minHeight: "100%",
             }}
           >

@@ -45,10 +45,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 value={formData.email}
                 onChange={handleChange}
                 autoComplete="username"
-                style={{
-                  background: "transparent",
-                  color: "white",
-                  height: "40px",
+                style={{ background: "transparent", color: "white", height: "40px",
                 }}
               />
             </Form.Item>
@@ -75,11 +72,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                     <EyeInvisibleOutlined style={{ color: "white" }} />
                   )
                 }
-                style={{
-                  background: "transparent",
-                  color: "white",
-                  height: "40px",
-                }}
+                style={{ background: "transparent", color: "white", height: "40px", }}
               />
             </Form.Item>
 

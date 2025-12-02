@@ -1,6 +1,6 @@
 import { CalendarOutlined, TrophyOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import type { ChallengeStatus, IChallenge } from "../../../types/types";
-import { Button, List, Space, Avatar, Divider } from "antd";
+import { Button, List, Space, Avatar } from "antd";
 import { StatusSelect } from "./StatusSelect";
 
 interface ChallengeDescriptionsProps {
@@ -8,9 +8,7 @@ interface ChallengeDescriptionsProps {
     toggleStatus: (challenge: IChallenge, newEstado: ChallengeStatus) => Promise<void>;
     openModal: (challenge: IChallenge) => void;
     handleDelete: (id: string) => void;
-    setView: React.Dispatch<React.SetStateAction<"challenges" | "proposals">>;
-    setSelectedChallenge: (value: any) => void;
-
+    onOpenProposals: () => void;
 }
 
 export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
@@ -18,15 +16,14 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
     toggleStatus,
     openModal,
     handleDelete,
-    setView,
-    setSelectedChallenge,
+    onOpenProposals
 }) => {
 
 
     return (
         <List.Item
             style={{
-                backgroundColor: '#8dc8f4',
+                backgroundColor: '#001529',
                 marginBottom: '8px',
                 borderRadius: '8px',
                 padding: '16px'
@@ -65,10 +62,7 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
                         <div>
                             <strong
                                 style={{ color: "#69b1ff", textDecoration: "underline", cursor: "pointer" }}
-                                onClick={() => {
-                                    setView("proposals");
-                                    setSelectedChallenge(challenge);
-                                }}
+                                onClick={() => onOpenProposals()}
                             >
                                 {challenge.titulo}
                             </strong>
@@ -84,12 +78,6 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
                 }
                 description={
                     <Space direction="vertical" size="small" style={{ width: "100%" }}>
-                        <div style={{ fontSize: 14, color: "#666", lineHeight: 1.5 }}>
-                            {challenge.descripcion}
-                        </div>
-
-                        <Divider style={{ margin: "12px 0" }} />
-
                         <Space size="large" style={{ fontSize: 13, color: "#8c8c8c" }}>
                             <span>Creado el día</span>
                             <span>

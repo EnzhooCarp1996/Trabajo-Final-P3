@@ -5,6 +5,7 @@ import { Form, type FormInstance } from "antd";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Modal } from "antd";
+import { useNavigate } from "react-router-dom";
 
 export const useProposalViewById = () => {
   const { _id } = useAuth();
@@ -12,6 +13,7 @@ export const useProposalViewById = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editing, setEditing] = useState<IProposal | null>(null);
   const [proposals, setProposals] = useState<IProposal[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProposals = async () => {
@@ -103,5 +105,6 @@ const handleDelete = (id: string) => {
     closeModalProposal: closeModal,
     handleSubmitProposalById,
     handleDelete,
+    navigate
   };
 };

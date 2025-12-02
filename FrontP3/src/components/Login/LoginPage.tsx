@@ -23,25 +23,14 @@ export const LoginPage = () => {
   } = useLoginForm();
 
   const [isRegister, setIsRegister] = useState(false);
-  const [tipoRegistro, setTipoRegistro] = useState<"empresa" | "emprendedor">(
-    "empresa"
-  );
+  const [tipoRegistro, setTipoRegistro] = useState<"empresa" | "emprendedor">( "empresa" );
 
   return (
     <Layout
-      style={{
-        background: "#12395B",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
+      style={{ background: "#12395B", alignItems: "center", justifyContent: "center", }}
     >
       <Card
-        styles={{
-          body: {
-            padding: 0,
-            display: "flex",
-          },
-        }}
+        styles={{ body: { padding: 0, display: "flex",},}}
         style={{
           width: "100%",
           maxWidth: "900px",
@@ -108,7 +97,7 @@ export const LoginPage = () => {
               form={formRegister}
               handleSubmit={(values) =>
                 handleSubmitRegister({ ...values, role: tipoRegistro }).then(() => {
-                  setIsRegister(false);   // ✔ Vuelve al login
+                  setIsRegister(false);
                 })
               }
             >
@@ -157,12 +146,7 @@ export const LoginPage = () => {
           </Title>
 
           <Text
-            style={{
-              color: "white",
-              fontSize: "16px",
-              opacity: 0.9,
-              textAlign: "center",
-            }}
+            style={{ color: "white", fontSize: "16px", opacity: 0.9, textAlign: "center", }}
           >
             Plataforma de Desafíos Empresariales
           </Text>

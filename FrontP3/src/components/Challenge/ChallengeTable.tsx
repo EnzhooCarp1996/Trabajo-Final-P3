@@ -1,23 +1,23 @@
-import { Table } from "antd";
-import type { IChallenge } from "../../types/types";
-import { useEffect, useState } from "react";
 import { challengeService } from "../../services/ChallengeService";
-import toast from "react-hot-toast";
+import { useProposal } from "../../hooks/Proposal/useProposal";
+import { ChallengeTableConfig } from "./ChallengeTableConfig";
+import { ProposalForm } from "../Proposal/ProposalForm";
+import type { IChallenge } from "../../types/types";
 import { ModalGeneral } from "../ModalGeneral";
 import { FormGeneral } from "../FormGeneral";
-import { ProposalForm } from "../Proposal/ProposalForm";
-import { useProposal } from "../../hooks/Proposal/useProposal";
-import { getChallengeColumns, tableHeaderStyle } from "./ChallengeTableConfig";
-import { useAuth } from "../../context/Auth/useAuth";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { BackHeader } from "../BackHeader";
+import { Table, Typography } from "antd";
+import toast from "react-hot-toast";
 
+const { Title } = Typography;
 
-interface ChallengeTableProps {
-    empresaId: string;
-}
-
-export const ChallengeTable = ({ empresaId }: ChallengeTableProps) => {
+export const ChallengeTable = () => {
+    const { id } = useParams();
     const [challenges, setChallenges] = useState<IChallenge[]>([]);
     const [loading, setLoading] = useState(false);
+    const [companyName, setCompanyName] = useState("");
     const {
         formProposal,
         isModalProposalOpen,
@@ -27,15 +27,19 @@ export const ChallengeTable = ({ empresaId }: ChallengeTableProps) => {
         openModalProposal,
         handleSubmitProposal,
     } = useProposal();
-    const { role } = useAuth();
-    const columns = getChallengeColumns(openModalProposal, role);
-    
+
+    const columns = ChallengeTableConfig(openModalProposal);
+
     useEffect(() => {
         const fetchChallenges = async () => {
             setLoading(true);
             try {
-                const data = await challengeService.getAll({ empresaId, estado: ["activo", "finalizado"] });
+                const data = await challengeService.getAll({ empresaId: id, estado: ["activo", "finalizado"] });
                 setChallenges(data);
+
+                if (data.length > 0) {
+                    setCompanyName(data[0].empresaId?.nombreEmpresa ?? "");
+                }
             } catch (error) {
                 console.error(error);
                 toast.error("Error al cargar tus desafios");
@@ -45,11 +49,15 @@ export const ChallengeTable = ({ empresaId }: ChallengeTableProps) => {
         };
 
         fetchChallenges();
-    }, []);
+    }, [id]);
 
     return (
         <>
+        <BackHeader />
             <div style={{ width: "auto", margin: "0 auto", height: "auto", overflowX: "auto" }}>
+                <Title level={3} style={{ color: '#8c8c8c', marginBottom: 12 }}>
+                    Desafíos de: {companyName}
+                </Title>
                 {loading ? (
                     <p>Cargando...</p>
                 ) : (
@@ -57,7 +65,7 @@ export const ChallengeTable = ({ empresaId }: ChallengeTableProps) => {
                         rowKey="_id"
                         columns={columns.map(col => ({
                             ...col,
-                            onHeaderCell: () => ({ style: tableHeaderStyle })
+                            onHeaderCell: () => ({ style: { backgroundColor: "#001529", color: "white", fontWeight: "bold" } })
                         }))}
                         dataSource={challenges}
                         scroll={{ x: 700, y: 400 }}

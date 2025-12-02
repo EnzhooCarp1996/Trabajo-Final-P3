@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose'
 
-export type ChallengeStatus = 'activo' | 'inactivo' | "finalizado"
+export type ChallengeStatus = 'activo' | 'inactivo' | 'finalizado'
 
 export type ProposalStatus = 'en revision' | 'seleccionada' | 'descartada'
 
@@ -48,13 +48,12 @@ export interface IProposal extends Document {
   createdAt: Date
 }
 
-export interface IMessage extends Document {
+export interface INotification extends Document {
   _id: Types.ObjectId
-  empresaId: Types.ObjectId
-  emprendedorId: Types.ObjectId
-  propuestaId: Types.ObjectId
+  userId: Types.ObjectId
+  fromUserId: Types.ObjectId
   contenido: string
-  visto?: boolean
+  visto: boolean
 }
 
 // JWT Payload

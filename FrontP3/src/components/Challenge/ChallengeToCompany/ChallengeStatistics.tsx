@@ -1,7 +1,7 @@
 import { PlusOutlined, TrophyOutlined } from "@ant-design/icons";
-import { Button, Tag } from "antd";
 import type { IChallenge } from "../../../types/types";
 import { useEffect, useState } from "react";
+import { Button, Tag } from "antd";
 
 interface ChallengeStatisticsProps {
     challenges: IChallenge[];
@@ -78,7 +78,7 @@ export const ChallengeStatistics: React.FC<ChallengeStatisticsProps> = ({ challe
             {/* BOTÓN */}
             <Button
                 type="primary"
-                onClick={openModal}
+                onClick={() => openModal()}
                 icon={<PlusOutlined />}
                 size="large"
                 style={{

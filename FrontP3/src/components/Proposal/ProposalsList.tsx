@@ -3,49 +3,52 @@ import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icon
 import { CardEntity } from "../CardEntity";
 import type { IProposal } from "../../types/types";
 import { getStatusColor } from "../../utils/utilsProposals";
-import { useState, type ReactNode } from "react";
-import { ProfileModal } from "../UserProfile/ProfileModal";
+import { useState } from "react";
+import { EntrepreneurProfile } from "../Entrepreneur/EntrepreneurProfile";
+import { ChallengeModal } from "../Challenge/ChallengeModal";
 
 interface ProposalsListProps {
     proposal: IProposal;
-    openModalProposal?: (proposal: IProposal) => void;
-    handleDelete?: (id: string) => void;
-    readOnly?: boolean;
-    iconoBoton?: ReactNode;
 }
 
-export const ProposalsList: React.FC<ProposalsListProps> = ({
-    proposal,
-    openModalProposal,
-    handleDelete,
-    readOnly = false,
-    iconoBoton,
-}) => {
+export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
     const [openProfile, setOpenProfile] = useState(false);
-    
+
     const openProfileModal = () => {
         setOpenProfile(true);
     };
 
+    const [openChallenge, setOpenChallenge] = useState(false);
+
+    const openChallengeModal = () => {
+        setOpenChallenge(true);
+    };
 
     return (
         <Col xs={24} sm={12} lg={8} key={proposal._id}>
             <CardEntity
-                iconoBoton={iconoBoton}
                 title={proposal.tituloPropuesta}
                 icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
                 borderColor={getStatusColor(proposal.estado)}
-                onEdit={!readOnly ? () => openModalProposal && openModalProposal(proposal) : undefined}
-                onDelete={!readOnly ? () => handleDelete && handleDelete(proposal._id) : undefined}
             >
-                <div style={{ marginTop: 12, fontSize: 12, color: "#91caff" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <div style={{ marginTop: 0, fontSize: 12, color: "#91caff" }}>
+                    <div
+                        onClick={() => openChallengeModal()}
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                            cursor: "pointer",
+                            textDecoration: "underline",
+                            color: "#69b1ff",
+                        }}
+                    >
                         <TrophyOutlined /> {proposal.desafioId.titulo}
                     </div>
 
                     <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
                         <div
-                            onClick={openProfileModal}
+                            onClick={() => openProfileModal()}
                             style={{
                                 display: "flex",
                                 alignItems: "center",
@@ -58,22 +61,26 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
                             <UserOutlined />
                             {proposal.emprendedorId.nombreCompleto}
                         </div>
-
                     </div>
 
-            
-
                     <span>{proposal.puntos} puntos</span>
-                    
+
                 </div>
             </CardEntity>
-            
-            <ProfileModal
+
+            {/* modal perfil emprendedor */}
+            <EntrepreneurProfile
                 open={openProfile}
                 onClose={() => setOpenProfile(false)}
                 _id={proposal.emprendedorId._id}
             />
 
+            {/* modal Challenge */}
+            <ChallengeModal
+                open={openChallenge}
+                onClose={() => setOpenChallenge(false)}
+                _id={proposal.desafioId._id}
+            />
         </Col>
 
     );

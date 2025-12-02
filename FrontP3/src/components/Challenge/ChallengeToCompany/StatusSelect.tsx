@@ -1,4 +1,4 @@
-import { getStatusStyles } from "../../../utils/utilsChallenges";
+import { estadoOptionschallenges, getStatusStyles } from "../../../utils/utilsChallenges";
 import type { ChallengeStatus } from "../../../types/types";
 import { Select } from "antd";
 
@@ -9,11 +9,7 @@ export const StatusSelect = ({ estado, onChange }: { estado: string, onChange: a
     <Select
       value={estado}
       onChange={(v) => onChange(v as ChallengeStatus)}
-      options={[
-        { value: "activo", label: "Activo" },
-        { value: "finalizado", label: "Finalizado" },
-        { value: "inactivo", label: "Inactivo" }
-      ]}
+      options={estadoOptionschallenges}
       style={{
         width: 150,
         borderRadius: 999,

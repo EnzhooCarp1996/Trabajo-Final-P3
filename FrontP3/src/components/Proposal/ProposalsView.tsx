@@ -1,47 +1,49 @@
 import { useProposal } from "../../hooks/Proposal/useProposal";
-import { estados } from "../../utils/utilsProposals";
+import { estadosPropuestas } from "../../utils/utilsProposals";
+import type { ProposalStatus } from "../../types/types";
+import { TabsProposals } from "../TabsProposals";
 import { ProposalsList } from "./ProposalsList";
 import { GridRow } from "../GridRow";
 import "swiper/css/navigation";
 import "swiper/css";
-import { EstadoTabs } from "../TabsProposals";
+
 
 
 export const ProposalsView: React.FC = () => {
   const {
     proposalsFiltradas,
+    activeTab,
+    setActiveTab,
     setFiltroEstado,
   } = useProposal();
 
-  return (
-    <>
 
-      {/* CONTENEDOR DEL SWIPER */}
-      <EstadoTabs
-        items={estados}
-        onChange={(value) => setFiltroEstado(value as any)}
-      />
 
-      {/* LISTA FILTRADA */}
-      <GridRow>
-        {proposalsFiltradas.map((proposal, index) => (
-          <ProposalsList
-            key={index}
-            iconoBoton={<span
-                    style={{
-                        cursor: "pointer",
-                        fontSize: "25px",
-                        transition: "0.2s",
-                    }}
-                >
-                    ★
-                </span>}
-            proposal={proposal}
-            readOnly
-          />
-        ))}
-      </GridRow>
-      
-    </>
-  );
-};
+    return (
+      <>
+
+        {/* CONTENEDOR DEL SWIPER */}
+        <TabsProposals
+          items={estadosPropuestas}
+          activeKey={activeTab}
+          onChange={(value) => {
+            setActiveTab(value as ProposalStatus);
+            setFiltroEstado(value as any);
+            localStorage.setItem("activeProposalTab", value);
+          }}
+        />
+
+        {/* LISTA FILTRADA */}
+        <GridRow>
+          {proposalsFiltradas.map((proposal, index) => (
+            <ProposalsList
+              key={index}
+              proposal={proposal}
+            />
+          ))}
+        </GridRow>
+
+      </>
+    );
+  };
+

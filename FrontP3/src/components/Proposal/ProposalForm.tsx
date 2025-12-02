@@ -13,11 +13,11 @@ export const ProposalForm: React.FC<ChallengeFormProps> = ({ selectedChallenge }
 
     return (
         <>
-            <Title level={3}>{selectedChallenge?.titulo}</Title>
+            <Title level={3} style={{ color: "#69b1ff" }}>{selectedChallenge?.titulo}</Title>
 
             <Form.Item
                 name="tituloPropuesta"
-                label="Título de la Propuesta"
+                label={<span style={{ color: "#69b1ff" }}>Título de la Propuesta</span>}
                 rules={[
                     { required: true, message: "El título es obligatorio" },
                     { min: 5, message: "El título debe tener al menos 5 caracteres" },
@@ -29,7 +29,7 @@ export const ProposalForm: React.FC<ChallengeFormProps> = ({ selectedChallenge }
 
             <Form.Item
                 name="descripcion"
-                label="Descripción"
+                label={<span style={{ color: "#69b1ff" }}>Descripción</span>}
                 rules={[
                     { required: true, message: "La descripción es obligatoria" },
                     { min: 10, message: "La descripción debe tener al menos 10 caracteres" },

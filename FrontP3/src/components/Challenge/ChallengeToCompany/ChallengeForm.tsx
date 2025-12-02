@@ -6,7 +6,7 @@ export const ChallengeForm: React.FC = () => {
         <>
             <Form.Item
                 name="titulo"
-                label="Título del Desafio"
+                label={<span style={{ color: "white" }}>Título del Desafio</span>}
                 rules={[
                     { required: true, message: "El título es obligatorio" },
                     { min: 5, message: "El título debe tener al menos 5 caracteres" },
@@ -18,7 +18,7 @@ export const ChallengeForm: React.FC = () => {
 
             <Form.Item
                 name="descripcion"
-                label="Descripción"
+                label={<span style={{ color: "white" }}>Descripción</span>}
                 rules={[
                     { required: true, message: "La descripción es obligatoria" },
                     { min: 10, message: "La descripción debe tener al menos 10 caracteres" },

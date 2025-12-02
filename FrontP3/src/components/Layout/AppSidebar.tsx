@@ -66,6 +66,12 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed 
                     ...(role === "empresa" ?
                         [
                             {
+                                key: "/ChallengeById",
+                                icon: <FlagOutlined />,
+                                label: "Mis Desafíos",
+                                onClick: () => navigate("/ChallengeById"),
+                            },
+                            {
                                 key: "/Entrepreneur",
                                 icon: <UsergroupDeleteOutlined />,
                                 label: "Emprendedores",

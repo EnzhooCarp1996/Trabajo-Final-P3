@@ -2,11 +2,11 @@ import { useProposalViewById } from "../../../hooks/Proposal/useProposalViewById
 import { ProposalDescriptions } from "./ProposalDescriptions";
 import { ProposalStatistics } from "./ProposalStatistics";
 import { FileTextOutlined } from "@ant-design/icons";
-import { HeaderReturn } from "../../HeaderReturn";
 import { ModalGeneral } from "../../ModalGeneral";
 import { ProposalForm } from "./../ProposalForm";
 import { FormGeneral } from "../../FormGeneral";
 import { Card, List, Typography } from "antd";
+import { BackHeader } from "../../BackHeader";
 
 const { Title } = Typography;
 
@@ -21,13 +21,18 @@ export const ProposalsViewById: React.FC = () => {
     closeModalProposal,
     handleSubmitProposalById,
     handleDelete,
+    navigate
   } = useProposalViewById();
+  
 
 
   return (
     <div style={{ padding: '0 16px' }}>
       {/* Encabezado */}
-      <HeaderReturn titulo={"Mis Propuestas"} />
+      {/* <HeaderReturn titulo={"Mis Propuestas"} /> */}
+      <BackHeader
+        onBack={() => navigate(-1)}
+      />
 
       {/* Estadísticas y Botón */}
       <div style={{

@@ -1,11 +1,11 @@
-import { useEffect, useState, type FC } from "react";
 import { proposalService } from "../../services/ProposalService";
+import { useEffect, useState, type FC } from "react";
 
-interface EntrepreneurProposalsProps {
+interface ProposalsToModalChallengeProps {
   _id: string;
 }
 
-export const EntrepreneurProposals: FC<EntrepreneurProposalsProps> = ({ _id }) => {
+export const ProposalsToModalChallenge: FC<ProposalsToModalChallengeProps> = ({ _id }) => {
   const [proposals, setProposals] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -15,7 +15,7 @@ export const EntrepreneurProposals: FC<EntrepreneurProposalsProps> = ({ _id }) =
     const fetchProposals = async () => {
       setLoading(true);
       try {
-        const result = await proposalService.getAll({ emprendedorId: _id });
+        const result = await proposalService.getAll({ desafioId: _id });
         setProposals(result);
       } catch (err) {
         console.error(err);
@@ -34,8 +34,8 @@ export const EntrepreneurProposals: FC<EntrepreneurProposalsProps> = ({ _id }) =
       {proposals.length === 0 && <p>No tiene propuestas.</p>}
 
       {proposals.map((p) => (
-        <div key={p._id} style={{ display: "flex", flexDirection:"column",padding: 8, background: "#006db2", borderRadius: 6 }}>
-          <strong>{p.tituloPropuesta}</strong>
+        <div key={p._id} style={{ display: "flex", flexDirection: "column", padding: 8, background: "#006db2", borderRadius: 6 }}>
+          <strong>{p.tituloPropuesta}: {p.estado}</strong>
         </div>
       ))}
     </div>

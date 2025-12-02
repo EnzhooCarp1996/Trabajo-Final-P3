@@ -1,14 +1,14 @@
 import { userService, type CreateUserRequest } from "../../services/UserService";
-import { EntrepreneurForm } from "./EntrepreneurForm";
 import { Button, Form, message, Typography } from "antd";
+import { EntrepreneurForm } from "./EntrepreneurForm";
 import { FormGeneralItem } from "../FormGeneralItem";
-import { CompanyForm } from "./CompanyForm";
 import { useAuth } from "../../context/Auth/useAuth";
 import type { IUser } from "../../types/types";
-import { HeaderReturn } from "../HeaderReturn";
 import { useNavigate } from "react-router-dom";
 import { FormGeneral } from "../FormGeneral";
+import { CompanyForm } from "./CompanyForm";
 import { useEffect, useState } from "react";
+import { BackHeader } from "../BackHeader";
 
 const { Title } = Typography;
 
@@ -65,7 +65,7 @@ export const ProfileEdit = () => {
 
     return (
         <>
-            <HeaderReturn titulo={"Editar Perfil"} />
+            <BackHeader/>
 
             <div
                 style={{

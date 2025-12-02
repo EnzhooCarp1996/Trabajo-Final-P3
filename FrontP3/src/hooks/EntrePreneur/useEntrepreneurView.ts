@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import type { IUser } from "../../types/types";
+import type { IEntrepreneurRef, IUser } from "../../types/types";
 import { userService } from "../../services/UserService";
 import toast from "react-hot-toast";
 
 export const useEntrepreneurView = () => {
     const [entrepreneurs, setEntrepreneurs] = useState<IUser[]>([]);
     const [loading, setLoading] = useState(false);
-    const [selectedEntrepreneur, setSelectedEntrepreneur] = useState<any>(null);
+    const [selectedEntrepreneur, setSelectedEntrepreneur] = useState<IEntrepreneurRef | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [view, setView] = useState<"entrepreneurs" | "proposals">("entrepreneurs");
   

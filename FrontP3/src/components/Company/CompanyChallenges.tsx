@@ -1,6 +1,5 @@
-// CompanyChallenges.tsx
-import { useEffect, useState, type FC } from "react";
 import { challengeService } from "../../services/ChallengeService";
+import { useEffect, useState, type FC } from "react";
 
 interface CompanyChallengesProps {
   empresaId: string;
@@ -16,7 +15,7 @@ export const CompanyChallenges: FC<CompanyChallengesProps> = ({ empresaId }) => 
     const fetchChallenges = async () => {
       setLoading(true);
       try {
-        const result = await challengeService.getAll({ empresaId });
+        const result = await challengeService.getAll({ empresaId, estado: ["activo", "finalizado"] });
         setChallenges(result);
       } catch (err) {
         console.error(err);
@@ -45,7 +44,7 @@ export const CompanyChallenges: FC<CompanyChallengesProps> = ({ empresaId }) => 
             borderRadius: 6
           }}
         >
-          <strong>{c.titulo}</strong>
+          <strong>{c.titulo}: {c.estado}</strong>
         </div>
       ))}
     </div>

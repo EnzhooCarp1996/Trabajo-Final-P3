@@ -1,6 +1,5 @@
 import { challengeService } from "../../services/ChallengeService";
 import { useEffect, useState, type FC } from "react";
-import { useAuth } from "../../context/Auth/useAuth";
 import type { IChallenge } from "../../types/types";
 import { ChallengeList } from "./ChallengeList";
 import { HeaderEntity } from "../HeaderEntity";
@@ -9,7 +8,6 @@ import toast from "react-hot-toast";
 
 
 export const ChallengesView: FC = () => {
-    const { role } = useAuth();
     const [challenges, setChallenges] = useState<IChallenge[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -45,7 +43,6 @@ export const ChallengesView: FC = () => {
                             <ChallengeList
                                 key={index}
                                 challenge={challenge}
-                                readOnly={role === "empresa"}
                             />
                         ))}
                     </GridRow>
