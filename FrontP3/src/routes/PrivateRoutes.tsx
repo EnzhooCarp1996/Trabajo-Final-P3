@@ -12,6 +12,7 @@ import { ProposalsByChallenge } from "../components/Challenge/ChallengeToEntrepr
 import { ProposalsByEntrepreneur } from "../components/Proposal/ProposalById/ProposalsByEntrepreneur";
 import { ProposalsToEditing } from "../components/Proposal/ProposalById/ProposalsToEditing";
 import { ChallengeTable } from "../components/Challenge/ChallengeTable";
+import { EntrepreneurPage } from "../components/Entrepreneur/EntrepreneurPage";
 
 export const PrivateRoutes: React.FC = () => {
 
@@ -31,8 +32,7 @@ export const PrivateRoutes: React.FC = () => {
             <Route path="/challenges" element={<ChallengesByProfile />} />
             <Route path="/ProposalsEditing/:id" element={<ProposalsToEditing />} />
             <Route path="/ChallengesByCompany/:id" element={<ChallengeTable />} />
-
-            {/* <Route path="/challenges/:challengeId/entrepreneur/:entrepreneurId"element={<ProposalsByEntrepreneur />} /> */}
+            <Route path="/perfil/:id" element={<EntrepreneurPage />} />
         </Routes>
     );
 };

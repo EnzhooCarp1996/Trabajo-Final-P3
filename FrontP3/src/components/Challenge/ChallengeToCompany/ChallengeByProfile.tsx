@@ -5,10 +5,7 @@ import { ChallengeStatistics } from "./ChallengeStatistics";
 import { Card, Form, List, Modal, Typography } from "antd";
 import { useAuth } from "../../../context/Auth/useAuth";
 import { TrophyOutlined } from "@ant-design/icons";
-import { ModalGeneral } from "../../ModalGeneral";
 import { ChallengeForm } from "./ChallengeForm";
-import { FormGeneral } from "../../FormGeneral";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -16,7 +13,6 @@ const { Title } = Typography;
 
 export const ChallengesByProfile = () => {
     const { _id } = useAuth();
-    const navigate = useNavigate();
     const [formChallenge] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editing, setEditing] = useState<IChallenge | null>(null);
@@ -166,7 +162,7 @@ export const ChallengesByProfile = () => {
             ) : (
                 <>
                     <Card
-                        style={{ borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: 'none', maxHeight: "60vh", overflowY: "auto" }}
+                        style={{ borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: 'none', }}
                         styles={{ body: { padding: "8px 0", } }}
                     >
                         <List
@@ -180,7 +176,6 @@ export const ChallengesByProfile = () => {
                                         toggleStatus={toggleStatus}
                                         openModal={openModal}
                                         handleDelete={handleDelete}
-                                        onOpenProposals={() => navigate(`/ProposalsEditing/${challenge._id}`)}
                                     />
                                 </div>
                             )}
@@ -188,17 +183,16 @@ export const ChallengesByProfile = () => {
                     </Card>
 
                     {/* Modal de creación */}
-                    <ModalGeneral
-                        titulo="Desafío"
-                        isOpen={isModalOpen}
-                        onClose={closeModal}
-                        onOk={() => formChallenge.submit()}
+
+                    <ChallengeForm
+                        isModalOpen={isModalOpen}
+                        closeModal={closeModal}
+                        formSubmit={() => formChallenge.submit()}
                         editing={editing !== null}
-                    >
-                        <FormGeneral form={formChallenge} handleSubmit={handleSubmitChallenge}>
-                            <ChallengeForm />
-                        </FormGeneral>
-                    </ModalGeneral>
+                        form={formChallenge}
+                        handleSubmit={handleSubmitChallenge}
+                    />
+
                 </>
             )}
         </div>

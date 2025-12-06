@@ -1,9 +1,9 @@
-import { useMemo } from "react";
-import type { ColumnsType } from "antd/es/table";
-import { Tag, Select } from "antd";
-import { cellBodyStyle } from "../../utils/utilsChallenges";
-import { estadoOptions, getStatusColor } from "../../utils/utilsProposals";
+import { StatusSelect } from "../Challenge/ChallengeToCompany/StatusSelect";
 import type { IChallengeRef, ProposalStatus } from "../../types/types";
+import { cellBodyStyle } from "../../utils/utilsChallenges";
+import type { ColumnsType } from "antd/es/table";
+import { useMemo } from "react";
+import { Tag } from "antd";
 
 
 interface BaseConfig {
@@ -49,19 +49,10 @@ export function ProposalTableColumns<T extends { createdAt: string }>(
                 onCell: () => ({ style: cellBodyStyle }),
                 render: (estado: string, record: any) =>
                     showSelectEstado ? (
-                        <Select
-                            value={estado}
-                            style={{
-                                width: "100%",
-                                color: getStatusColor(estado),
-                                borderColor: getStatusColor(estado),
-                                fontWeight: "bold",
-                            }}
-                            options={estadoOptions?.map(opt => ({
-                                ...opt,
-                                style: { color: getStatusColor(opt.value) },
-                            }))}
-                            onChange={(value) => onEstadoChange?.(record._id, value as ProposalStatus)}
+                        <StatusSelect
+                        isChallenge={false}
+                            estado={estado}
+                            onChange={(value: ProposalStatus) => onEstadoChange?.(record._id, value)}
                         />
                     ) : (
                         <Tag

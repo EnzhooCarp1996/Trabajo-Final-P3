@@ -4,6 +4,7 @@ import User from '../schemas/user'
 import Role from '../schemas/role'
 import { CreateUserRequest } from '../types'
 import { validateIdParam } from '../middlewares/validateId'
+import { buildUserPipeline } from '../utils/userPipelines'
 
 const router = express.Router()
 
@@ -29,14 +30,9 @@ async function getAllUsersByRole(
   }
 
   try {
-    const users = await User.find().populate({
-      path: 'role',
-      match: { nombre: role },
-    })
-
-    const filteredUsers = users.filter((u) => u.role)
-
-    res.send(filteredUsers)
+    const pipeline = buildUserPipeline(role);
+    const users = await User.aggregate(pipeline);
+    res.send(users);
   } catch (err) {
     next(err)
   }

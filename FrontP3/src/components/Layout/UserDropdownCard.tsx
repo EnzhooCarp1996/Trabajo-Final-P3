@@ -32,14 +32,7 @@ export const UserDropdownCard: React.FC<UserDropdownCardProps> = ({ nombre, role
                 </div>
             </div>
 
-            <div
-                style={{
-                    marginTop: "16px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "8px"
-                }}
-            >
+            <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
                 <Button type="primary" block onClick={onProfile}>
                     Ver Perfil
                 </Button>

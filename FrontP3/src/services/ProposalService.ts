@@ -23,6 +23,7 @@ export interface ProposalService {
   create: (data: CreateProposalRequest) => Promise<IProposal>;
   update: (id: string, data: Partial<CreateProposalRequest>) => Promise<IProposal>;
   delete: (id: string) => Promise<{ message: string }>;
+  updateStatus: (id: string, estado: ProposalStatus) => Promise<IProposal>;
 }
 
 // Implementación del servicio
@@ -41,4 +42,7 @@ export const proposalService: ProposalService = {
 
   delete: (id) =>
     axiosInstance.delete<{ message: string }>(`/proposals/${id}`).then(res => res.data),
+  
+  updateStatus: (id: string, estado: ProposalStatus) =>
+    axiosInstance.put<IProposal>(`/proposals/${id}/estado`, { estado }).then(res => res.data),
 };

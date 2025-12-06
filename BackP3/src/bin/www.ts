@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import { readFileSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { initSocket } from '../server/socket'
 
 debug('trabajo-final-p3:server')
 
@@ -19,6 +20,9 @@ app.set('port', port)
 
 // Create HTTP server.
 const server = http.createServer(app)
+
+// Inicializar Socket.IO
+initSocket(server);
 
 const db_url = process.env.MONGO_URL
 const db_name = process.env.MONGO_DB

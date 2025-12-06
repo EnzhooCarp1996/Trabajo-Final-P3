@@ -4,6 +4,7 @@ import { authService } from "../../services/AuthService";
 import { useState } from "react";
 import { Form, Modal } from "antd";
 import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
 
 export function useLoginForm() {
   const { login } = useAuth();
@@ -30,7 +31,10 @@ const handleSubmitLogin = async () => {
   setError(null);
 
   try {
+    localStorage.removeItem("token")
     const data = await authService.logIn(formData.email, formData.password);
+    const decoded = jwtDecode(data.token);
+    console.log("🔍 TOKEN DECODED:", decoded);
     login(data.token, formData.recordar);
   } catch (err: unknown) {
     setError(err instanceof Error ? err.message : "Error inesperado");

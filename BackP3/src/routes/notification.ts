@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express'
 import Notification from '../schemas/notification'
 import User from '../schemas/user'
-import { INotification } from '../types/index'
+import { CreateNotificationRequest } from '../types/index'
+import { io } from '../server/socket'
 
 const router = express.Router()
 
@@ -12,12 +13,8 @@ router.put('/:id/visto', markAsSeen)
 
 //  ===========================
 //  GET: Todas las notificaciones del usuario
-//  =========================== 
-async function getAllNotifications(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
+//  ===========================
+async function getAllNotifications(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const userId = req.user?._id
 
@@ -26,7 +23,7 @@ async function getAllNotifications(
       return
     }
 
-    const notificaciones = await Notification.find({ userId })
+    const notificaciones = await Notification.find({ toUserId: userId })
       .populate({ path: 'fromUserId', select: 'nombreCompleto nombreEmpresa' })
       .sort({ createdAt: -1 })
 
@@ -38,15 +35,17 @@ async function getAllNotifications(
 
 //  ===========================
 //  GET: Notificación por ID
-//  =========================== 
+//  ===========================
 async function getNotificationById(
   req: Request<{ id: string }>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
   try {
-    const noti = await Notification.findById(req.params.id)
-      .populate({ path: 'fromUserId', select: 'nombreCompleto nombreEmpresa' })
+    const noti = await Notification.findById(req.params.id).populate({
+      path: 'fromUserId',
+      select: 'nombreCompleto nombreEmpresa',
+    })
 
     if (!noti) {
       res.status(404).json({ error: 'Notificación no encontrada' })
@@ -54,7 +53,7 @@ async function getNotificationById(
     }
 
     // Solo el dueño puede verla
-    if (noti.userId.toString() !== req.user?._id.toString()) {
+    if (noti.toUserId.toString() !== req.user?._id.toString()) {
       res.status(403).json({ error: 'No autorizado' })
       return
     }
@@ -75,15 +74,15 @@ async function getNotificationById(
 //  POST: Crear notificación
 //  ===========================
 async function createNotification(
-  req: Request<Record<string, never>, unknown, INotification>,
+  req: Request<Record<string, never>, unknown, CreateNotificationRequest>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  const { userId, fromUserId, contenido } = req.body
+  const { toUserId, fromUserId, contenido } = req.body
 
   try {
     // Validar usuarios
-    const receptor = await User.findById(userId)
+    const receptor = await User.findById(toUserId)
     const remitente = await User.findById(fromUserId)
 
     if (!receptor) {
@@ -96,9 +95,16 @@ async function createNotification(
     }
 
     const noti = await Notification.create({
-      userId,
+      toUserId,
       fromUserId,
       contenido,
+    })
+
+    io.to(toUserId.toString()).emit('notification:new', {
+      _id: noti._id,
+      contenido: noti.contenido,
+      fromUserId: noti.fromUserId,
+      createdAt: noti.createdAt,
     })
 
     res.status(201).json(noti)
@@ -124,7 +130,7 @@ async function markAsSeen(
     }
 
     // Solo el destinatario puede marcarla como vista
-    if (noti.userId.toString() !== req.user?._id.toString()) {
+    if (noti.toUserId.toString() !== req.user?._id.toString()) {
       res.status(403).send('No autorizado')
       return
     }

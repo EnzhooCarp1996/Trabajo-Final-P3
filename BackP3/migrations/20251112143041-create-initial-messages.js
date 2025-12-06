@@ -3,7 +3,7 @@ import mongodb from "mongodb";
 const { ObjectId } = mongodb;
 
 export const up = async (db) => {
-  const initialMessages = [
+  const initialNotifications = [
     // Empresa 1 -> Emprendedor 1
     {
       _id: new ObjectId("300000000000000000000000"),
@@ -65,11 +65,11 @@ export const up = async (db) => {
     },
   ];
 
-  await db.collection("messages").insertMany(initialMessages);
+  await db.collection("notifications").insertMany(initialNotifications);
 };
 
 export const down = async (db) => {
-  await db.collection("messages").deleteMany({
+  await db.collection("notifications").deleteMany({
     _id: {
       $in: [
         new ObjectId("300000000000000000000000"),

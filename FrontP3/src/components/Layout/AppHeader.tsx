@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/Auth/useAuth";
 import { useEffect, useRef, useState } from "react";
 import { UserDropdownCard } from "./UserDropdownCard";
+import { NotificationBell } from "./NotificationBell";
 
 const { Header } = Layout;
 const { Title } = Typography;
@@ -76,36 +77,38 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ collapsed, setCollapsed })
             </Title>
 
             <Space size="middle">
-
-                <div ref={wrapperRef} style={{ position: "relative" }}>
-                    <Avatar
-                        size={48}
-                        style={{ cursor: "pointer", backgroundColor: "#1890ff" }}
-                        onClick={() => setOpen(!open)}
-                    >
-                        {nombre || "U"}
-                    </Avatar>
-
-                    {open && (
-                        <div
-                            style={{
-                                position: "absolute",
-                                right: 0,
-                                top: 60,
-                                zIndex: 9999,
-                            }}
+                <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                    <NotificationBell />
+                    <div ref={wrapperRef} style={{ position: "relative" }}>
+                        <Avatar
+                            size={48}
+                            style={{ cursor: "pointer", backgroundColor: "#1890ff" }}
+                            onClick={() => setOpen(!open)}
                         >
-                            <UserDropdownCard
-                                nombre={nombre}
-                                role={role}
-                                email={email}
-                                onProfile={handleClick}
-                                onLogout={logout}
-                            />
-                        </div>
-                    )}
-                </div>
+                            {nombre || "U"}
+                        </Avatar>
 
+                        {open && (
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    right: 0,
+                                    top: 60,
+                                    zIndex: 9999,
+                                }}
+                            >
+                                <UserDropdownCard
+                                    nombre={nombre}
+                                    role={role}
+                                    email={email}
+                                    onProfile={handleClick}
+                                    onLogout={logout}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                </div>
             </Space>
         </Header>
     );

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 
-export function errorHandler(
+function errorHandler(
   err: any,
   _req: Request,
   res: Response,
@@ -15,7 +15,7 @@ export function errorHandler(
     return;
   }
 
-  // Error de validación (por ejemplo, campo requerido faltante)
+  // Error de validación (campo requerido faltante)
   if (err instanceof mongoose.Error.ValidationError) {
     res.status(400).json({ error: "Error de validación", details: err.errors });
     return;
@@ -30,3 +30,5 @@ export function errorHandler(
   // Otros errores no manejados
   res.status(500).json({ error: "Error interno del servidor" });
 }
+
+export default errorHandler;

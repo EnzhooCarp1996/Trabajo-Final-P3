@@ -22,21 +22,9 @@ export const AppContent: React.FC<AppContent> = ({ children }) => {
         <AppHeader collapsed={collapsed} setCollapsed={setCollapsed} />
 
         <Content
-          style={{
-            backgroundColor: "#0a1f44",
-           
-            color: "white",
-            minHeight: "calc(100vh - 128px)",
-          }}
+          style={{ backgroundColor: "#0a1f44", overflowY: "auto", color: "white", minHeight: "calc(100vh - 128px)",}}
         >
-          <div
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              borderRadius: 12,
-              padding: "10px",
-              minHeight: "100%",
-            }}
-          >
+          <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 12, padding: "10px" }} >
             {children}
           </div>
         </Content>

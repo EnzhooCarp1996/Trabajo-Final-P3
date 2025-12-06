@@ -9,7 +9,7 @@ import userRouter from "./routes/user";
 import challengeRouter from "./routes/challenge";
 import proposalRouter from "./routes/proposal";
 import notificationRouter from "./routes/notification";
-import { errorHandler } from "./middlewares/errorHandler";
+import errorHandler from "./middlewares/errorHandler";
 import authentication from "./middlewares/authentication";
 import authorization from "./middlewares/authorization";
 
@@ -28,7 +28,7 @@ app.use(authorization)
 app.use("/users", authentication, userRouter);          // GET /users?role=empresa
 app.use("/challenges", authentication, challengeRouter); // GET /challenges?estado=activo&empresaId=123
 app.use("/proposals", authentication, proposalRouter);   // GET /proposals?estado=en%20revision&emprendedorId=456
-app.use("/notifications", authentication, notificationRouter);     // GET /messages?empresaId=...&desafioId=...
+app.use("/notifications", authentication, notificationRouter);     // GET /notifications?empresaId=...&desafioId=...
 
 // app.use('/auth', authRouter)
 // app.use('/users', authentication, userRouter)

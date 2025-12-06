@@ -1,20 +1,22 @@
 import { userService, type CreateUserRequest } from "../../services/UserService";
 import { Button, Form, message, Typography } from "antd";
-import { EntrepreneurForm } from "./EntrepreneurForm";
+import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
 import { FormGeneralItem } from "../FormGeneralItem";
 import { useAuth } from "../../context/Auth/useAuth";
 import type { IUser } from "../../types/types";
 import { useNavigate } from "react-router-dom";
 import { FormGeneral } from "../FormGeneral";
-import { CompanyForm } from "./CompanyForm";
+import { CompanyForm } from "../Company/CompanyForm";
 import { useEffect, useState } from "react";
 import { BackHeader } from "../BackHeader";
+import { FormPassword } from "../FormPassword";
 
 const { Title } = Typography;
 
 export const ProfileEdit = () => {
     const { _id, role } = useAuth();
     const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+    const [showPasswordFields, setShowPasswordFields] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -65,7 +67,7 @@ export const ProfileEdit = () => {
 
     return (
         <>
-            <BackHeader/>
+            <BackHeader />
 
             <div
                 style={{
@@ -79,8 +81,6 @@ export const ProfileEdit = () => {
                     flexDirection: "column",
                     justifyContent: "center",
                     boxShadow: "0px 4px 16px rgba(0,0,0,0.2)",
-
-                    // 🔥 Ajuste responsivo
                     boxSizing: "border-box",
                 }}
             >
@@ -89,8 +89,14 @@ export const ProfileEdit = () => {
                 </Title>
 
                 <FormGeneral form={form} handleSubmit={handleSubmit}>
-                    {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
-                    <FormGeneralItem form={form} requirePassword={false} />
+                    {!showPasswordFields ?
+                        <>
+                            {role === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
+                            <FormGeneralItem/>
+                        </>
+                        :
+                        <FormPassword form={form} />
+                    }
                     <div
                         style={{
                             marginTop: "24px",
@@ -100,6 +106,18 @@ export const ProfileEdit = () => {
                             flexWrap: "wrap"
                         }}
                     >
+                        <Button
+                            onClick={() => setShowPasswordFields(!showPasswordFields)}
+                            style={{
+                                backgroundColor: showPasswordFields ? "#486581" : "#6c5ce7",
+                                color: "white",
+                                borderColor: "#486581",
+                                padding: "6px 16px",
+                                borderRadius: "6px",
+                            }}
+                        >
+                            {showPasswordFields ? "Cancelar Cambio" : "Cambiar Contraseña"}
+                        </Button>
                         <Button
                             onClick={() => navigate(-1)}
                             style={{

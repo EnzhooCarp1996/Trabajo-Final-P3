@@ -5,18 +5,18 @@ import { Form, Modal } from 'antd'
 import { proposalService } from '../../services/ProposalService'
 import toast from 'react-hot-toast'
 import { useAuth } from '../../context/Auth/useAuth'
-import { estadosPropuestas } from '../../utils/utilsProposals'
+import { estadoPropuestas } from '../../utils/utilsProposals'
 
 export const useProposal = () => {
-  const { _id } = useAuth();
-  const [isModalProposalOpen, setIsModalProposalOpen] = useState(false);
-  const [editingProposal, setEditingProposal] = useState<IProposal | null>(null);
-  const [proposals, setProposals] = useState<IProposal[]>([]);
-  const [loading, setLoading] = useState(false);
-  const formProposal = Form.useForm()[0];
-  const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estadosPropuestas[0].value as ProposalStatus);
-  const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado);
-  const [activeTab, setActiveTab] = useState<ProposalStatus>('en revision');
+  const { _id } = useAuth()
+  const [isModalProposalOpen, setIsModalProposalOpen] = useState(false)
+  const [editingProposal, setEditingProposal] = useState<IProposal | null>(null)
+  const [proposals, setProposals] = useState<IProposal[]>([])
+  const [loading, setLoading] = useState(false)
+  const formProposal = Form.useForm()[0]
+  const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estadoPropuestas[0].value as ProposalStatus)
+  const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado)
+  const [activeTab, setActiveTab] = useState<ProposalStatus>('en revision')
 
   useEffect(() => {
     const fetchProposals = async () => {

@@ -51,7 +51,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({ _id, open, onClo
                         style={{ color: "#69b1ff", marginTop: 20, cursor: "pointer", textDecoration: "underline", }}
                         onClick={() => navigate(`/proposals/challenge/${_id}`)}
                     >
-                        Sus Propuestas:
+                        Sus Propuestas
                     </h3>
                     <ProposalsToModalChallenge _id={challenge._id} />
                 </>

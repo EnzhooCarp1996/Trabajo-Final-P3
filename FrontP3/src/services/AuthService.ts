@@ -48,6 +48,7 @@ export const authService: AuthService = {
     if (!token || isTokenExpired(token)) return {  _id: "", email: "", nombre: "", role: "" };
     try {
       const decoded = jwtDecode<JWTPayload>(token);
+      
       return { _id: decoded._id, email: decoded.email, nombre: decoded.nombre, role: decoded.role };
     } catch {
       return {  _id: "", email: "", nombre: "", role: "" };

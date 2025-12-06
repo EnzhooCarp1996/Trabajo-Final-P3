@@ -1,5 +1,5 @@
 import type { IChallenge, IEntrepreneurRef, IProposal, ProposalStatus } from "../../../types/types";
-import { EntrepreneurProfile } from "../../Entrepreneur/EntrepreneurProfile";
+import { EntrepreneurModal } from "../../Entrepreneur/EntrepreneurModal";
 import { proposalService } from "../../../services/ProposalService";
 import { ProposalTableColumns } from "../ProposalTableColumns";
 import { useEffect, useState } from "react";
@@ -60,12 +60,11 @@ export const ProposalsToEditing = () => {
 
     const handleEstadoChange = async (id: string, nuevoEstado: ProposalStatus) => {
         try {
-            await proposalService.update(id, { estado: nuevoEstado });
+            const updated = await proposalService.updateStatus(id, nuevoEstado);
 
-            // Actualizar tabla local sin volver a llamar al servidor
             setProposals(prev =>
                 prev.map((p) =>
-                    p._id === id ? { ...p, estado: nuevoEstado } : p
+                    p._id === id ? updated : p
                 )
             );
 
@@ -85,7 +84,7 @@ export const ProposalsToEditing = () => {
     return (
         <>
             <BackHeader />
-            <div style={{ width: "auto", margin: "0 auto", minHeight: 300 }}>
+            <div style={{ width: "auto", margin: "0 auto" }}>
                 <Title level={3} style={{ color: '#8c8c8c', marginBottom: 0, marginTop: 0 }}>
                     Propuestas de: {challenge?.titulo}
                 </Title>
@@ -103,10 +102,10 @@ export const ProposalsToEditing = () => {
                                 onHeaderCell: () => ({ style: { backgroundColor: "#001529", color: "white", fontWeight: "bold" } })
                             }))}
                             dataSource={proposals}
-                            scroll={{ x: 700, y: 400 }}
+                            
                         />
                         {selectedEntrepreneur && (
-                            <EntrepreneurProfile
+                            <EntrepreneurModal
                                 open={openProfile}
                                 onClose={() => setOpenProfile(false)}
                                 _id={selectedEntrepreneur._id}

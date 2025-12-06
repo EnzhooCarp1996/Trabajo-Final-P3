@@ -59,7 +59,7 @@ export const CompanyModal = ({ _id, open, onClose }: CompanyModalProps) => {
             style={{ color: "#69b1ff", marginTop: 20, cursor: "pointer", textDecoration: "underline", }}
             onClick={() => navigate(`/ChallengesByCompany/${_id}`)}
           >
-            Desafíos:
+            Ver Sus Desafíos
           </h3>
 
           <CompanyChallenges empresaId={company._id} />

@@ -19,6 +19,8 @@ export interface IUser extends Document {
   edad?: number
   activo: boolean
   createdAt: Date
+  challengeCount?: number
+  proposalCount?: number
   checkPassword(potentialPassword: string): Promise<{ isOk: boolean; isLocked: boolean }>
 }
 
@@ -50,10 +52,11 @@ export interface IProposal extends Document {
 
 export interface INotification extends Document {
   _id: Types.ObjectId
-  userId: Types.ObjectId
+  toUserId: Types.ObjectId
   fromUserId: Types.ObjectId
   contenido: string
   visto: boolean
+  createdAt: Date
 }
 
 // JWT Payload
@@ -119,12 +122,11 @@ export interface CreateProposalRequest {
   puntos: number
 }
 
-export interface CreateMessageRequest {
-  empresaId: Types.ObjectId
-  emprendedorId: Types.ObjectId
-  propuestaId: Types.ObjectId
+export interface CreateNotificationRequest {
+  toUserId: Types.ObjectId
+  fromUserId: Types.ObjectId
   contenido: string
-  visto?: boolean
+  createdAt: Date
 }
 
 // Environment Variables

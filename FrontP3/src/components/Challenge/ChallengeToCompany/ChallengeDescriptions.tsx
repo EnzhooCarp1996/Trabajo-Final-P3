@@ -1,6 +1,7 @@
-import { CalendarOutlined, TrophyOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { CalendarOutlined, TrophyOutlined, EditOutlined, DeleteOutlined, ExportOutlined } from "@ant-design/icons";
 import type { ChallengeStatus, IChallenge } from "../../../types/types";
 import { Button, List, Space, Avatar } from "antd";
+import { useNavigate } from "react-router-dom";
 import { StatusSelect } from "./StatusSelect";
 
 interface ChallengeDescriptionsProps {
@@ -8,7 +9,6 @@ interface ChallengeDescriptionsProps {
     toggleStatus: (challenge: IChallenge, newEstado: ChallengeStatus) => Promise<void>;
     openModal: (challenge: IChallenge) => void;
     handleDelete: (id: string) => void;
-    onOpenProposals: () => void;
 }
 
 export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
@@ -16,32 +16,17 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
     toggleStatus,
     openModal,
     handleDelete,
-    onOpenProposals
 }) => {
-
+    const navigate = useNavigate();
 
     return (
         <List.Item
-            style={{
-                backgroundColor: '#001529',
-                marginBottom: '8px',
-                borderRadius: '8px',
-                padding: '16px'
-            }}
+            style={{ backgroundColor: '#001529', marginBottom: '8px', borderRadius: '8px', padding: '16px' }}
             actions={[
-                <Button
-                    type="link"
-                    icon={<EditOutlined />}
-                    onClick={() => openModal(challenge)}
-                >
+                <Button type="link" icon={<EditOutlined />} onClick={() => openModal(challenge)} >
                     Editar
                 </Button>,
-                <Button
-                    danger
-                    type="link"
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDelete(challenge._id)}
-                >
+                <Button danger type="link" icon={<DeleteOutlined />} onClick={() => handleDelete(challenge._id)}>
                     Eliminar
                 </Button>,
             ]}
@@ -58,11 +43,12 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
                     />
                 }
                 title={
-                    <Space style={{ justifyContent: "space-between", width: "100%" }}>
+                    <div
+                        style={{ display: "flex", justifyContent: "space-between", width: "100%", flexWrap: "wrap", gap: 8, alignItems: "center", }} >
                         <div>
                             <strong
-                                style={{ color: "#69b1ff", textDecoration: "underline", cursor: "pointer" }}
-                                onClick={() => onOpenProposals()}
+                                style={{ color: "#69b1ff" }}
+                                
                             >
                                 {challenge.titulo}
                             </strong>
@@ -70,19 +56,25 @@ export const ChallengeDescriptions: React.FC<ChallengeDescriptionsProps> = ({
                         </div>
 
                         <StatusSelect
+                            isChallenge
                             estado={challenge.estado}
                             onChange={(value: string) => toggleStatus(challenge, value as ChallengeStatus)}
                         />
 
-                    </Space>
+                    </div>
                 }
                 description={
                     <Space direction="vertical" size="small" style={{ width: "100%" }}>
                         <Space size="large" style={{ fontSize: 13, color: "#8c8c8c" }}>
+                            <span>Ver propuestas</span>
+                            <div onClick={() => navigate(`/ProposalsEditing/${challenge._id}`)} style={{ cursor: "pointer", color: "#69b1ff", }} >
+                                <ExportOutlined style={{ fontSize: 15 }} />
+                            </div>
+
+                        </Space>
+                        <Space size="large" style={{ fontSize: 13, color: "#8c8c8c" }}>
                             <span>Creado el día</span>
-                            <span>
-                                <CalendarOutlined /> {new Date(challenge.createdAt).toLocaleDateString()}
-                            </span>
+                            <span><CalendarOutlined /> {new Date(challenge.createdAt).toLocaleDateString()}</span>
 
                         </Space>
                     </Space>

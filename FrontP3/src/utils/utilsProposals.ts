@@ -1,4 +1,4 @@
-export const getStatusColor = (estado: string) => {
+export const getStatusColorProposals = (estado: string) => {
   switch (estado) {
     case 'seleccionada':
       return '#52c41a'
@@ -9,14 +9,37 @@ export const getStatusColor = (estado: string) => {
   }
 }
 
-export const estadosPropuestas = [
-  { label: 'En revisión', value: 'en revision' },
-  { label: 'Seleccionadas', value: 'seleccionada' },
-  { label: 'Descartadas', value: 'descartada' },
+export const estadoPropuestas = [
+  { value: 'en revision', label: 'En revisión' },
+  { value: 'seleccionada', label: 'Seleccionadas' },
+  { value: 'descartada' , label: 'Descartadas' },
 ]
 
-export const estadoOptions = [
-  { label: 'En revisión', value: 'en revision' },
-  { label: 'Seleccionada', value: 'seleccionada' },
-  { label: 'Descartada', value: 'descartada' },
-]
+export const getStatusStylesProposals = (estado: string) => {
+  switch (estado) {
+    case 'seleccionada':
+      return {
+        background: '#52c41a', // verde
+        color: '#34C759',
+        borderColor: '#34C759',
+      }
+    case 'en revision':
+      return {
+        background: '#1677ff', // azul
+        color: '#007AFF',
+        borderColor: '#007AFF',
+      }
+    case 'descartada':
+      return {
+        background: 'red', // rojo
+        color: '#FF3B30',
+        borderColor: '#FF3B30',
+      }
+    default:
+      return {
+        background: 'grey',
+        color: '#8E8E93',
+        borderColor: '#8E8E93',
+      }
+  }
+}

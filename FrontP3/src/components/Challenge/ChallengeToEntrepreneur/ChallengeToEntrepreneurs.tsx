@@ -1,4 +1,4 @@
-import { CalendarOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
+import { BankOutlined, CalendarOutlined, ExportOutlined, PlusOutlined, TrophyOutlined } from "@ant-design/icons";
 import { challengeService } from "../../../services/ChallengeService";
 import type { IChallenge, ICompanyRef } from "../../../types/types";
 import { useProposal } from "../../../hooks/Proposal/useProposal";
@@ -7,8 +7,6 @@ import { CompanyModal } from "../../Company/CompanyModal";
 import { Button, Card, Carousel, Typography } from 'antd';
 import { useEffect, useRef, useState } from "react";
 import type { CarouselRef } from "antd/es/carousel";
-import { ModalGeneral } from "../../ModalGeneral";
-import { FormGeneral } from "../../FormGeneral";
 import { ButtonNuevo } from "../../ButtonNuevo";
 
 import toast from "react-hot-toast";
@@ -114,18 +112,19 @@ export const ChallengesToEntrepreneurs: React.FC = () => {
 
                                                     <div style={{ fontSize: 24 }}>{challenge.descripcion} </div>
 
-                                                    <div style={{ color: "#A3CEEF", fontSize: 20 }}>
+                                                    <div style={{ color: "#A3CEEF", fontSize: 20, gap: 10, }}>
                                                         <CalendarOutlined /> {new Date(challenge.createdAt).toLocaleDateString()}
                                                     </div>
 
-                                                    <div
-                                                        onClick={() => openModal(challenge.empresaId)}
-                                                        style={{
-                                                            display: "flex", alignItems: "center", gap: 4,
-                                                            cursor: "pointer", textDecoration: "underline", color: "#69b1ff",
-                                                        }}
-                                                    >
-                                                        {challenge.empresaId.nombreEmpresa}
+                                                    <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#69b1ff", }}>
+
+                                                        <BankOutlined />{challenge.empresaId.nombreEmpresa}
+                                                        <div
+                                                            onClick={() => openModal(challenge.empresaId)}
+                                                            style={{ cursor: "pointer" }}
+                                                        >
+                                                            <ExportOutlined style={{ fontSize: 15 }} />
+                                                        </div>
                                                     </div>
 
                                                 </Text>
@@ -147,17 +146,17 @@ export const ChallengesToEntrepreneurs: React.FC = () => {
                         </div>
 
                         {/* Modal de creación de propuestas */}
-                        <ModalGeneral
+
+                        <ProposalForm
                             titulo={"Nueva Propuesta"}
-                            isOpen={isModalProposalOpen}
-                            onClose={closeModalProposal}
-                            onOk={() => formProposal.submit()}
+                            selectedChallenge={selectedChallenge}
+                            isModalOpen={isModalProposalOpen}
+                            closeModal={closeModalProposal}
+                            formSubmit={() => formProposal.submit()}
                             editing={!!editingProposal}
-                        >
-                            <FormGeneral form={formProposal} handleSubmit={handleSubmitProposal}>
-                                <ProposalForm selectedChallenge={selectedChallenge} />
-                            </FormGeneral>
-                        </ModalGeneral>
+                            form={formProposal}
+                            handleSubmit={handleSubmitProposal}
+                        />
 
                         {/* MODAL DETALLES */}
                         {selectedCompany &&

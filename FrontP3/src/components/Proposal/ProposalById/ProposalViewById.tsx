@@ -2,9 +2,7 @@ import { useProposalViewById } from "../../../hooks/Proposal/useProposalViewById
 import { ProposalDescriptions } from "./ProposalDescriptions";
 import { ProposalStatistics } from "./ProposalStatistics";
 import { FileTextOutlined } from "@ant-design/icons";
-import { ModalGeneral } from "../../ModalGeneral";
 import { ProposalForm } from "./../ProposalForm";
-import { FormGeneral } from "../../FormGeneral";
 import { Card, List, Typography } from "antd";
 import { BackHeader } from "../../BackHeader";
 
@@ -21,18 +19,15 @@ export const ProposalsViewById: React.FC = () => {
     closeModalProposal,
     handleSubmitProposalById,
     handleDelete,
-    navigate
   } = useProposalViewById();
-  
+
 
 
   return (
     <div style={{ padding: '0 16px' }}>
       {/* Encabezado */}
       {/* <HeaderReturn titulo={"Mis Propuestas"} /> */}
-      <BackHeader
-        onBack={() => navigate(-1)}
-      />
+      <BackHeader />
 
       {/* Estadísticas y Botón */}
       <div style={{
@@ -60,26 +55,14 @@ export const ProposalsViewById: React.FC = () => {
         <>
           {/* Vista de lista */}
           <Card
-            style={{
-              borderRadius: 12,
-              boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-              border: 'none',
-              maxHeight: "60vh",
-              overflowY: "auto",
-              marginBottom: 16
-            }}
+            style={{ borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: 'none', marginBottom: 16 }}
             styles={{ body: { padding: "8px 0", backgroundColor: '#213ac4' } }}
           >
             <List
               style={{ backgroundColor: 'transparent' }}
               dataSource={proposals}
               renderItem={(proposal) => (
-                <div style={{
-                  margin: '8px 16px',
-                  backgroundColor: '#fff',
-                  borderRadius: 8,
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-                }}>
+                <div style={{ margin: '8px 16px', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
                   <ProposalDescriptions
                     key={proposal._id}
                     proposal={proposal}
@@ -94,17 +77,16 @@ export const ProposalsViewById: React.FC = () => {
       )}
 
       {/* Modal de edición */}
-      <ModalGeneral
+      <ProposalForm
         titulo={"Propuesta"}
-        isOpen={isModalProposalOpen}
-        onClose={closeModalProposal}
-        onOk={() => formProposal.submit()}
-        editing={!!editingProposal}
-      >
-        <FormGeneral form={formProposal} handleSubmit={handleSubmitProposalById}>
-          <ProposalForm selectedChallenge={selectedChallenge} />
-        </FormGeneral>
-      </ModalGeneral>
+        selectedChallenge={selectedChallenge}
+        isModalOpen={isModalProposalOpen}
+        closeModal={closeModalProposal}
+        formSubmit={() => formProposal.submit()}
+        editing={editingProposal !== null}
+        form={formProposal}
+        handleSubmit={handleSubmitProposalById}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { CalendarOutlined, FileTextOutlined, EditOutlined, DeleteOutlined, TrophyOutlined } from "@ant-design/icons";
 import { Button, List, Space, Avatar, Divider, Tag } from "antd";
-import { getStatusColor } from "../../../utils/utilsProposals";
+import { getStatusColorProposals } from "../../../utils/utilsProposals";
 import type { IProposal } from "../../../types/types";
 
 interface ProposalDescriptionsProps {
@@ -27,13 +27,13 @@ export const ProposalDescriptions: React.FC<ProposalDescriptionsProps> = ({
         >
             <List.Item.Meta
                 avatar={
-                    <Avatar size="large" icon={<FileTextOutlined />} style={{ backgroundColor: getStatusColor(proposal.estado)}} />
+                    <Avatar size="large" icon={<FileTextOutlined />} style={{ backgroundColor: getStatusColorProposals(proposal.estado) }} />
                 }
                 title={
                     <Space style={{ justifyContent: "space-between", width: "100%" }}>
                         <span style={{ fontWeight: 600 }}>{proposal.tituloPropuesta}</span>
-                        <Tag 
-                            color={getStatusColor(proposal.estado)}
+                        <Tag
+                            color={getStatusColorProposals(proposal.estado)}
                             style={{ borderRadius: 12, color: 'white', fontWeight: 600 }}
                         >
                             {proposal.estado?.toUpperCase()}

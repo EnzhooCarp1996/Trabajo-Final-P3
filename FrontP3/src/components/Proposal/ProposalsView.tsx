@@ -1,5 +1,5 @@
 import { useProposal } from "../../hooks/Proposal/useProposal";
-import { estadosPropuestas } from "../../utils/utilsProposals";
+import { estadoPropuestas } from "../../utils/utilsProposals";
 import type { ProposalStatus } from "../../types/types";
 import { TabsProposals } from "../TabsProposals";
 import { ProposalsList } from "./ProposalsList";
@@ -19,19 +19,20 @@ export const ProposalsView: React.FC = () => {
 
 
 
-    return (
-      <>
+  return (
+    <>
 
-        {/* CONTENEDOR DEL SWIPER */}
-        <TabsProposals
-          items={estadosPropuestas}
-          activeKey={activeTab}
-          onChange={(value) => {
-            setActiveTab(value as ProposalStatus);
-            setFiltroEstado(value as any);
-            localStorage.setItem("activeProposalTab", value);
-          }}
-        />
+      {/* CONTENEDOR DEL SWIPER */}
+      <TabsProposals
+        items={estadoPropuestas}
+        activeKey={activeTab}
+        onChange={(value) => {
+          setActiveTab(value as ProposalStatus);
+          setFiltroEstado(value as any);
+          localStorage.setItem("activeProposalTab", value);
+        }}
+      />
+
 
         {/* LISTA FILTRADA */}
         <GridRow>
@@ -43,7 +44,9 @@ export const ProposalsView: React.FC = () => {
           ))}
         </GridRow>
 
-      </>
-    );
-  };
+
+
+    </>
+  );
+};
 

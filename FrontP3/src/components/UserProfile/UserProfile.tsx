@@ -67,13 +67,7 @@ export const UserProfile = () => {
                             <Link to="/ProfileEdit">
                                 <Button
                                     icon={<EditOutlined />}
-                                    style={{
-                                        backgroundColor: "#1677ff",
-                                        color: "white",
-                                        borderRadius: 8,
-                                        padding: "4px 12px",
-                                        border: "none"
-                                    }}
+                                    style={{ backgroundColor: "#1677ff", color: "white", borderRadius: 8, padding: "4px 12px", border: "none"}}
                                 >
                                     Editar Perfil
                                 </Button>
@@ -109,15 +103,6 @@ export const UserProfile = () => {
                         </div>
                     </Card>
                 </div >
-
-                {/* 
-                {role === "emprendedor" ? (
-                    <ProposalsSwiper />
-                ) : (
-                    <ChallengeTable />
-                )} */}
-
-
             </div>
         </>
     );

@@ -69,7 +69,7 @@ export const ProposalsByEntrepreneur = () => {
               onHeaderCell: () => ({ style: { backgroundColor: "#001529", color: "white", fontWeight: "bold" } })
             }))}
             dataSource={proposals}
-            scroll={{ x: 700, y: 400 }}
+            
           />
         )}
 

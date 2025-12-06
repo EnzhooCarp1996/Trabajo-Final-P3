@@ -48,7 +48,7 @@ export const ModalGeneral: React.FC<ModalGeneralProps> = ({
           }}
             okButtonProps={{ style: { backgroundColor: "#1677ff" } }}
         >
-            <Title level={3} style={{ marginBottom: 16, color: "white" }}>{editing ? `Editar ${titulo}` : `Nuevo ${titulo}`}</Title>
+            <Title level={3} style={{ marginBottom: 16, color: "white" }}>{editing ? `Editar ${titulo}` : `${titulo}`}</Title>
             {children}
         </Modal>
     );

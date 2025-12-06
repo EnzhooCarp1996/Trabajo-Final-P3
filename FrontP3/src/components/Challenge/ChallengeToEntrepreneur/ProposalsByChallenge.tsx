@@ -1,4 +1,4 @@
-import { EntrepreneurProfile } from "../../Entrepreneur/EntrepreneurProfile";
+import { EntrepreneurModal } from "../../Entrepreneur/EntrepreneurModal";
 import { ProposalTableColumns } from "../../Proposal/ProposalTableColumns";
 import type { IEntrepreneurRef, IProposal } from "../../../types/types";
 import { proposalService } from "../../../services/ProposalService";
@@ -72,7 +72,7 @@ export const ProposalsByChallenge = () => {
         )}
         {/* Modal con los datos del emprendedor */}
         {selectedEntrepreneur && (
-          <EntrepreneurProfile
+          <EntrepreneurModal
             open={openEntrepreneur}
             onClose={() => setOpenEntrepreneur(false)}
             _id={selectedEntrepreneur?._id}

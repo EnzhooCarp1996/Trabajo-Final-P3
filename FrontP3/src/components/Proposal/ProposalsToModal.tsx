@@ -1,5 +1,6 @@
 import { useEffect, useState, type FC } from "react";
 import { proposalService } from "../../services/ProposalService";
+import { Spin, Timeline } from "antd";
 
 interface ProposalsToModalProps {
   _id: string;
@@ -27,17 +28,20 @@ export const ProposalsToModal: FC<ProposalsToModalProps> = ({ _id }) => {
     fetchProposals();
   }, [_id]);
 
-  if (loading) return <p>Cargando propuestas...</p>;
+  if (loading) return <Spin />;
+
+  if (proposals.length === 0) return <p>No tiene propuestas.</p>;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-      {proposals.length === 0 && <p>No tiene propuestas.</p>}
-
-      {proposals.map((p) => (
-        <div key={p._id} style={{ display: "flex", flexDirection: "column", padding: 8, background: "#006db2", borderRadius: 6 }}>
-          <strong>{p.tituloPropuesta}: {p.estado}</strong>
-        </div>
-      ))}
-    </div>
+    <Timeline
+      items={proposals.map((p) => ({
+        color: "blue",
+        children: (
+          <span>
+            <b>{p.tituloPropuesta}</b> — {p.estado}
+          </span>
+        ),
+      }))}
+    />
   );
 };

@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import type { INotification } from "../../types/types";
 
 interface AuthContextType {
   token: string | null;
@@ -6,6 +7,8 @@ interface AuthContextType {
   email: string;
   nombre: string;
   role: string;
+  notifications: INotification[];
+  handleMarkAsSeen: (id: string) => void;
   login: (token: string, recordar?: boolean) => void;
   logout: () => void;
   isAuthenticated: boolean;

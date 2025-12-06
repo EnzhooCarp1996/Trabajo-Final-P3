@@ -4,9 +4,10 @@ import { Layout, Card, Typography, Button, Segmented } from "antd";
 import { LoginForm } from "./LoginForm";
 import { FlagOutlined } from "@ant-design/icons";
 import { FormGeneralItem } from "../FormGeneralItem";
-import { CompanyForm } from "../UserProfile/CompanyForm";
-import { EntrepreneurForm } from "../UserProfile/EntrepreneurForm";
+import { CompanyForm } from "../Company/CompanyForm";
+import { EntrepreneurForm } from "../Entrepreneur/EntrepreneurForm";
 import { FormGeneral } from "../FormGeneral";
+import { FormPassword } from "../FormPassword";
 
 const { Title, Text } = Typography;
 
@@ -23,14 +24,14 @@ export const LoginPage = () => {
   } = useLoginForm();
 
   const [isRegister, setIsRegister] = useState(false);
-  const [tipoRegistro, setTipoRegistro] = useState<"empresa" | "emprendedor">( "empresa" );
+  const [tipoRegistro, setTipoRegistro] = useState<"empresa" | "emprendedor">("empresa");
 
   return (
     <Layout
       style={{ background: "#12395B", alignItems: "center", justifyContent: "center", }}
     >
       <Card
-        styles={{ body: { padding: 0, display: "flex",},}}
+        styles={{ body: { padding: 0, display: "flex", }, }}
         style={{
           width: "100%",
           maxWidth: "900px",
@@ -102,7 +103,8 @@ export const LoginPage = () => {
               }
             >
               {tipoRegistro === "empresa" ? <CompanyForm /> : <EntrepreneurForm />}
-              <FormGeneralItem form={formRegister} />
+              <FormGeneralItem />
+              <FormPassword form={formRegister} />
               <Button type="primary" htmlType="submit" loading={loading} block>
                 Registrarme
               </Button>

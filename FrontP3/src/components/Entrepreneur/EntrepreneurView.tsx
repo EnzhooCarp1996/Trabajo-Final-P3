@@ -1,36 +1,30 @@
 import { useEntrepreneurView } from "../../hooks/EntrePreneur/useEntrepreneurView";
-import { EntrepreneurProfile } from "./EntrepreneurProfile";
 import { EntrepreneursList } from "./EntrepreneursList";
-import { Space } from "antd";
+import { Box } from "@mui/material";
 
 export const EntrepreneurView = () => {
-    const { entrepreneurs, loading, selectedEntrepreneur, isModalOpen, openModal, closeModal } = useEntrepreneurView();
+    const { entrepreneurs, loading } = useEntrepreneurView();
 
-        return (
-            <>
-                {/* Lista */}
-                {loading ? (
-                    <p>Cargando...</p>
-                ) : (
-                    <Space wrap size="large" style={{ width: "100%" }}>
-                        {entrepreneurs.map((entrepreneur) => (
-                            <EntrepreneursList 
+    return (
+        <>
+            {/* Lista */}
+            {loading ? (
+                <p>Cargando...</p>
+            ) : (
+                <Box
+                    display="grid"
+                    gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+                    gap={3}
+                    width="100%"
+                >
+                    {entrepreneurs.map((entrepreneur) => (
+                        <EntrepreneursList
+                            key={entrepreneur._id}
                             entrepreneur={entrepreneur}
-                            openModal={openModal}
-                            />
-                        ))}
-                    </Space>
-                )}
-
-                {/* Modal con los datos del emprendedor */}
-                {selectedEntrepreneur && (
-                    <EntrepreneurProfile
-                        open={isModalOpen}
-                        onClose={closeModal}
-                        _id={selectedEntrepreneur._id}
-                        
-                    />
-                )}
-            </>
-        );
-    };
+                        />
+                    ))}
+                </Box>
+            )}
+        </>
+    );
+};

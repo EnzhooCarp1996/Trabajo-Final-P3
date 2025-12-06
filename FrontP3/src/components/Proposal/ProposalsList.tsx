@@ -1,11 +1,11 @@
-import { Col } from "antd";
-import { FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
-import { CardEntity } from "../CardEntity";
-import type { IProposal } from "../../types/types";
-import { getStatusColor } from "../../utils/utilsProposals";
-import { useState } from "react";
-import { EntrepreneurProfile } from "../Entrepreneur/EntrepreneurProfile";
+import { ExportOutlined, FileTextOutlined, TrophyOutlined, UserOutlined } from "@ant-design/icons";
+import { EntrepreneurModal } from "../Entrepreneur/EntrepreneurModal";
 import { ChallengeModal } from "../Challenge/ChallengeModal";
+import { getStatusColorProposals } from "../../utils/utilsProposals";
+import type { IProposal } from "../../types/types";
+import { CardEntity } from "../CardEntity";
+import { useState } from "react";
+import { Col } from "antd";
 
 interface ProposalsListProps {
     proposal: IProposal;
@@ -28,25 +28,24 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
         <Col xs={24} sm={12} lg={8} key={proposal._id}>
             <CardEntity
                 title={proposal.tituloPropuesta}
-                icon={<FileTextOutlined style={{ color: getStatusColor(proposal.estado) }} />}
-                borderColor={getStatusColor(proposal.estado)}
+                icon={<FileTextOutlined style={{ color: getStatusColorProposals(proposal.estado) }} />}
+                borderColor={getStatusColorProposals(proposal.estado)}
             >
                 <div style={{ marginTop: 0, fontSize: 12, color: "#91caff" }}>
-                    <div
-                        onClick={() => openChallengeModal()}
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 4,
-                            cursor: "pointer",
-                            textDecoration: "underline",
-                            color: "#69b1ff",
-                        }}
-                    >
-                        <TrophyOutlined /> {proposal.desafioId.titulo}
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <TrophyOutlined />
+                        {proposal.desafioId.titulo}
+                        <div
+                            onClick={() => openChallengeModal()}
+                            style={{ cursor: "pointer", color: "#69b1ff", }}
+                        >
+                            <ExportOutlined style={{ fontSize: 15 }} />
+                        </div>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <UserOutlined />
+                        {proposal.emprendedorId.nombreCompleto}
                         <div
                             onClick={() => openProfileModal()}
                             style={{
@@ -58,8 +57,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
                                 color: "#69b1ff",
                             }}
                         >
-                            <UserOutlined />
-                            {proposal.emprendedorId.nombreCompleto}
+                            <ExportOutlined style={{ fontSize: 15 }} />
                         </div>
                     </div>
 
@@ -69,7 +67,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
             </CardEntity>
 
             {/* modal perfil emprendedor */}
-            <EntrepreneurProfile
+            <EntrepreneurModal
                 open={openProfile}
                 onClose={() => setOpenProfile(false)}
                 _id={proposal.emprendedorId._id}
