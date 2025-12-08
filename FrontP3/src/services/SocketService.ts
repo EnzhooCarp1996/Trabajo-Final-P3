@@ -11,7 +11,6 @@ export function createSocket(userId: string): Socket {
   })
 
   socket.on('connect', () => {
-    console.log('🟢 SOCKET CONNECTED:', socket.id)
     socket.emit('join', { userId })
   })
   socket.on('reconnect', () => {

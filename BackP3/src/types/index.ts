@@ -50,6 +50,14 @@ export interface IProposal extends Document {
   createdAt: Date
 }
 
+export interface IVote extends Document {
+  _id: Types.ObjectId
+  propuestaId: Types.ObjectId
+  empresaId: Types.ObjectId
+  valor: number
+  createdAt: Date
+}
+
 export interface INotification extends Document {
   _id: Types.ObjectId
   toUserId: Types.ObjectId
@@ -126,6 +134,13 @@ export interface CreateNotificationRequest {
   toUserId: Types.ObjectId
   fromUserId: Types.ObjectId
   contenido: string
+  createdAt: Date
+}
+
+export interface CreateVoteRequest extends Document {
+  propuestaId: Types.ObjectId
+  empresaId: Types.ObjectId
+  valor: number
   createdAt: Date
 }
 

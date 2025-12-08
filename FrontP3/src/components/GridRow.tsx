@@ -1,13 +1,9 @@
-import { Row } from "antd";
+import { Row } from 'antd'
 
 interface GridRowProps {
-    children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export const GridRow: React.FC<GridRowProps> = ({ children }) => {
-    return (
-        <Row gutter={[16, 16]}>
-            {children}
-        </Row>
-    );
-};
+  return <Row gutter={[16, 16]}>{children}</Row>
+}

@@ -1,112 +1,111 @@
-import { BankOutlined, UserOutlined, FlagOutlined, FileTextOutlined, UsergroupDeleteOutlined } from "@ant-design/icons";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Layout, Menu, Typography } from "antd";
-import { useAuth } from "../../context/Auth/useAuth";
+import { BankOutlined, UserOutlined, FlagOutlined, FileTextOutlined, UsergroupDeleteOutlined } from '@ant-design/icons'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { Layout, Menu, Typography } from 'antd'
+import { useAuth } from '../../context/Auth/useAuth'
 
-const { Sider } = Layout;
-const { Title } = Typography;
+const { Sider } = Layout
+const { Title } = Typography
 
 interface AppSidebarProps {
-    collapsed: boolean;
-    setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  collapsed: boolean
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AppSidebar: React.FC<AppSidebarProps> = ({ collapsed, setCollapsed }) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { role } = useAuth();
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { role } = useAuth()
 
-    return (
-        <Sider
-            collapsible
-            collapsed={collapsed}
-            trigger={null}
-            width={220}
-            breakpoint="md"
-            onBreakpoint={(broken) => {
-                setCollapsed(broken);
-            }}
-            style={{
-                backgroundColor: "#001529",
-                transition: "all 0.3s",
-            }}
-        >
-            <div
-                style={{
-                    height: 64,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "rgba(255, 255, 255, 0.1)",
-                    margin: "16px",
-                    borderRadius: 8,
-                    textAlign: "center",
-                }}
-            >
-                {!collapsed && (
-                    <Title level={4} style={{ color: "white", margin: 0, fontSize: 16 }}>
-                        Plataforma de Desafíos
-                    </Title>
-                )}
-            </div>
+  return (
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      trigger={null}
+      width={220}
+      breakpoint="md"
+      onBreakpoint={(broken) => {
+        setCollapsed(broken)
+      }}
+      style={{
+        backgroundColor: '#001529',
+        transition: 'all 0.3s',
+      }}
+    >
+      <div
+        style={{
+          height: 64,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(255, 255, 255, 0.1)',
+          margin: '16px',
+          borderRadius: 8,
+          textAlign: 'center',
+        }}
+      >
+        {!collapsed && (
+          <Title level={4} style={{ color: 'white', margin: 0, fontSize: 16 }}>
+            Plataforma de Desafíos
+          </Title>
+        )}
+      </div>
 
-            <Menu
-                theme="dark"
-                mode="inline"
-                selectedKeys={[location.pathname]}
-                items={[
-                    {
-                        key: "/UserProfile",
-                        icon: <UserOutlined />,
-                        label: "Perfil",
-                        onClick: () => navigate("/UserProfile"),
-                    },
+      <Menu
+        theme="dark"
+        mode="inline"
+        selectedKeys={[location.pathname]}
+        items={[
+          {
+            key: '/UserProfile',
+            icon: <UserOutlined />,
+            label: 'Perfil',
+            onClick: () => navigate('/UserProfile'),
+          },
 
+          ...(role === 'empresa'
+            ? [
+              {
+                key: '/ChallengeById',
+                icon: <FlagOutlined />,
+                label: 'Mis Desafíos',
+                onClick: () => navigate('/ChallengeById'),
+              },
+              {
+                key: '/Entrepreneur',
+                icon: <UsergroupDeleteOutlined />,
+                label: 'Emprendedores',
+                onClick: () => navigate('/Entrepreneur'),
+              },
 
-                    ...(role === "empresa" ?
-                        [
-                            {
-                                key: "/ChallengeById",
-                                icon: <FlagOutlined />,
-                                label: "Mis Desafíos",
-                                onClick: () => navigate("/ChallengeById"),
-                            },
-                            {
-                                key: "/Entrepreneur",
-                                icon: <UsergroupDeleteOutlined />,
-                                label: "Emprendedores",
-                                onClick: () => navigate("/Entrepreneur"),
-                            },
-                            {
-                                key: "/Challenge",
-                                icon: <FlagOutlined />,
-                                label: "Desafíos",
-                                onClick: () => navigate("/Challenge"),
-                            },
-                        ]
-                        :
-                        [
-                            {
-                                key: "/Company",
-                                icon: <BankOutlined />,
-                                label: "Empresas",
-                                onClick: () => navigate("/Company"),
-                            },
-                            {
-                                key: "/ChallengesByEntrepreneur",
-                                icon: <FlagOutlined />,
-                                label: "Desafíos",
-                                onClick: () => navigate("/ChallengesByEntrepreneur"),
-                            },
-                        ]),
-                    {
-                        key: "/Proposal",
-                        icon: <FileTextOutlined />,
-                        label: "Propuestas",
-                        onClick: () => navigate("/Proposal"),
-                    },
-                ]}
-            />
-        </Sider>
-    );
-};
+            ]
+            : [
+              {
+                key: '/ProposalById',
+                icon: <FlagOutlined />,
+                label: 'Mis Propuestas',
+                onClick: () => navigate('/ProposalById'),
+              },
+              {
+                key: '/Company',
+                icon: <BankOutlined />,
+                label: 'Empresas',
+                onClick: () => navigate('/Company'),
+              },
+              {
+                key: '/ChallengesByEntrepreneur',
+                icon: <FlagOutlined />,
+                label: 'Desafíos',
+                onClick: () => navigate('/ChallengesByEntrepreneur'),
+              },
+            ]),
+          {
+            key: '/Proposal',
+            icon: <FileTextOutlined />,
+            label: 'Propuestas',
+            onClick: () => navigate('/Proposal'),
+          },
+        ]}
+      />
+    </Sider>
+  )
+}

@@ -1,5 +1,7 @@
-export function buildUserPipeline(role: string) {
-  const pipeline: any[] = [
+import { PipelineStage } from "mongoose";
+
+export function buildUserPipeline(role: string): PipelineStage[] {
+  const pipeline: PipelineStage[] = [
     {
       $lookup: {
         from: "roles",
@@ -12,7 +14,7 @@ export function buildUserPipeline(role: string) {
     { $match: { "role.nombre": role } }
   ];
 
-  const lookupsByRole: Record<string, any[]> = {
+  const lookupsByRole: Record<string, PipelineStage[]> = {
     empresa: [
       {
         $lookup: {

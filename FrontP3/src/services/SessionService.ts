@@ -1,32 +1,31 @@
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode'
+import type { JWTPayload } from '../types/types'
 
 export function getToken(): string | null {
-  return (
-    localStorage.getItem("token") ||
-    sessionStorage.getItem("token")
-  );
+  return localStorage.getItem('token') || sessionStorage.getItem('token')
 }
 
 export function setToken(token: string) {
-  localStorage.setItem("token", token);
+  localStorage.setItem('token', token)
 }
 
 export function clearSession() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("refreshToken");
-  sessionStorage.removeItem("token");
+  localStorage.removeItem('token')
+  localStorage.removeItem('refreshToken')
+  sessionStorage.removeItem('token')
 }
 
 export function logout(setToken?: (token: string | null) => void) {
-  clearSession();
-  if (setToken) setToken(null);
+  clearSession()
+  if (setToken) setToken(null)
 }
 
 export function isTokenExpired(token: string): boolean {
   try {
-    const decoded: any = jwtDecode(token);
-    return decoded.exp * 1000 < Date.now();
+    const decoded = jwtDecode<JWTPayload>(token)
+    if (!decoded.exp) return true
+    return decoded.exp * 1000 < Date.now()
   } catch {
-    return true;
+    return true
   }
 }

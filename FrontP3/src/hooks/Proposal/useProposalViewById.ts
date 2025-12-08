@@ -1,4 +1,4 @@
-import type { IProposal, IChallengeRef } from '../../types/types'
+import type { IProposal, IChallengeRef, CreateProposalRequest } from '../../types/types'
 import { proposalService } from '../../services/ProposalService'
 import { useAuth } from '../../context/Auth/useAuth'
 import { useEffect, useState } from 'react'
@@ -8,7 +8,7 @@ import { Form } from 'antd'
 
 export const useProposalViewById = () => {
   const { _id } = useAuth()
-  const formProposal = Form.useForm()[0]
+  const [formProposal] = Form.useForm<CreateProposalRequest>()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProposal, setEditingProposal] = useState<IProposal | null>(null)
   const [proposals, setProposals] = useState<IProposal[]>([])
@@ -25,23 +25,26 @@ export const useProposalViewById = () => {
     }
 
     fetchProposals()
-  }, [])
+  }, [_id])
 
   const [selectedChallenge, setSelectedChallenge] = useState<IChallengeRef | null>(null)
 
   const openModalProposal = (proposal?: IProposal) => {
-    setEditingProposal(proposal || null);
-    setIsModalOpen(true);
+    setEditingProposal(proposal || null)
+    setIsModalOpen(true)
 
     setTimeout(() => {
       if (proposal) {
-        formProposal.setFieldsValue(proposal)
+        formProposal.setFieldsValue({
+          tituloPropuesta: proposal.tituloPropuesta,
+          descripcion: proposal.descripcion,
+          desafioId: proposal.desafioId._id,
+        })
         setSelectedChallenge(proposal.desafioId)
       } else {
         formProposal.resetFields()
       }
     }, 100)
-    
   }
 
   const closeModalProposal = () => {
@@ -49,7 +52,7 @@ export const useProposalViewById = () => {
     setEditingProposal(null)
   }
 
-  const handleSubmitProposalById = async (values: any) => {
+  const handleSubmitProposalById = async (values: CreateProposalRequest) => {
     if (!editingProposal) return
 
     Modal.confirm({

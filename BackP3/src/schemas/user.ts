@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { IRole, IUser, UserType } from "../types/index";
+import { IRole, IUser } from "../types/index";
 import { hashPassword } from "../utils/hashPassword";
 
 const { ObjectId } = Schema.Types;

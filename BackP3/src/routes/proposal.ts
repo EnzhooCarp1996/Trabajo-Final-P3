@@ -2,9 +2,9 @@ import express, { Request, Response, NextFunction } from 'express'
 import Proposal from '../schemas/proposal'
 import User from '../schemas/user'
 import Challenge from '../schemas/challenge'
-import { CreateProposalRequest, IProposal, ProposalStatus } from '../types'
-import Notification from '../schemas/notification'
-import { io } from '../server/socket'
+import { CreateProposalRequest, IChallenge, ProposalStatus } from '../types'
+import { sendNotification } from '../utils/sendNotification'
+import { Types } from 'mongoose'
 
 const router = express.Router()
 
@@ -18,14 +18,23 @@ router.delete('/:id', deleteProposal)
 
 // Obtener todas las propuestas, o por emprendedor
 async function getAllProposals(
-  req: Request<{}, {}, {}, { estado?: ProposalStatus; desafioId?: string; emprendedorId?: string }>,
+  req: Request<
+    Record<string, never>,
+    unknown,
+    unknown,
+    { estado?: ProposalStatus; desafioId?: string; emprendedorId?: string }
+  >,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
   const { estado, desafioId, emprendedorId } = req.query
 
   try {
-    const filter: any = {}
+    const filter: {
+      estado?: ProposalStatus
+      desafioId?: string
+      emprendedorId?: string
+    } = {}
 
     if (estado && ['en revision', 'seleccionada', 'descartada'].includes(estado))
       filter.estado = estado
@@ -81,7 +90,6 @@ async function createProposal(
       res.status(404).send('Desafio not found')
       return
     }
-    const empresaId = desafio.empresaId.toString()
 
     const emprendedor = await User.findById(emprendedorId)
     if (!emprendedor) {
@@ -92,17 +100,10 @@ async function createProposal(
     const proposalCreated = await Proposal.create(req.body)
     const contenido = `Recibiste una propuesta al desafío "${desafio.titulo}".`
 
-    const noti = await Notification.create({
-      toUserId: desafio.empresaId, // Empresa recibe
-      fromUserId: emprendedorId, // Emprendedor envía
+    await sendNotification({
+      toUserId: desafio.empresaId,
+      fromUserId: emprendedorId.toString(),
       contenido,
-    })
-
-    io.to(desafio.empresaId.toString()).emit('notification:new', {
-      _id: noti._id,
-      contenido: noti.contenido,
-      fromUserId: emprendedorId,
-      createdAt: noti.createdAt,
     })
 
     res.send(proposalCreated)
@@ -182,52 +183,49 @@ async function updateProposalStatus(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
+  if (!req.user) {
+    res.status(401).send('No autenticado')
+    return
+  }
+
   try {
-    const { estado } = req.body;
+    const { estado } = req.body
+    const userId = new Types.ObjectId(req.user._id)
 
     const proposal = await Proposal.findById(req.params.id)
       .populate('desafioId')
-      .populate('emprendedorId');
+      .populate('emprendedorId')
 
     if (!proposal) {
-      res.status(404).send('Proposal not found');
-      return;
+      res.status(404).send('Proposal not found')
+      return
     }
 
-    const desafio: any = proposal.desafioId;
+    const desafio = proposal.desafioId as unknown as IChallenge
 
     // Solo la empresa dueña del desafío puede cambiar el estado
-    if (req.user?._id.toString() !== desafio.empresaId.toString()) {
-      res.status(403).send('No autorizado para modificar el estado');
-      return;
+    if (!desafio.empresaId.equals(userId)) {
+      res.status(403).send('No autorizado para modificar el estado')
+      return
     }
 
     // Cambiar estado
-    proposal.estado = estado;
-    await proposal.save();
+    proposal.estado = estado
+    await proposal.save()
 
     // Crear notificación al emprendedor
-    const contenido = `Tu propuesta al desafío "${desafio.titulo}" fue marcada como "${estado}".`;
+    const contenido = `Tu propuesta "${proposal.tituloPropuesta}" al desafío "${desafio.titulo}" fue marcada como "${estado}".`
 
-    const noti = await Notification.create({
-      toUserId: proposal.emprendedorId,
-      fromUserId: req.user!._id,
+    res.json(proposal)
+
+    await sendNotification({
+      toUserId: proposal.emprendedorId._id,
+      fromUserId: req.user._id,
       contenido,
-    });
-
-    // Emitir por socket
-    io.to(proposal.emprendedorId.toString()).emit('notification:new', {
-      _id: noti._id,
-      contenido: noti.contenido,
-      fromUserId: req.user!._id,
-      createdAt: noti.createdAt,
-    });
-
-    res.json(proposal);
+    })
   } catch (err) {
-    next(err);
+    next(err)
   }
 }
-
 
 export default router

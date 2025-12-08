@@ -1,38 +1,33 @@
-import { AppSidebar } from './AppSidebar';
-import { AppHeader } from "./AppHeader";
-import { AppFooter } from "./AppFooter";
-import { useState } from "react";
-import { Layout } from "antd";
+import { AppSidebar } from './AppSidebar'
+import { AppHeader } from './AppHeader'
+import { AppFooter } from './AppFooter'
+import { useState } from 'react'
+import { Layout } from 'antd'
 
-const { Content } = Layout;
+const { Content } = Layout
 
 interface AppContent {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 export const AppContent: React.FC<AppContent> = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(false)
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-
+    <Layout style={{ minHeight: '100vh' }}>
       <AppSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       <Layout>
         <AppHeader collapsed={collapsed} setCollapsed={setCollapsed} />
 
         <Content
-          style={{ backgroundColor: "#0a1f44", overflowY: "auto", color: "white", minHeight: "calc(100vh - 128px)",}}
+          style={{ backgroundColor: '#0a1f44', overflowY: 'auto', color: 'white', minHeight: 'calc(100vh - 128px)' }}
         >
-          <div style={{ background: "rgba(255,255,255,0.05)", borderRadius: 12, padding: "10px" }} >
-            {children}
-          </div>
+          <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 12, padding: '10px' }}>{children}</div>
         </Content>
 
         <AppFooter />
-
       </Layout>
     </Layout>
-  );
-};
-
+  )
+}

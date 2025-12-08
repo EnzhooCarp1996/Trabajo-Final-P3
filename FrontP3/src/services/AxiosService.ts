@@ -2,7 +2,7 @@ import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import { getToken, isTokenExpired, logout } from './SessionService'
 import toast from 'react-hot-toast'
 import axios from 'axios'
-import qs from "qs";
+import qs from 'qs'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 

@@ -1,10 +1,10 @@
-import { Tabs } from "antd";
-import { getStatusColorProposals } from "../utils/utilsProposals";
+import { Tabs } from 'antd'
+import { getStatusColorProposals } from '../utils/utilsProposals'
 
 interface TabsProposalsProps {
-  items: { label: string; value: string }[];
-  activeKey: string;
-  onChange: (value: string) => void;
+  items: { label: string; value: string }[]
+  activeKey: string
+  onChange: (value: string) => void
 }
 
 export const TabsProposals: React.FC<TabsProposalsProps> = ({ items, activeKey, onChange }) => {
@@ -18,7 +18,11 @@ export const TabsProposals: React.FC<TabsProposalsProps> = ({ items, activeKey, 
           key: item.value,
           label: (
             <span
-              style={{ color: getStatusColorProposals(item.value), fontWeight: "bold", fontSize: "clamp(12px, 3vw, 18px)" }}
+              style={{
+                color: getStatusColorProposals(item.value),
+                fontWeight: 'bold',
+                fontSize: 'clamp(12px, 3vw, 18px)',
+              }}
             >
               {item.label}
             </span>
@@ -26,7 +30,7 @@ export const TabsProposals: React.FC<TabsProposalsProps> = ({ items, activeKey, 
           children: null,
         }))}
         tabBarStyle={{
-          background: "black",
+          background: 'black',
           padding: 10,
           borderRadius: 12,
         }}
@@ -40,5 +44,5 @@ export const TabsProposals: React.FC<TabsProposalsProps> = ({ items, activeKey, 
        `}
       </style>
     </>
-  );
-};
+  )
+}

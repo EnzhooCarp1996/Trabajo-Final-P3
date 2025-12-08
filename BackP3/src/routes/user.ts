@@ -15,7 +15,7 @@ router.put('/:id', validateIdParam, updateUser)
 router.delete('/:id', validateIdParam, deleteUser)
 
 async function getAllUsersByRole(
-  req: Request<{}, {}, {}, { role?: string }>,
+  req: Request<Record<string, never>, unknown, unknown, { role?: string }>,
   res: Response,
   next: NextFunction,
 ): Promise<void> {

@@ -15,14 +15,22 @@ router.delete('/:id', validateIdParam, deleteChallenge)
 
 // Obtener todos los desafios activos, o por empresa
 async function getAllChallenges(
-  req: Request<{}, {}, {}, { estado?: ChallengeStatus | ChallengeStatus[]; empresaId?: string }>,
+  req: Request<
+    Record<string, never>,
+    unknown,
+    unknown,
+    { estado?: ChallengeStatus | ChallengeStatus[]; empresaId?: string }
+  >,
   res: Response,
   next: NextFunction,
 ): Promise<void> {
   const { estado, empresaId } = req.query
 
   try {
-    const filter: any = {}
+    const filter: {
+      estado?: { $in: string[] }
+      empresaId?: string
+    } = {}
 
     if (estado) {
       const estadosValidos = ['activo', 'inactivo', 'finalizado']
@@ -45,8 +53,7 @@ async function getAllChallenges(
     }
 
     if (empresaId) filter.empresaId = empresaId
-    console.log("Filtro aplicado:", filter);
-
+    console.log('Filtro aplicado:', filter)
 
     const challenges = await Challenge.find(filter).populate({
       path: 'empresaId',

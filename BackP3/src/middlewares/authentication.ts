@@ -28,13 +28,17 @@ function authentication(req: Request, res: Response, next: NextFunction): void {
 
   const token = getToken(req, next)
 
-  if (!token) {
-    return
+  if (!token) return
+
+  const jwtSecret = process.env.JWT_SECRET
+  if (!jwtSecret) {
+    console.error('JWT_SECRET no está configurada')
+    return next(new createError.InternalServerError('JWT misconfiguration'))
   }
 
   try {
     // Unsecure alternative
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!, {
+    const decoded = jwt.verify(token, jwtSecret, {
       algorithms: ['HS256'], // <-- debe coincidir
       issuer: process.env.JWT_ISSUER || 'base-api-express-generator',
     }) as JWTPayload

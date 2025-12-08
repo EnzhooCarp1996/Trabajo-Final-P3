@@ -1,8 +1,8 @@
-import type { ChallengeStatus, IChallenge } from "../../../types/types";
+import type { ChallengeStatus, CreateChallengeRequest, IChallenge } from "../../../types/types";
 import { challengeService } from "../../../services/ChallengeService";
 import { ChallengeDescriptions } from "./ChallengeDescriptions";
 import { ChallengeStatistics } from "./ChallengeStatistics";
-import { Card, Form, List, Modal, Typography } from "antd";
+import { Card, Form, List, message, Modal, Typography } from "antd";
 import { useAuth } from "../../../context/Auth/useAuth";
 import { TrophyOutlined } from "@ant-design/icons";
 import { ChallengeForm } from "./ChallengeForm";
@@ -13,9 +13,9 @@ const { Title } = Typography;
 
 export const ChallengesByProfile = () => {
     const { _id } = useAuth();
-    const [formChallenge] = Form.useForm();
+    const [formChallenge] = Form.useForm<CreateChallengeRequest>();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editing, setEditing] = useState<IChallenge | null>(null);
+    const [editingChallenge, setEditingChallenge] = useState<IChallenge | null>(null);
     const [challenges, setChallenges] = useState<IChallenge[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -34,30 +34,33 @@ export const ChallengesByProfile = () => {
         };
 
         fetchChallenges();
-    }, []);
+    }, [_id]);
 
 
 
-    const openModal = (challenge?: IChallenge) => {
-        setEditing(challenge || null);
+    const openModalChallenge = (challenge?: IChallenge) => {
+        setEditingChallenge(challenge || null);
         setIsModalOpen(true);
 
         setTimeout(() => {
             if (challenge) {
-                formChallenge.setFieldsValue(challenge);
+                formChallenge.setFieldsValue({
+                    titulo: challenge.titulo,
+                    descripcion: challenge.descripcion,
+                });
             } else {
                 formChallenge.resetFields();
             }
-        }, 100);
+        }, 0);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setEditing(null);
+        setEditingChallenge(null);
     };
 
-    const handleSubmitChallenge = async (values: any) => {
-        const isEdit = !!editing;
+    const handleSubmitChallenge = async (values: CreateChallengeRequest) => {
+        const isEdit = !!editingChallenge;
 
         Modal.confirm({
             title: isEdit ? "Actualizar desafío" : "Crear desafío",
@@ -68,14 +71,14 @@ export const ChallengesByProfile = () => {
             cancelText: "No",
             onOk: async () => {
                 try {
-                    if (isEdit && editing) {
+                    if (isEdit && editingChallenge) {
                         // Edición
-                        const updatedChallenge = await challengeService.update(editing._id, values);
+                        const updatedChallenge = await challengeService.update(editingChallenge._id, values);
                         const updated = challenges.map((c) =>
-                            c._id === editing._id ? updatedChallenge : c
+                            c._id === editingChallenge._id ? updatedChallenge : c
                         );
                         setChallenges(updated);
-                        toast.success("Desafío actualizado correctamente");
+                        message.success("Desafío actualizado correctamente");
                     } else {
                         // Creación
                         const newChallenge = await challengeService.create({
@@ -83,7 +86,7 @@ export const ChallengesByProfile = () => {
                             empresaId: _id,
                         });
                         setChallenges(prev => [...prev, newChallenge]);
-                        toast.success("Desafío creado correctamente");
+                        message.success("Desafío creado correctamente");
                     }
                     closeModal();
                 } catch (error) {
@@ -104,10 +107,10 @@ export const ChallengesByProfile = () => {
                 try {
                     await challengeService.delete(id);
                     setChallenges(challenges.filter((c) => c._id !== id));
-                    toast.success("Desafio eliminado correctamente");
+                    message.success("Desafio eliminado correctamente");
                 } catch (error) {
                     console.error(error);
-                    toast.error("No se pudo eliminar el desafio");
+                    message.error("No se pudo eliminar el desafio");
                 }
             },
         });
@@ -142,7 +145,7 @@ export const ChallengesByProfile = () => {
                 borderRadius: 12,
                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
             }}>
-                <ChallengeStatistics challenges={challenges} openModal={openModal} />
+                <ChallengeStatistics challenges={challenges} openModal={openModalChallenge} />
             </div>
 
             {/* Lista de desafíos */}
@@ -174,7 +177,7 @@ export const ChallengesByProfile = () => {
                                         key={challenge._id}
                                         challenge={challenge}
                                         toggleStatus={toggleStatus}
-                                        openModal={openModal}
+                                        openModal={openModalChallenge}
                                         handleDelete={handleDelete}
                                     />
                                 </div>
@@ -188,7 +191,7 @@ export const ChallengesByProfile = () => {
                         isModalOpen={isModalOpen}
                         closeModal={closeModal}
                         formSubmit={() => formChallenge.submit()}
-                        editing={editing !== null}
+                        editing={editingChallenge !== null}
                         form={formChallenge}
                         handleSubmit={handleSubmitChallenge}
                     />
@@ -198,3 +201,4 @@ export const ChallengesByProfile = () => {
         </div>
     );
 };
+

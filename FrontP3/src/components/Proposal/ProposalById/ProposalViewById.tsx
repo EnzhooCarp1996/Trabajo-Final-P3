@@ -1,12 +1,12 @@
-import { useProposalViewById } from "../../../hooks/Proposal/useProposalViewById";
-import { ProposalDescriptions } from "./ProposalDescriptions";
-import { ProposalStatistics } from "./ProposalStatistics";
-import { FileTextOutlined } from "@ant-design/icons";
-import { ProposalForm } from "./../ProposalForm";
-import { Card, List, Typography } from "antd";
-import { BackHeader } from "../../BackHeader";
+import { useProposalViewById } from '../../../hooks/Proposal/useProposalViewById'
+import { ProposalDescriptions } from './ProposalDescriptions'
+import { ProposalStatistics } from './ProposalStatistics'
+import { FileTextOutlined } from '@ant-design/icons'
+import { ProposalForm } from './../ProposalForm'
+import { Card, List, Typography } from 'antd'
+import { BackHeader } from '../../BackHeader'
 
-const { Title } = Typography;
+const { Title } = Typography
 
 export const ProposalsViewById: React.FC = () => {
   const {
@@ -19,9 +19,7 @@ export const ProposalsViewById: React.FC = () => {
     closeModalProposal,
     handleSubmitProposalById,
     handleDelete,
-  } = useProposalViewById();
-
-
+  } = useProposalViewById()
 
   return (
     <div style={{ padding: '0 16px' }}>
@@ -30,16 +28,18 @@ export const ProposalsViewById: React.FC = () => {
       <BackHeader />
 
       {/* Estadísticas y Botón */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 8,
-        padding: '16px 24px',
-        backgroundColor: '#213ac4',
-        borderRadius: 12,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 8,
+          padding: '16px 24px',
+          backgroundColor: '#213ac4',
+          borderRadius: 12,
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        }}
+      >
         <ProposalStatistics proposals={proposals} />
       </div>
 
@@ -56,13 +56,20 @@ export const ProposalsViewById: React.FC = () => {
           {/* Vista de lista */}
           <Card
             style={{ borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.1)', border: 'none', marginBottom: 16 }}
-            styles={{ body: { padding: "8px 0", backgroundColor: '#213ac4' } }}
+            styles={{ body: { padding: '8px 0', backgroundColor: '#213ac4' } }}
           >
             <List
               style={{ backgroundColor: 'transparent' }}
               dataSource={proposals}
               renderItem={(proposal) => (
-                <div style={{ margin: '8px 16px', backgroundColor: '#fff', borderRadius: 8, boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>
+                <div
+                  style={{
+                    margin: '8px 16px',
+                    backgroundColor: '#fff',
+                    borderRadius: 8,
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+                  }}
+                >
                   <ProposalDescriptions
                     key={proposal._id}
                     proposal={proposal}
@@ -78,7 +85,7 @@ export const ProposalsViewById: React.FC = () => {
 
       {/* Modal de edición */}
       <ProposalForm
-        titulo={"Propuesta"}
+        titulo={'Propuesta'}
         selectedChallenge={selectedChallenge}
         isModalOpen={isModalProposalOpen}
         closeModal={closeModalProposal}
@@ -88,5 +95,5 @@ export const ProposalsViewById: React.FC = () => {
         handleSubmit={handleSubmitProposalById}
       />
     </div>
-  );
-};
+  )
+}

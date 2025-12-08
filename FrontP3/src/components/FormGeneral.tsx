@@ -1,21 +1,15 @@
-import { Form } from "antd";
+import { Form, type FormInstance } from 'antd'
 
-interface FormGeneralProps {
-    form: any;
-    handleSubmit: (values: any) => void;
-    children: React.ReactNode;
+interface FormGeneralProps<T> {
+  form: FormInstance<T>
+  handleSubmit: (values: T) => void
+  children: React.ReactNode
 }
 
-export const FormGeneral: React.FC<FormGeneralProps> = ({ form, handleSubmit, children }) => {
-    return (
-        <Form
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-            style={{ width: "100%", maxWidth: "100%", }}
-        >
-            {children}
-        </Form>
-    );
-};
-
+export const FormGeneral = <T,>({ form, handleSubmit, children }: FormGeneralProps<T>) => {
+  return (
+    <Form form={form} layout="vertical" onFinish={handleSubmit} style={{ width: '100%', maxWidth: '100%' }}>
+      {children}
+    </Form>
+  )
+}

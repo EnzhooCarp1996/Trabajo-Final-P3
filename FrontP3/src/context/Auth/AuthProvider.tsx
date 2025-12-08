@@ -1,92 +1,76 @@
-import { getToken, logout as sessionLogout } from "../../services/SessionService";
-import { createSocket, disconnectSocket } from "../../services/SocketService";
-import { authService } from "../../services/AuthService";
-import { useState, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
-import type { ReactNode } from "react";
-import type { INotification } from "../../types/types";
-import { notificationService } from "../../services/NotificationService";
-import type { Socket } from "socket.io-client";
+import { getToken, logout as sessionLogout } from '../../services/SessionService'
+import { bindNotification, createSocket } from '../../services/SocketService'
+import { authService } from '../../services/AuthService'
+import { useState, useEffect, useRef } from 'react'
+import { AuthContext } from './AuthContext'
+import type { ReactNode } from 'react'
+import type { INotification } from '../../types/types'
+import { notificationService } from '../../services/NotificationService'
+import type { Socket } from 'socket.io-client'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(getToken());
-  const [userInfo, setUserInfo] = useState(authService.getUserInfo());
-  const [notifications, setNotifications] = useState<INotification[]>([]);
-  const [socket, setSocket] = useState<Socket | null>(null);
-
-
+  const [token, setToken] = useState<string | null>(getToken())
+  const [userInfo, setUserInfo] = useState(authService.getUserInfo())
+  const [notifications, setNotifications] = useState<INotification[]>([])
+  const socketRef = useRef<Socket | null>(null)
 
   const login = (newToken: string, recordar: boolean = true) => {
     if (recordar) {
-      localStorage.setItem("token", newToken);
-      console.log("TOKEN GUARDADO:", newToken);
-
+      localStorage.setItem('token', newToken)
     } else {
-      sessionStorage.setItem("token", newToken);
+      sessionStorage.setItem('token', newToken)
     }
 
-    setToken(newToken);
-    setUserInfo(authService.getUserInfo());
-  };
+    setToken(newToken)
+    setUserInfo(authService.getUserInfo())
+  }
 
-
-  const logout = () => {
-    if (socket) disconnectSocket(socket);
-    sessionLogout();
-    setToken(null);
-    setUserInfo({ _id: "", email: "", nombre: "", role: "" });
-  };
+const logout = () => {
+  socketRef.current?.disconnect()
+  socketRef.current = null
+  sessionLogout()
+  setToken(null)
+  setUserInfo({ _id: '', email: '', nombre: '', role: '' })
+}
 
   useEffect(() => {
     // Sincronización entre pestañas
     const handleStorage = () => {
-      const t = getToken();
-      setToken(t);
-      setUserInfo(authService.getUserInfo());
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+      const t = getToken()
+      setToken(t)
+      setUserInfo(authService.getUserInfo())
+    }
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
+  }, [])
 
   useEffect(() => {
-    if (!userInfo._id) return;
+    if (!userInfo._id) return
+    notificationService.getAll({ toUserId: userInfo._id }).then((res) => setNotifications(res))
+  }, [userInfo._id])
 
-    // setLoading(true);
-    notificationService
-      .getAll({ toUserId: userInfo._id })
-      .then((res) => setNotifications(res))
-    // .finally(() => setLoading(false));
 
-  }, [userInfo._id]);
+useEffect(() => {
+  if (!token || !userInfo._id || socketRef.current) return
 
-  useEffect(() => {
-    if (!token || !userInfo._id || socket) return;
-    console.log("🔌 Conectando socket para user:", userInfo._id);
+  const socket = createSocket(userInfo._id)
+  socketRef.current = socket
 
-    const s = createSocket(userInfo._id);
-    setSocket(s);
+  bindNotification(socket, (data) => {
+    setNotifications((prev) => [data, ...prev])
+  })
 
-    // cuando llega una notificación
-    s.on("notification:new", (data) => {
-      console.log("🎯 SOCKET EVENTO LLEGÓ AL PROVIDER:", data);
-      setNotifications((prev) => {
-        const updated = [data, ...prev];
-        console.log("📌 Nuevo array de notificaciones:", updated);
-        return updated;
-      });
-    });
+  return () => {
+    socket.disconnect()
+    socketRef.current = null
+  }
+}, [token, userInfo._id])
 
-    return () => {
-      s.disconnect();
-    };
-  }, [token, userInfo._id]);
 
   const handleMarkAsSeen = (id: string) => {
-    notificationService.markAsSeen(id);
-    setNotifications((prev) =>
-      prev.map((n) => (n._id === id ? { ...n, visto: true } : n))
-    );
-  };
+    notificationService.markAsSeen(id)
+    setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, visto: true } : n)))
+  }
 
   return (
     <AuthContext.Provider
@@ -105,5 +89,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     >
       {children}
     </AuthContext.Provider>
-  );
+  )
 }

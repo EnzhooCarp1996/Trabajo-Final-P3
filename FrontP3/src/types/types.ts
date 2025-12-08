@@ -7,6 +7,16 @@ export interface Role {
   nombre: 'empresa' | 'emprendedor'
 }
 
+// ==================================
+//  Users
+// ==================================
+export interface CurrentUser {
+  _id: string
+  email: string
+  nombre: string
+  role: 'empresa' | 'emprendedor' | ''
+}
+
 export interface IUser {
   _id: string
   email: string
@@ -15,8 +25,8 @@ export interface IUser {
   activo: boolean
   telefono: string
   createdAt?: Date
+  descripcion: string
   nombreEmpresa?: string
-  descripcion?: string
   sitioWeb?: string
   nombreCompleto?: string
   edad?: number
@@ -24,13 +34,17 @@ export interface IUser {
   proposalCount?: number
 }
 
-export interface IChallenge {
-  _id: string
-  empresaId: ICompanyRef
-  titulo: string
+export interface CreateUserRequest {
+  email: string
+  password?: string
+  role: string
+  activo: boolean
+  telefono: string
   descripcion: string
-  estado: ChallengeStatus
-  createdAt: Date
+  nombreEmpresa?: string
+  sitioWeb?: string
+  nombreCompleto?: string
+  edad?: number
 }
 
 export interface ICompanyRef {
@@ -38,52 +52,24 @@ export interface ICompanyRef {
   nombreEmpresa: string
 }
 
-export interface IProposal {
-  _id: string
-  desafioId: IChallengeRef
-  emprendedorId: IEntrepreneurRef
-  tituloPropuesta: string
-  descripcion: string
-  estado: ProposalStatus
-  puntos: number
-  createdAt: string
-}
-
-export interface IChallengeRef {
-  _id: string
-  titulo: string
-}
-
 export interface IEntrepreneurRef {
   _id: string
   nombreCompleto: string
 }
 
-export interface LoginResponse {
-  token: string
-  nombreUsuario: string
-  email: string
-  role: string
-  refreshToken?: string
-  mensaje?: string
+interface Empresa {
+  nombreEmpresa: string
 }
 
-export interface JwtPayload {
-  exp: number
-  sub: string
-  nombreUsuario?: string
-  email?: string
-  role?: string
+interface Emprendedor {
+  nombreCompleto: string
 }
 
-export interface LoginResponse {
-  token: string
-  nombreUsuario: string
-  role: string
-  refreshToken?: string
-  mensaje?: string
-}
+export type Sender = Empresa | Emprendedor | null | undefined
 
+// ==================================
+//  Notifications
+// ==================================
 export interface INotification {
   _id: string
   fromUserId: IEntrepreneurRef | ICompanyRef // remitente
@@ -105,4 +91,90 @@ export interface CreateNotificationRequest {
   contenido: string
   createdAt: Date
   visto: boolean
+}
+
+// ==================================
+//  Challenges
+// ==================================
+export interface IChallenge {
+  _id: string
+  empresaId: ICompanyRef
+  titulo: string
+  descripcion: string
+  estado: ChallengeStatus
+  createdAt: Date
+}
+
+export interface IChallengeRef {
+  _id: string
+  titulo: string
+}
+
+export interface ChallengeFilters {
+  estado?: ChallengeStatus[]
+  empresaId?: string
+}
+
+export interface CreateChallengeRequest {
+  empresaId: string
+  titulo: string
+  descripcion: string
+  estado?: ChallengeStatus
+}
+
+// ==================================
+//  Proposals
+// ==================================
+export interface IProposal {
+  _id: string
+  desafioId: IChallengeRef
+  emprendedorId: IEntrepreneurRef
+  tituloPropuesta: string
+  descripcion: string
+  estado: ProposalStatus
+  puntos: number
+  createdAt: string
+}
+
+export interface ProposalFilters {
+  estado?: ProposalStatus
+  desafioId?: string
+  emprendedorId?: string
+}
+
+export interface CreateProposalRequest {
+  desafioId: string
+  emprendedorId: string
+  tituloPropuesta: string
+  descripcion: string
+  estado: ProposalStatus
+  puntos: number
+}
+
+//=====================================================
+export interface JWTPayload {
+  _id: string
+  email: string
+  nombre: string
+  role: 'empresa' | 'emprendedor'
+  iat?: number
+  exp?: number
+  iss?: string
+}
+
+export interface LoginResponse {
+  token: string
+  nombreUsuario: string
+  email: string
+  role: string
+  refreshToken?: string
+  mensaje?: string
+}
+
+export interface LoginResponse {
+  token: string
+  nombreUsuario: string
+  role: string
+  refreshToken?: string
+  mensaje?: string
 }

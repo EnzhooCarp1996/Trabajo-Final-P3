@@ -1,32 +1,30 @@
 import { Server } from 'socket.io'
 import type { Server as HTTPServer } from 'http'
+import { Types } from 'mongoose'
 
 let io: Server
 
 export const initSocket = (server: HTTPServer) => {
   io = new Server(server, {
     cors: {
-      origin: "*",
+      origin: '*',
     },
   })
 
-  io.on("connection", (socket) => {
-    console.log("🟢 Cliente conectado:", socket.id)
+  io.on('connection', (socket) => {
+    console.log('🟢 Cliente conectado:', socket.id)
 
-    socket.on("join", ({ userId }) => {
-      console.log("📩 EVENTO JOIN RECIBIDO:", { socketId: socket.id, userId })
-
-      if (!userId) {
-        console.log("❌ join recibido SIN userId")
+    socket.on('join', ({ userId }) => {
+      if (!userId || !Types.ObjectId.isValid(userId)) {
+        console.log('❌ join con userId inválido:', userId)
         return
       }
 
-      socket.join(userId)
-      console.log(`📨 Usuario ${userId} fue unido a la sala privada`)
+      socket.join(userId.toString())
     })
 
-    socket.on("disconnect", () => {
-      console.log("🔴 Cliente desconectado:", socket.id)
+    socket.on('disconnect', () => {
+      console.log('🔴 Cliente desconectado:', socket.id)
     })
   })
 

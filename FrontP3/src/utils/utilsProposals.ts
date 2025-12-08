@@ -12,7 +12,7 @@ export const getStatusColorProposals = (estado: string) => {
 export const estadoPropuestas = [
   { value: 'en revision', label: 'En revisión' },
   { value: 'seleccionada', label: 'Seleccionadas' },
-  { value: 'descartada' , label: 'Descartadas' },
+  { value: 'descartada', label: 'Descartadas' },
 ]
 
 export const getStatusStylesProposals = (estado: string) => {

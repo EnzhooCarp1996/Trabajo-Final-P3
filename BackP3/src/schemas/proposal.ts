@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IProposal, ProposalStatus } from "../types/index";
 import { validarTipoUsuario } from "../utils/validarTipoUsuario";
 
