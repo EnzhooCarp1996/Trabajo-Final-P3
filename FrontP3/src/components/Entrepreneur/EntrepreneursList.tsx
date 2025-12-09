@@ -1,7 +1,7 @@
 import { ExportOutlined, FileTextOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
+import { Box, Paper, Tooltip } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import type { IUser } from '../../types/types'
-import { Box, Paper, Tooltip } from '@mui/material'
 
 interface EntrepreneursListProps {
   entrepreneur: IUser

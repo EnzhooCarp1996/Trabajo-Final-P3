@@ -1,17 +1,6 @@
-import type { ICompanyRef } from '../types/types'
+import type { CreateVoteRequest, IVote } from '../types/types'
 import axiosInstance from './AxiosService'
 
-export interface IVote {
-  _id: string
-  propuestaId: string
-  empresaId: ICompanyRef
-  valor: number
-  createdAt: Date
-}
-
-export interface CreateVoteRequest {
-  valor: number
-}
 
 // Interfaz que define el contrato del servicio
 export interface VoteService {

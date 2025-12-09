@@ -1,5 +1,5 @@
-import { Form, Input, Checkbox, Button, Typography } from 'antd'
 import { EyeTwoTone, EyeInvisibleOutlined } from '@ant-design/icons'
+import { Form, Input, Checkbox, Button, Typography } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
 
 const { Text } = Typography

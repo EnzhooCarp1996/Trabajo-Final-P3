@@ -1,10 +1,9 @@
 import { ProposalsToModalChallenge } from './ProposalsToModalChallenge'
-import type { IChallenge } from '../../types/types'
-import { Modal } from 'antd'
-import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
 import { challengeService } from '../../services/ChallengeService'
+import type { IChallenge } from '../../types/types'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { message, Modal } from 'antd'
 
 interface ChallengeModalProps {
   _id: string
@@ -23,7 +22,7 @@ export const ChallengeModal: React.FC<ChallengeModalProps> = ({ _id, open, onClo
         setChallenge(data)
       } catch (error) {
         console.error(error)
-        toast.error('Error al cargar tus desafios')
+        message.error('Error al cargar tus desafios')
       }
     }
 

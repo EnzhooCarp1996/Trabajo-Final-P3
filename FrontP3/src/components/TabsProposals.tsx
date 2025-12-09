@@ -1,5 +1,5 @@
-import { Tabs } from 'antd'
 import { getStatusColorProposals } from '../utils/utilsProposals'
+import { Tabs } from 'antd'
 
 interface TabsProposalsProps {
   items: { label: string; value: string }[]

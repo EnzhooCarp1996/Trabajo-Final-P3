@@ -2,10 +2,9 @@ import { GlobalOutlined, PhoneOutlined } from '@ant-design/icons'
 import { userService } from '../../services/UserService'
 import { CompanyChallenges } from './CompanyChallenges'
 import type { IUser } from '../../types/types'
-import { useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
-import { Modal } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { message, Modal } from 'antd'
 
 interface CompanyModalProps {
   open: boolean
@@ -16,6 +15,7 @@ interface CompanyModalProps {
 export const CompanyModal = ({ _id, open, onClose }: CompanyModalProps) => {
   const navigate = useNavigate()
   const [company, setCompany] = useState<IUser>()
+  const [challengeCount, setChallengeCount] = useState(0)
 
   useEffect(() => {
     const fetchChallenges = async () => {
@@ -24,7 +24,7 @@ export const CompanyModal = ({ _id, open, onClose }: CompanyModalProps) => {
         setCompany(data)
       } catch (error) {
         console.error(error)
-        toast.error('Error al cargar tus desafios')
+        message.error('Error al cargar tus desafios')
       }
     }
 
@@ -63,13 +63,20 @@ export const CompanyModal = ({ _id, open, onClose }: CompanyModalProps) => {
             <PhoneOutlined /> {company.telefono}
           </p>
           <h3
-            style={{ color: '#69b1ff', marginTop: 20, cursor: 'pointer', textDecoration: 'underline' }}
-            onClick={() => navigate(`/ChallengesByCompany/${_id}`)}
+            style={{
+                color: challengeCount > 0 ? '#69b1ff' : '#999',
+                textDecoration: challengeCount > 0 ? 'underline' : 'none',
+                cursor: challengeCount > 0 ? 'pointer' : 'not-allowed',
+              }}
+            onClick={() => {
+              if (challengeCount === 0) return
+              navigate(`/ChallengesByCompany/${_id}`)
+              }}
           >
             Ver Sus Desafíos
           </h3>
 
-          <CompanyChallenges empresaId={company._id} />
+          <CompanyChallenges empresaId={company._id} onCountChange={setChallengeCount}/>
         </>
       )}
     </Modal>

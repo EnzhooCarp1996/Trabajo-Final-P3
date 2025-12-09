@@ -1,5 +1,5 @@
-import { userService } from '../../services/UserService'
 import { BankOutlined, ExportOutlined, GlobalOutlined, TrophyOutlined } from '@ant-design/icons'
+import { userService } from '../../services/UserService'
 import type { IUser } from '../../types/types'
 import { CompanyModal } from './CompanyModal'
 import { useEffect, useState } from 'react'

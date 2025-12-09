@@ -1,15 +1,13 @@
 import { BankOutlined, CalendarOutlined, ExportOutlined, PlusOutlined, TrophyOutlined } from '@ant-design/icons'
+import { Button, Card, Carousel, message, Tooltip, Typography } from 'antd'
 import { challengeService } from '../../../services/ChallengeService'
 import type { IChallenge, ICompanyRef } from '../../../types/types'
 import { useProposal } from '../../../hooks/Proposal/useProposal'
 import { ProposalForm } from '../../Proposal/ProposalForm'
 import { CompanyModal } from '../../Company/CompanyModal'
-import { Button, Card, Carousel, Tooltip, Typography } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import type { CarouselRef } from 'antd/es/carousel'
 import { ButtonNuevo } from '../../ButtonNuevo'
-
-import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
 const { Text } = Typography
@@ -48,7 +46,7 @@ export const ChallengesToEntrepreneurs: React.FC = () => {
         setChallenges(data)
       } catch (error) {
         console.error(error)
-        toast.error('Error al cargar los desafios')
+        message.error('Error al cargar los desafios')
       } finally {
         setLoading(false)
       }

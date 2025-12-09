@@ -1,7 +1,7 @@
+import type { CreateChallengeRequest } from '../../../types/types'
 import { Form, Input, type FormInstance } from 'antd'
 import { ModalGeneral } from '../../ModalGeneral'
 import { FormGeneral } from '../../FormGeneral'
-import type { CreateChallengeRequest } from '../../../types/types'
 
 interface ChallengeFormProps {
   isModalOpen: boolean

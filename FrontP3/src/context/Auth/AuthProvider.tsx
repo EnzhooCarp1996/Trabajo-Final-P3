@@ -1,12 +1,12 @@
 import { getToken, logout as sessionLogout } from '../../services/SessionService'
 import { bindNotification, createSocket } from '../../services/SocketService'
+import { notificationService } from '../../services/NotificationService'
 import { authService } from '../../services/AuthService'
+import type { INotification } from '../../types/types'
 import { useState, useEffect, useRef } from 'react'
+import type { Socket } from 'socket.io-client'
 import { AuthContext } from './AuthContext'
 import type { ReactNode } from 'react'
-import type { INotification } from '../../types/types'
-import { notificationService } from '../../services/NotificationService'
-import type { Socket } from 'socket.io-client'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(getToken())

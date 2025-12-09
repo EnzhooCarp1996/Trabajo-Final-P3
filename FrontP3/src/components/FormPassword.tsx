@@ -1,6 +1,6 @@
-import { Form, Input, type FormInstance } from 'antd'
 import { validateConfirmPassword } from '../utils/validatorPassword'
 import type { CreateUserRequest } from '../types/types';
+import { Form, Input, type FormInstance } from 'antd'
 
 interface FormPasswordProps {
   form: FormInstance<CreateUserRequest>;

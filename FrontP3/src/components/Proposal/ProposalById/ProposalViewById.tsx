@@ -45,9 +45,10 @@ export const ProposalsViewById: React.FC = () => {
 
       {/* Lista de propuestas */}
       {proposals.length === 0 ? (
-        <Card style={{ textAlign: 'center', padding: 60, borderRadius: 12, border: '2px dashed #d9d9d9' }}>
-          <FileTextOutlined style={{ fontSize: 48, color: '#bfbfbf', marginBottom: 16 }} />
-          <Title level={4} style={{ color: '#8c8c8c', marginBottom: 16 }}>
+        <Card style={{ color: '#213ac4', textAlign: 'center', padding: 10, borderRadius: 12, border: '2px dashed #d9d9d9' }}
+          styles={{ body: { padding: '8px 0', backgroundColor: '#213ac4', color: '#213ac4', borderRadius: 5, } }}>
+          <FileTextOutlined style={{ fontSize: 48, color: 'white', marginBottom: 16 }} />
+          <Title level={4} style={{ color: 'white', marginBottom: 16 }}>
             No hay propuestas creadas
           </Title>
         </Card>

@@ -2,10 +2,10 @@ import type { IChallengeRef, IProposal } from '../../../types/types'
 import { proposalService } from '../../../services/ProposalService'
 import { ChallengeModal } from '../../Challenge/ChallengeModal'
 import { ProposalTableColumns } from '../ProposalTableColumns'
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { message, Table, Typography } from 'antd'
 import { BackHeader } from '../../BackHeader'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 const { Title } = Typography
 

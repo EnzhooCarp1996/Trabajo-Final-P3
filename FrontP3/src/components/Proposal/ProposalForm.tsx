@@ -1,5 +1,5 @@
-import { Form, Input, Typography, type FormInstance } from 'antd'
 import type { CreateProposalRequest, IChallengeRef } from '../../types/types'
+import { Form, Input, Typography, type FormInstance } from 'antd'
 import { ModalGeneral } from '../ModalGeneral'
 import { FormGeneral } from '../FormGeneral'
 

@@ -1,6 +1,6 @@
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation } from 'swiper/modules'
-import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 
 import 'swiper/css'
 import 'swiper/css/navigation'

@@ -4,7 +4,7 @@ import type { IChallenge } from '../../types/types'
 import { ChallengeList } from './ChallengeList'
 import { HeaderEntity } from '../HeaderEntity'
 import { GridRow } from '../GridRow'
-import toast from 'react-hot-toast'
+import { message } from 'antd'
 
 export const ChallengesView: FC = () => {
   const [challenges, setChallenges] = useState<IChallenge[]>([])
@@ -18,7 +18,7 @@ export const ChallengesView: FC = () => {
         setChallenges(data)
       } catch (error) {
         console.error(error)
-        toast.error('Error al cargar los desafios')
+        message.error('Error al cargar los desafios')
       } finally {
         setLoading(false)
       }

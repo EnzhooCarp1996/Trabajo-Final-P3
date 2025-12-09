@@ -1,5 +1,5 @@
-import { jwtDecode } from 'jwt-decode'
 import type { JWTPayload } from '../types/types'
+import { jwtDecode } from 'jwt-decode'
 
 export function getToken(): string | null {
   return localStorage.getItem('token') || sessionStorage.getItem('token')

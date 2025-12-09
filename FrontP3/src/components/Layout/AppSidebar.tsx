@@ -1,7 +1,7 @@
 import { BankOutlined, UserOutlined, FlagOutlined, FileTextOutlined, UsergroupDeleteOutlined } from '@ant-design/icons'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Layout, Menu, Typography } from 'antd'
 import { useAuth } from '../../context/Auth/useAuth'
+import { Layout, Menu, Typography } from 'antd'
 
 const { Sider } = Layout
 const { Title } = Typography

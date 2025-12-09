@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
 import type { IProposal, IChallenge, ProposalStatus, IChallengeRef, CreateProposalRequest } from '../../types/types'
-import { Form, message, Modal } from 'antd'
 import { proposalService } from '../../services/ProposalService'
-import { useAuth } from '../../context/Auth/useAuth'
 import { estadoPropuestas } from '../../utils/utilsProposals'
+import { useAuth } from '../../context/Auth/useAuth'
+import { useEffect, useState } from 'react'
+import { Form, message, Modal } from 'antd'
 import axios from 'axios'
 
 export const useProposal = () => {
@@ -14,24 +14,27 @@ export const useProposal = () => {
   const [loading, setLoading] = useState(false)
   const [formProposal] = Form.useForm<CreateProposalRequest>()
   const [filtroEstado, setFiltroEstado] = useState<ProposalStatus>(estadoPropuestas[0].value as ProposalStatus)
-  const proposalsFiltradas = proposals.filter((p) => p.estado === filtroEstado)
   const [activeTab, setActiveTab] = useState<ProposalStatus>('en revision')
   const [selectedChallenge, setSelectedChallenge] = useState<IChallengeRef | null>(null)
+  const proposalsFiltradas = proposals
+    .filter((p) => p.estado === filtroEstado)
+    .sort((a, b) => (b.puntos ?? 0) - (a.puntos ?? 0))
+
+
+  const fetchProposals = async () => {
+    setLoading(true)
+    try {
+      const data = await proposalService.getAll()
+      setProposals(data)
+    } catch (error) {
+      console.error(error)
+      message.error('Error al cargar las propuestas')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const fetchProposals = async () => {
-      setLoading(true)
-      try {
-        const data = await proposalService.getAll()
-        setProposals(data)
-      } catch (error) {
-        console.error(error)
-        message.error('Error al cargar las propuestas')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     fetchProposals()
   }, [])
 
@@ -93,6 +96,7 @@ export const useProposal = () => {
     loading,
     formProposal,
     proposalsFiltradas,
+    fetchProposals,
     isModalProposalOpen,
     editingProposal,
     selectedChallenge,

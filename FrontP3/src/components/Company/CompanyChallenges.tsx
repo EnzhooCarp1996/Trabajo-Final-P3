@@ -4,9 +4,10 @@ import type { IChallenge } from '../../types/types'
 
 interface CompanyChallengesProps {
   empresaId: string
+  onCountChange?: (count: number) => void
 }
 
-export const CompanyChallenges: FC<CompanyChallengesProps> = ({ empresaId }) => {
+export const CompanyChallenges: FC<CompanyChallengesProps> = ({ empresaId, onCountChange }) => {
   const [challenges, setChallenges] = useState<IChallenge[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -18,6 +19,7 @@ export const CompanyChallenges: FC<CompanyChallengesProps> = ({ empresaId }) => 
       try {
         const result = await challengeService.getAll({ empresaId, estado: ['activo', 'finalizado'] })
         setChallenges(result)
+        onCountChange?.(result.length)
       } catch (err) {
         console.error(err)
       } finally {

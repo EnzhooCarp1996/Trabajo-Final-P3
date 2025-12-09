@@ -13,7 +13,7 @@ export const up = async (db) => {
     {
       _id: new ObjectId('000000000000000000000000'),
       email: 'enzo@plataforma.com',
-      password: await hashPassword('admin123'),
+      password: await hashPassword('emprendedor123'),
       role: new ObjectId('000000000000000000000002'), // Emprendedor
       nombreCompleto: 'Enzo Olmedo',
       telefono: '1111111111',

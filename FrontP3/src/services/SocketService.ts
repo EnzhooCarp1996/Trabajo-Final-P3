@@ -1,6 +1,6 @@
+import type { INotification } from '../types/types'
 import { io, Socket } from 'socket.io-client'
 import { getToken } from './SessionService'
-import type { INotification } from '../types/types'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 

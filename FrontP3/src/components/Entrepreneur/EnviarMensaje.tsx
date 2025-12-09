@@ -1,8 +1,8 @@
-import { Modal, Input, Button, message } from 'antd'
-import { MessageCircle } from 'lucide-react'
 import { notificationService } from '../../services/NotificationService'
-import { useState } from 'react'
+import { Modal, Input, Button, message } from 'antd'
 import { useAuth } from '../../context/Auth/useAuth'
+import { MessageCircle } from 'lucide-react'
+import { useState } from 'react'
 
 interface EnviarMensajeProps {
   emprendendedorId: string

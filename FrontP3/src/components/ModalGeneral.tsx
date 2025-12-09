@@ -1,5 +1,5 @@
-import { Modal } from 'antd'
 import { Typography } from 'antd'
+import { Modal } from 'antd'
 
 const { Title } = Typography
 
@@ -23,6 +23,7 @@ export const ModalGeneral: React.FC<ModalGeneralProps> = ({
   return (
     <Modal
       open={isOpen}
+      destroyOnClose
       onCancel={onClose}
       onOk={onOk}
       okText={editing ? 'Actualizar' : 'Crear'}

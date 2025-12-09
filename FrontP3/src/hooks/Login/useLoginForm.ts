@@ -1,14 +1,13 @@
 import type { CheckboxChangeEvent } from 'antd/es/checkbox'
+import type { CreateUserRequest } from '../../types/types'
 import { authService } from '../../services/AuthService'
 import { useAuth } from '../../context/Auth/useAuth'
-import toast from 'react-hot-toast'
-import { Form, Modal } from 'antd'
+import { Form, message, Modal } from 'antd'
 import { useState } from 'react'
-import type { IUser, CreateUserRequest } from '../../types/types'
 
 export function useLoginForm() {
   const { login } = useAuth()
-  const [formRegister] = Form.useForm<IUser>();
+  const [formRegister] = Form.useForm<CreateUserRequest>();
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -47,12 +46,6 @@ export function useLoginForm() {
     }))
   }
 
-  const [success, setSuccess] = useState(false)
-
-  const handleChangRegister = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
 
   const handleSubmitRegister = async (values: CreateUserRequest) => {
     setLoading(true)
@@ -65,12 +58,12 @@ export function useLoginForm() {
       onOk: async () => {
         try {
           await authService.create(values)
-          setSuccess(true)
           formRegister.resetFields()
+          message.success('Usuario registrado con exito')
         } catch (error) {
           console.error('Error al crear su usuario', error)
           setError(error instanceof Error ? error.message : 'Error al crear su usuario')
-          toast.error('No se pudo crear el usuario')
+          message.error('No se pudo crear el usuario')
         } finally {
           setLoading(false)
         }
@@ -85,11 +78,9 @@ export function useLoginForm() {
     error,
     setShowPassword,
     handleChange,
-    handleSubmit: handleSubmitLogin,
+    handleSubmitLogin,
     handleCheckbox,
     formRegister,
-    success,
-    handleChangRegister,
     handleSubmitRegister,
   }
 }

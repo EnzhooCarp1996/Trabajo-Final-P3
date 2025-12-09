@@ -151,6 +151,21 @@ export interface CreateProposalRequest {
   puntos: number
 }
 
+// ==================================
+//  Votos
+// ==================================
+export interface IVote {
+  _id: string
+  propuestaId: string
+  empresaId: ICompanyRef
+  valor: number
+  createdAt: Date
+}
+
+export interface CreateVoteRequest {
+  valor: number
+}
+
 //=====================================================
 export interface JWTPayload {
   _id: string

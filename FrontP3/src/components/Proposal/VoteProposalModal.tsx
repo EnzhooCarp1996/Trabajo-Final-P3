@@ -1,12 +1,12 @@
+import { voteService } from '../../services/VoteService'
 import { Modal, Rate, Button, message } from 'antd'
 import { useEffect, useState } from 'react'
-import { voteService } from '../../services/VoteService'
 
 interface Props {
   propuestaId: string
   open: boolean
   onClose: () => void
-  onVoted?: () => void // para refrescar datos afuera
+  onVoted?: () => void
 }
 
 export default function VoteProposalModal({ propuestaId, open, onClose, onVoted }: Props) {
@@ -28,7 +28,7 @@ export default function VoteProposalModal({ propuestaId, open, onClose, onVoted 
     try {
       setLoading(true)
       await voteService.votarPropuesta(propuestaId, { valor })
-      message.success('Voto enviado ✅')
+      message.success('Voto enviado')
       onVoted?.()
       onClose()
     } catch (err) {

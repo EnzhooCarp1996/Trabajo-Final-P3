@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import { useLoginForm } from '../../hooks/Login/useLoginForm'
+import { EntrepreneurForm } from '../Entrepreneur/EntrepreneurForm'
 import { Layout, Card, Typography, Button, Segmented } from 'antd'
-import { LoginForm } from './LoginForm'
-import { FlagOutlined } from '@ant-design/icons'
+import { useLoginForm } from '../../hooks/Login/useLoginForm'
 import { FormGeneralItem } from '../FormGeneralItem'
 import { CompanyForm } from '../Company/CompanyForm'
-import { EntrepreneurForm } from '../Entrepreneur/EntrepreneurForm'
-import { FormGeneral } from '../FormGeneral'
+import { FlagOutlined } from '@ant-design/icons'
 import { FormPassword } from '../FormPassword'
+import { FormGeneral } from '../FormGeneral'
+import { LoginForm } from './LoginForm'
+import { useState } from 'react'
 import { Grid } from 'antd'
 
 const { useBreakpoint } = Grid
 const { Title, Text } = Typography
 
 export const LoginPage = () => {
-  const { formData, loading, error, handleChange, handleSubmit, handleCheckbox, formRegister, handleSubmitRegister } =
+  const { formData, loading, error, handleChange, handleSubmitLogin, handleCheckbox, formRegister, handleSubmitRegister } =
     useLoginForm()
 
   const [isRegister, setIsRegister] = useState(false)
@@ -92,7 +92,7 @@ export const LoginPage = () => {
               error={error}
               loading={loading}
               handleChange={handleChange}
-              handleSubmit={handleSubmit}
+              handleSubmit={handleSubmitLogin}
               handleCheckbox={handleCheckbox}
             />
           ) : (

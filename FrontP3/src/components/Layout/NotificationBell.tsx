@@ -1,6 +1,6 @@
 import { Badge, Dropdown, List, Tooltip, Typography } from 'antd'
-import { BellOutlined } from '@ant-design/icons'
 import { useAuth } from '../../context/Auth/useAuth'
+import { BellOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
 

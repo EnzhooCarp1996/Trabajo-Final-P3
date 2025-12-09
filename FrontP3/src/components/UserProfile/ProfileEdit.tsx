@@ -1,15 +1,15 @@
+import { EntrepreneurForm } from '../Entrepreneur/EntrepreneurForm'
+import type { CreateUserRequest, IUser } from '../../types/types'
 import { userService } from '../../services/UserService'
 import { Button, Form, message, Typography } from 'antd'
-import { EntrepreneurForm } from '../Entrepreneur/EntrepreneurForm'
 import { FormGeneralItem } from '../FormGeneralItem'
 import { useAuth } from '../../context/Auth/useAuth'
-import type { CreateUserRequest, IUser } from '../../types/types'
-import { useNavigate } from 'react-router-dom'
-import { FormGeneral } from '../FormGeneral'
 import { CompanyForm } from '../Company/CompanyForm'
+import { useNavigate } from 'react-router-dom'
+import { FormPassword } from '../FormPassword'
+import { FormGeneral } from '../FormGeneral'
 import { useEffect, useState } from 'react'
 import { BackHeader } from '../BackHeader'
-import { FormPassword } from '../FormPassword'
 
 const { Title } = Typography
 

@@ -1,7 +1,7 @@
-import { useEffect, useState, type FC } from 'react'
 import { proposalService } from '../../services/ProposalService'
-import { Spin, Timeline } from 'antd'
+import { useEffect, useState, type FC } from 'react'
 import type { IProposal } from '../../types/types'
+import { Spin, Timeline } from 'antd'
 
 interface ProposalsToModalProps {
   _id: string

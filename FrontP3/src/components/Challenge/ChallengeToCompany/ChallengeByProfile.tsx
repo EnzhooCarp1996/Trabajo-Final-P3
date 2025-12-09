@@ -1,8 +1,8 @@
 import type { ChallengeStatus, CreateChallengeRequest, IChallenge } from "../../../types/types";
 import { challengeService } from "../../../services/ChallengeService";
+import { Card, Form, List, message, Modal, Typography } from "antd";
 import { ChallengeDescriptions } from "./ChallengeDescriptions";
 import { ChallengeStatistics } from "./ChallengeStatistics";
-import { Card, Form, List, message, Modal, Typography } from "antd";
 import { useAuth } from "../../../context/Auth/useAuth";
 import { TrophyOutlined } from "@ant-design/icons";
 import { ChallengeForm } from "./ChallengeForm";
@@ -35,6 +35,7 @@ export const ChallengesByProfile = () => {
 
         fetchChallenges();
     }, [_id]);
+
 
 
 
@@ -184,20 +185,17 @@ export const ChallengesByProfile = () => {
                             )}
                         />
                     </Card>
-
-                    {/* Modal de creación */}
-
-                    <ChallengeForm
-                        isModalOpen={isModalOpen}
-                        closeModal={closeModal}
-                        formSubmit={() => formChallenge.submit()}
-                        editing={editingChallenge !== null}
-                        form={formChallenge}
-                        handleSubmit={handleSubmitChallenge}
-                    />
-
                 </>
             )}
+            {/* Modal de creación */}
+            <ChallengeForm
+                isModalOpen={isModalOpen}
+                closeModal={closeModal}
+                formSubmit={() => formChallenge.submit()}
+                editing={editingChallenge !== null}
+                form={formChallenge}
+                handleSubmit={handleSubmitChallenge}
+            />
         </div>
     );
 };

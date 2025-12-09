@@ -1,9 +1,9 @@
 import { BankOutlined, EditOutlined, MailOutlined, UserOutlined } from '@ant-design/icons'
-import type { IUser } from '../../types/types'
-import { Card, Typography, Button } from 'antd'
-import { useEffect, useState } from 'react'
-import { useAuth } from '../../context/Auth/useAuth'
 import { userService } from '../../services/UserService'
+import { useAuth } from '../../context/Auth/useAuth'
+import { Card, Typography, Button } from 'antd'
+import type { IUser } from '../../types/types'
+import { useEffect, useState } from 'react'
 
 import { Link } from 'react-router-dom'
 

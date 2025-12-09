@@ -1,6 +1,6 @@
-import { Form, Input } from 'antd'
-import type { RuleObject } from 'antd/es/form'
 import type { StoreValue } from 'antd/es/form/interface'
+import type { RuleObject } from 'antd/es/form'
+import { Form, Input } from 'antd'
 
 export const EntrepreneurForm = () => {
   // validators.ts

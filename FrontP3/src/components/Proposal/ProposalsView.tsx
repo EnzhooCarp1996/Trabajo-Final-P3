@@ -8,7 +8,7 @@ import 'swiper/css/navigation'
 import 'swiper/css'
 
 export const ProposalsView: React.FC = () => {
-  const { proposalsFiltradas, activeTab, setActiveTab, setFiltroEstado } = useProposal()
+  const { proposalsFiltradas, activeTab, setActiveTab, setFiltroEstado, fetchProposals } = useProposal()
 
   return (
     <>
@@ -25,8 +25,8 @@ export const ProposalsView: React.FC = () => {
 
       {/* LISTA FILTRADA */}
       <GridRow>
-        {proposalsFiltradas.map((proposal, index) => (
-          <ProposalsList key={index} proposal={proposal} />
+        {proposalsFiltradas.map((proposal) => (
+          <ProposalsList key={proposal._id} proposal={proposal} onVoted={fetchProposals}/>
         ))}
       </GridRow>
     </>

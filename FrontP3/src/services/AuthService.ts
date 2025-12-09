@@ -1,7 +1,7 @@
-import { getToken, isTokenExpired } from './SessionService'
 import type { CreateUserRequest, CurrentUser, IUser, JWTPayload, LoginResponse } from '../types/types'
-import { jwtDecode } from 'jwt-decode'
+import { getToken, isTokenExpired } from './SessionService'
 import axiosInstance from './AxiosService'
+import { jwtDecode } from 'jwt-decode'
 
 // -------------------------
 // LOGIN

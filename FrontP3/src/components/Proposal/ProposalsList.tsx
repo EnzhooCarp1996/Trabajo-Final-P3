@@ -1,19 +1,20 @@
 import { ExportOutlined, FileTextOutlined, TrophyOutlined, UserOutlined } from '@ant-design/icons'
 import { EntrepreneurModal } from '../Entrepreneur/EntrepreneurModal'
-import { ChallengeModal } from '../Challenge/ChallengeModal'
 import { getStatusColorProposals } from '../../utils/utilsProposals'
+import { ChallengeModal } from '../Challenge/ChallengeModal'
+import { useAuth } from '../../context/Auth/useAuth'
+import VoteProposalModal from './VoteProposalModal'
 import type { IProposal } from '../../types/types'
+import { Button, Col, Tooltip } from 'antd'
 import { CardEntity } from '../CardEntity'
 import { useState } from 'react'
-import { Button, Col, Tooltip } from 'antd'
-import VoteProposalModal from './VoteProposalModal'
-import { useAuth } from '../../context/Auth/useAuth'
 
 interface ProposalsListProps {
   proposal: IProposal
+  onVoted: () => void
 }
 
-export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
+export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal, onVoted }) => {
   const { role } = useAuth()
   const [openProfile, setOpenProfile] = useState(false)
   const [openVote, setOpenVote] = useState(false)
@@ -85,9 +86,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({ proposal }) => {
         propuestaId={proposal._id}
         open={openVote}
         onClose={() => setOpenVote(false)}
-        onVoted={() => {
-          // opcional: refrescar propuestas
-        }}
+        onVoted={onVoted}
       />
     </Col>
   )

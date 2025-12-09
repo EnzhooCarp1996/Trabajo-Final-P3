@@ -1,9 +1,6 @@
 import type { CreateUserRequest, IUser } from '../types/types'
 import axiosInstance from './AxiosService'
 
-export type Role = 'empresa' | 'emprendedor'
-
-
 
 // Interfaz que define el contrato del servicio
 export interface UserService {

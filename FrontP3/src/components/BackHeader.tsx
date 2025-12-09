@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from '@ant-design/icons'
-import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
 
 interface BackHeaderProps {
   children?: ReactNode

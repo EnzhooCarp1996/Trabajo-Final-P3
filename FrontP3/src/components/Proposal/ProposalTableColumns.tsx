@@ -1,5 +1,5 @@
-import type { IChallengeRef, IEntrepreneurRef } from '../../types/types'
 import { StatusSelect } from '../Challenge/ChallengeToCompany/StatusSelect'
+import type { IChallengeRef, IEntrepreneurRef } from '../../types/types'
 import { cellBodyStyle } from '../../utils/utilsChallenges'
 import type { ColumnsType } from 'antd/es/table'
 import { useMemo } from 'react'

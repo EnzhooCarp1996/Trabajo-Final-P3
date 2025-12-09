@@ -3,11 +3,10 @@ import { useProposal } from '../../hooks/Proposal/useProposal'
 import { ChallengeTableConfig } from './ChallengeTableConfig'
 import { ProposalForm } from '../Proposal/ProposalForm'
 import type { IChallenge } from '../../types/types'
+import { message, Table, Typography } from 'antd'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { BackHeader } from '../BackHeader'
-import { Table, Typography } from 'antd'
-import toast from 'react-hot-toast'
 
 const { Title } = Typography
 
@@ -40,7 +39,7 @@ export const ChallengesByCompanyId = () => {
         }
       } catch (error) {
         console.error(error)
-        toast.error('Error al cargar tus desafios')
+        message.error('Error al cargar tus desafios')
       } finally {
         setLoading(false)
       }
