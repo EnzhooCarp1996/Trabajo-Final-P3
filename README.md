@@ -78,12 +78,7 @@ npm install
 
 3. **Configurar variables de entorno Back-End:**
 
-Copiar el archivo `.env.example` a `.env`
-```
-$env:NODE_ENV="development"
-```
-
-Ajustar las variables en `.env` según tu entorno (opcional)
+Ajustar las variables en `.env` según tu entorno
 ```env
 # Ejemplo de .env
 NODE_ENV=development
@@ -94,6 +89,10 @@ MONGO_DB=PlataformaDeDesafios
 DEBUG=trabajo-final-p3:*
 JWT_SECRET=clave_super_segura_123
 JWT_ISSUER=PlataformaDeDesafiosAPI
+```
+
+```bash
+$env:NODE_ENV="development"
 ```
 
 4. **Para ejecutar migraciones locales (Back-End)**
@@ -109,10 +108,6 @@ npm run dev
 ```
 
 6. **Configurar variables de entorno Front-End:**
-
-```bash
-cp .env.example .env
-```
 
 Editar `.env` con la configuración de tu API backend (opcional).
 ```env
