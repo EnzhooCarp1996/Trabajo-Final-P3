@@ -24,8 +24,8 @@ const server = http.createServer(app)
 // Inicializar Socket.IO
 initSocket(server);
 
-const db_url = process.env.MONGO_URL
-const db_name = process.env.MONGO_DB
+const db_url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/'
+const db_name = process.env.MONGO_DB || 'test'
 const fullUrl = `${db_url}${db_name}`
 
 // MongoDB database initialization
