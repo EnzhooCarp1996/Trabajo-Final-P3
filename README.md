@@ -73,19 +73,21 @@ cd BackP3
 npm install
 ```
 ```bash
+cd ..
+```
+```bash
 cd FrontP3
 npm install
 ```
 
 3. **Configurar variables de entorno Back-End:**
 
-Ajustar las variables en `.env` según tu entorno
+Ajustar las variables en `.env.development` según tu entorno
 ```env
 # Ejemplo de .env
 NODE_ENV=development
 PORT=4000
 MONGO_URL=mongodb://127.0.0.1:27017/
-MONGO_URL_AUTH_ENABLED=mongodb://root:1234@localhost:27017
 MONGO_DB=PlataformaDeDesafios
 DEBUG=trabajo-final-p3:*
 JWT_SECRET=clave_super_segura_123
@@ -110,9 +112,9 @@ npm run dev
 
 6. **Configurar variables de entorno Front-End:**
 
-Editar `.env` con la configuración de tu API backend (opcional).
+Editar `.env.local` con la configuración de tu API backend.
 ```env
-# Ejemplo de .env
+# Ejemplo de .env.local
 VITE_API_BASE_URL=http://localhost:4000
 ```
 7. **Iniciar Front-End**
