@@ -32,17 +32,18 @@ Plataforma web full stack para la gestión de desafíos empresariales, donde emp
 
 ## 🛠️ Stack Tecnológico
 # Back-End
-- **Framework**: Node.js, Express.js
+- **Framework**: Node.js, Express.js 5.1.0
 - **Lenguaje:** TypeScript 5.9.3
 - **Base de Datos**: MongoDB con Mongoose 8.19.2
 - **Autenticación**: JWT (JSON Web Tokens)
 - **Hasheo**: bcrypt
+- - **Real-time:** Socket.io 4.8.1
 - **Dev Tools**: ESLint, Prettier, nodemon
 
 # Front-End
 - **Framework:** React 18.3.1
 - **Lenguaje:** TypeScript 5.8.3
-- **Build Tool:** Vite 7.1.7
+- **Build Tool:** Vite 7.1.12
 - **UI Library:** Material-UI (MUI) 7.3.2, AntD 5.19.0
 - **Routing:** React Router DOM 7.9.3
 - **HTTP Client:** Axios 1.12.2
